@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">MyPillClock</string>
+
+    <string-array name="pillTypeArray">
+        <item>pills</item>
+        <item>sachets</item>
+        <item>ml</item>
+        <item>mg</item>
+    </string-array>
+
+    <string name="TextViewPillName"> Pill Name:</string>
+    <string name="TextViewDuration">Duration (Days): </string>
+    <string name="TextViewFrequency">Frequency (Hours): </string>
+    <string name="TextViewAmount">Amount: </string>
+    <string name="TextViewTime">Time: </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
