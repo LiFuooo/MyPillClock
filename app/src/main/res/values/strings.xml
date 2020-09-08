@@ -3,7 +3,7 @@
 
     <string-array name="pillTypeArray">
         <item>pills</item>
-        <item>sachets</item>
+        <item>bottles</item>
         <item>ml</item>
         <item>mg</item>
     </string-array>
@@ -12,9 +12,14 @@
     <string name="TextViewDuration">Duration (Days): </string>
     <string name="TextViewFrequency">Frequency (Hours): </string>
     <string name="TextViewAmount">Amount: </string>
-    <string name="TextViewTime">Time: </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="TextViewTime">Remind Time: </string>
+    <string name="PillQty">1</string>
+    <string name="NoteFromDoctor">Note From Doctor: </string>
+    <string name="save">Save</string>
+    <string name="hint_time">12:00 PM</string>
+    <string name="NoMoreRecords">No More records available!</string>
+    <string name="imgAlarmOnOff">alarmOnOff</string>
+    <string name="hello_blank_fragment">hello_blank_fragment</string>
 
 
 </resources>

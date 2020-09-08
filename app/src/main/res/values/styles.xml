@@ -7,4 +7,8 @@
         <item name="colorAccent">@color/colorOrange</item>
     </style>
 
+    <style name="materialComponentTheme" parent="Theme.MaterialComponents.DayNight">
+        <!-- ... -->
+    </style>
+
 </resources>

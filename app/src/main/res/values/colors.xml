@@ -3,4 +3,10 @@
     <color name="colorGreen">#8DC6BF</color>
     <color name="colorYellow">#FCBC66</color>
     <color name="colorOrange">#F97b4F</color>
+    <color name="colorGrey">#E6E6E4</color>
+    <color name="lightGreen">#B0E7EA</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="colorLightGray">#EBEBEB</color>
+
 </resources>
