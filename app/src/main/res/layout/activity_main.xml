@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="476dp"
             android:visibility="visible"
-            tools:listitem="@layout/fragment_pill_item_adapter" />
+            tools:listitem="@layout/item_pill" />
 
         <TextView
             android:id="@+id/tvNoMorePillRecords"

@@ -20,6 +20,7 @@
     <string name="NoMoreRecords">No More records available!</string>
     <string name="imgAlarmOnOff">alarmOnOff</string>
     <string name="hello_blank_fragment">hello_blank_fragment</string>
+    <string name="Update">UPDATE</string>
 
 
 </resources>

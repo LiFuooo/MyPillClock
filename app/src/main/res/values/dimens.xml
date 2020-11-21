@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tvPillName_textSize">16sp</dimen>
+    <dimen name="etPillName_textSize">16sp</dimen>
+    <dimen name="tvDuration_textSize">16sp</dimen>
+    <dimen name="etDuration_textSize">16sp</dimen>
+    <dimen name="tvFrequency_textSize">16sp</dimen>
+    <dimen name="etFrequency_textSize">16sp</dimen>
+    <dimen name="tvPillAmount_textSize">16sp</dimen>
+    <dimen name="etPillAmount_textSize">16sp</dimen>
+    <dimen name="tvPillRemindTime_textSize">16sp</dimen>
+    <dimen name="tvPillTimePicker_textSize">16sp</dimen>
+    <dimen name="etDoctorNote_textSize">16sp</dimen>
+
+
+</resources>

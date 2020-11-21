@@ -29,45 +29,34 @@ class MainActivity : AppCompatActivity() {
 //        setupListOfDataIntoRecycleView()
 
         var fakePillList = mutableListOf<PillInfo>(
-            PillInfo("name1", 24,30,1,"pills","12:00PM",null),
-            PillInfo("name2", 2 ,3,2,"pills","12:00PM",null),
-            PillInfo("name3", 24,30,1,"pills","12:00PM",null),
-            PillInfo("name4", 24,30,1,"pills","12:00PM",null),
-            PillInfo("name5", 2 ,3,20,"pills","12:00PM",null),
-            PillInfo("name6", 24,30,100,"pills","12:00PM",null),
-            PillInfo("name7", 2 ,3,3,"pills","12:00PM",null),
-            PillInfo("name8", 24,30,1,"pills","12:00PM",null)
+            PillInfo(1,"name1", 24,30,1,"pills","12:00PM",null),
+            PillInfo(2,"name2", 2 ,3,2,"pills","12:00PM",null),
+            PillInfo(3,"name3", 24,30,1,"pills","12:00PM",null),
+            PillInfo(4,"name4", 24,30,1,"pills","12:00PM",null),
+            PillInfo(5,"name5", 2 ,3,20,"pills","12:00PM",null),
+            PillInfo(6,"name6", 24,30,100,"pills","12:00PM",null),
+            PillInfo(7,"name7", 2 ,3,3,"pills","12:00PM",null),
+            PillInfo(8,"name8", 24,30,1,"pills","12:00PM",null)
         )
 //        val adapter = PillItemAdapter(this, fakePillList)
 //        rvPillItem.adapter = adapter
 //        rvPillItem.layoutManager = LinearLayoutManager(this)
 
 
-        setupListOfDataIntoRecycleView()
+        getItemListFromLocalDB()
 
 
 
     }
 
     //    function to get Pill list from database
-    private fun getItemList(): MutableList<PillInfo> {
-        val databaseHandler = PillDatabaseHandler(this)
-        return databaseHandler.viewPill()
-    }
+    private fun getItemListFromLocalDB(){
+        val getSavedPillList = PillDatabaseHandler(this).getPillListFromDB()
 
-
-    //    function to show the list of pill Info in rv
-    private fun setupListOfDataIntoRecycleView(){
-        if(getItemList().size > 0){
-
+        if(getSavedPillList.size > 0){
             rvPillItem.visibility = View.VISIBLE
             tvNoMorePillRecords.visibility = View.GONE
-
-            rvPillItem.layoutManager = LinearLayoutManager(this)
-            val itemAdapter = PillItemAdapter(this, getItemList())
-
-            rvPillItem.adapter = itemAdapter
-            rvPillItem.layoutManager = LinearLayoutManager(this)
+            setupListOfDataIntoRecycleView(getSavedPillList)
         } else {
             rvPillItem.visibility = View.GONE
             tvNoMorePillRecords.visibility = View.VISIBLE
@@ -75,11 +64,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    //    function to show the list of pill Info in rv
+    private fun setupListOfDataIntoRecycleView(SavedPillList:MutableList<PillInfo>){
+        rvPillItem.layoutManager = LinearLayoutManager(this)
+
+        val itemAdapter = PillItemAdapter(this, SavedPillList)
+        rvPillItem.adapter = itemAdapter
+
+        itemAdapter.setOnClickListener(object:PillItemAdapter.OnClickListener{
+            override fun onClick(position:Int, model: PillInfo){
+                val intent = Intent(this@MainActivity,
+                        EditPillActivity::class.java)
+                    intent.putExtra(EXTRA_PILL_DETAIL, model)
+                startActivity(intent)
+            }
+        })
+
+}
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == ADD_PILL_ACTIVITY_REQUEST_CODE){
             if(resultCode == Activity.RESULT_OK){
-                setupListOfDataIntoRecycleView()
+                getItemListFromLocalDB()
             } else{
                 Log.e("Acctivity_Main", "Canceled or Back Pressed")
             }
@@ -88,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var ADD_PILL_ACTIVITY_REQUEST_CODE = 1
+        var EXTRA_PILL_DETAIL = "ExtraPillDetail"
     }
 
 

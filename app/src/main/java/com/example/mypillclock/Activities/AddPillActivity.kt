@@ -13,14 +13,18 @@ import com.example.mypillclock.Database.PillDatabaseHandler
 import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_edit_pill.*
+import kotlinx.android.synthetic.main.activity_add_pill.*
 import kotlinx.serialization.json.Json
 
 
 class AddPillActivity : AppCompatActivity() {
+
+    private var myPill: PillInfo? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_pill)
+        setContentView(R.layout.activity_add_pill)
 
 
 //        spinner part  ------------------------------------------------------------------
@@ -88,13 +92,15 @@ class AddPillActivity : AppCompatActivity() {
 //                after data saved in database correctly, make the toast
                 Toast.makeText(this, "Pill Info is Saved!", Toast.LENGTH_SHORT).show()
 
-                val pill = PillInfo(name,
-                    duration,
-                    frequency,
-                    amount,
-                    amountType,
-                    remindTime,
-                    doctorNote)
+                val pill = PillInfo(
+                        if (myPill == null) 0 else myPill!!.id,
+                        name,
+                        duration,
+                        frequency,
+                        amount,
+                        amountType,
+                        remindTime,
+                        doctorNote)
 
 
 
