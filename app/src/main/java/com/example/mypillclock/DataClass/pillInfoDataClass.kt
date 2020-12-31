@@ -11,5 +11,6 @@ data class PillInfo(
         val amount: Int,
         val amountType:String,
         val RemindTime: String,
+        val Rx_Number: String,
         val doctorNote: String
 ):Serializable

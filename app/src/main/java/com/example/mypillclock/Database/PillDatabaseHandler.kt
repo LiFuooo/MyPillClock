@@ -18,8 +18,6 @@ import com.example.mypillclock.Database.PillDatabaseHandler.PillDB.KEY_ID
 import com.example.mypillclock.Database.PillDatabaseHandler.PillDB.KEY_PILL_NAME
 import com.example.mypillclock.Database.PillDatabaseHandler.PillDB.KEY_REMINDTIME
 import com.example.mypillclock.Database.PillDatabaseHandler.PillDB.TABLE_NAME
-import com.example.mypillclock.Database.PillDatabaseHandler.DBExposedPills.duration
-import com.example.mypillclock.Database.PillDatabaseHandler.DBExposedPills.frequency
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -31,7 +29,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class PillDatabaseHandler(context: Context):
     SQLiteOpenHelper(context, DATABASE_NAME, null,DATABASE_VERSION){
 
-
+//https://www.baeldung.com/kotlin-exposed-persistence
 
 
         object PillDB:BaseColumns{
@@ -46,7 +44,8 @@ class PillDatabaseHandler(context: Context):
             const val KEY_DOCTORNOTE= "doctorNote"
         }
 
-        object DBExposedPills : IntIdTable() {
+//    declare a table that contain an Int id with the name "id"
+        object DBExposedPillsTable : IntIdTable() {
             val sequelId: Column<Int> = integer("sequel_id").uniqueIndex()
             val name: Column<String> = varchar("name", 50)
             var duration: Column<Int> = integer("duration")
@@ -59,15 +58,16 @@ class PillDatabaseHandler(context: Context):
             override val primaryKey = PrimaryKey(id, name = "PillSaved")
         }
 
-    class DBExposedPill(id: EntityID<Int>):IntEntity(id){
-        companion object: IntEntityClass<DBExposedPill>(DBExposedPills)
-        var name by DBExposedPills.name
-        var duration by DBExposedPills.duration
-        var frequency by DBExposedPills.frequency
-        var amount by DBExposedPills.amount
-        var amountType by DBExposedPills.amountType
-        var remindTime by DBExposedPills.remindTime
-        var doctorNote by DBExposedPills.doctorNote
+//    An entity instance or a row in the table is defined as a class instance:
+    class DBExposedPillInstance(id: EntityID<Int>):IntEntity(id){
+        companion object: IntEntityClass<DBExposedPillInstance>(DBExposedPillsTable)
+        var name by DBExposedPillsTable.name
+        var duration by DBExposedPillsTable.duration
+        var frequency by DBExposedPillsTable.frequency
+        var amount by DBExposedPillsTable.amount
+        var amountType by DBExposedPillsTable.amountType
+        var remindTime by DBExposedPillsTable.remindTime
+        var doctorNote by DBExposedPillsTable.doctorNote
 
     }
 
@@ -92,12 +92,14 @@ class PillDatabaseHandler(context: Context):
 //        creating table with fields
     db.execSQL(SQL_CREATE_ENTRIES)
 
-        val ddlStatements: List<String> = SchemaUtils.createStatements(DBExposedPills)
+        val ddlStatements: List<String> = SchemaUtils.createStatements(DBExposedPillsTable)
 //        SchemaUtils.
 
         Database.connect ("jdbc:sqlite:/data/data.db", "org.sqlite.JDBC")
         transaction{
-            SchemaUtils.create(DBExposedPills)
+            addLogger(StdOutSqlLogger)
+            SchemaUtils.create(DBExposedPillsTable)
+//            commit()
         }
     }
 
@@ -122,22 +124,22 @@ class PillDatabaseHandler(context: Context):
 
 
 
-        val contentValues = ContentValues().apply{
-            put(KEY_PILL_NAME, pillInfoJson.name)
-            put(KEY_DURATION, pillInfoJson.duration)
-            put(KEY_FREQUENCY, pillInfoJson.frequency)
-            put(KEY_AMOUNT, pillInfoJson.amount)
-            put(KEY_AMOUNTTYPE, pillInfoJson.amountType)
-            put(KEY_REMINDTIME, pillInfoJson.RemindTime)
-            put(KEY_DOCTORNOTE, pillInfoJson.doctorNote)
-        }
+//        val pillContent = ContentValues().apply{
+//            put(KEY_PILL_NAME, pillInfoJson.name)
+//            put(KEY_DURATION, pillInfoJson.duration)
+//            put(KEY_FREQUENCY, pillInfoJson.frequency)
+//            put(KEY_AMOUNT, pillInfoJson.amount)
+//            put(KEY_AMOUNTTYPE, pillInfoJson.amountType)
+//            put(KEY_REMINDTIME, pillInfoJson.RemindTime)
+//            put(KEY_DOCTORNOTE, pillInfoJson.doctorNote)
+//        }
 
 
 
-        Database.connect("jdbc:sqlite:/data/data.db", "org.sqlite.JDBC")
+//        Database.connect("jdbc:sqlite:/data/data.db", "org.sqlite.JDBC")
         transaction {
             addLogger(StdOutSqlLogger)
-            val pillContentExposed =  DBExposedPill.new{
+            val  aNewPill = DBExposedPillInstance.new{
                 name = pillInfoJson.name
                 duration = pillInfoJson.duration
                 frequency = pillInfoJson.frequency
@@ -145,17 +147,21 @@ class PillDatabaseHandler(context: Context):
                 amountType = pillInfoJson.amountType
                 remindTime = pillInfoJson.RemindTime
                 doctorNote = pillInfoJson.doctorNote
-
             }
+
+//            val success =db.insert(TABLE_NAME, null, pillContentExposed)
+//            db.close()
+//            return success
         }
 
 
 // Insert the new row, returning the primary key value of the new row
 //        or it will return -1 if there was an error inserting the data
-        val success =db.insert(TABLE_NAME, null, contentValues)
-        db.close()
-        return success
-    }
+//        val success =db.insert(TABLE_NAME, null, pillContent)
+
+//        db.close()
+//        return success
+//    }
 
     //    function to read records from database in the form of List
     fun getPillListFromDB(): MutableList<PillInfo> {
@@ -206,18 +212,39 @@ class PillDatabaseHandler(context: Context):
         return pillList
     }
 
-    fun deletePill(pillInfo: PillInfo):Int{
+    fun deletePill(pillInfo: PillInfo){
         val db = this.writableDatabase
-        val success = db.delete(TABLE_NAME, KEY_ID + "=" + pillInfo.id, null)
-        db.close()
-        return success
-    }
+        transaction {
+            addLogger(StdOutSqlLogger)
+            DBExposedPillsTable.deleteWhere {
+                DBExposedPillsTable.id eq pillInfo.id
+            }
+            }
+
+        }
+
+//        val success = db.delete(TABLE_NAME, KEY_ID + "=" + pillInfo.id, null)
+//        db.close()
+//        return success
+//    }
 
     fun updatePill(pill: PillInfo):Int{
         val db = this.writableDatabase
 
         val pillInfoString = Json.encodeToString(PillInfo.serializer(), pill)
         val pillInfoJson = Json.decodeFromString(PillInfo.serializer(), pillInfoString)
+        val PillToBeUpdated =  getPillListFromDB(pill)
+
+        transaction {
+
+            PillToBeUpdated.name = pillInfoJson.name
+                duration = pillInfoJson.duration
+                frequency = pillInfoJson.frequency
+                amount = pillInfoJson.amount
+                amountType = pillInfoJson.amountType
+                remindTime = pillInfoJson.RemindTime
+                doctorNote = pillInfoJson.doctorNote
+
 
 
         val contentValues = ContentValues().apply{
@@ -239,6 +266,14 @@ class PillDatabaseHandler(context: Context):
         db.close()
         return success
     }
+
+        fun queryOnePill(id: Int):DBExposedPillInstance?{
+//            problem: check id is valid
+            return  transaction {
+                addLogger(StdOutSqlLogger)
+                DBExposedPillInstance.findById(id)
+            }
+        }
 
 }
 
