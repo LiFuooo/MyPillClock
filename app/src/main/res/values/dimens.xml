@@ -11,6 +11,8 @@
     <dimen name="tvPillRemindTime_textSize">16sp</dimen>
     <dimen name="tvPillTimePicker_textSize">16sp</dimen>
     <dimen name="etDoctorNote_textSize">16sp</dimen>
+    <dimen name="rxNumberTextSize">16sp</dimen>
+    <dimen name="rxNumberTVTextSize">16sp</dimen>
 
 
 </resources>

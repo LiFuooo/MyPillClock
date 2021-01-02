@@ -20,7 +20,9 @@
     <string name="NoMoreRecords">No More records available!</string>
     <string name="imgAlarmOnOff">alarmOnOff</string>
     <string name="hello_blank_fragment">hello_blank_fragment</string>
-    <string name="Update">UPDATE</string>
+    <string name="Update">UPDATE AND SAVE</string>
+    <string name="RxNumber">Rx Number</string>
+    <string name="etRxNumberEditDefaultText">0090-klx</string>
 
 
 </resources>

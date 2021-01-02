@@ -188,7 +188,39 @@
 
     </LinearLayout>
 
-<!--    Doctor's Note Text Field-->
+    <!--    rxNumber Layout-->
+    <LinearLayout
+        android:id="@+id/rxNumberLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/PillRemindTimeLayout">
+
+        <TextView
+            android:id="@+id/tvRxNumber"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/rxNumberTVTextSize"
+            android:text="@string/RxNumber" />
+
+        <EditText
+            android:id="@+id/etRxNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:inputType="text"
+            android:maxEms="30"
+            android:textSize="@dimen/rxNumberTextSize"
+            android:text="1008-jxl"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+
+    <!--    Doctor's Note Text Field-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/LayoutDoctorNoteInput"
@@ -201,7 +233,7 @@
         android:layout_margin="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/PillRemindTimeLayout"
+        app:layout_constraintTop_toBottomOf="@id/rxNumberLayout"
         android:hint="Doctor's Note (Optional)"
         app:hintAnimationEnabled="true"
         android:scrollbarSize="15dp"
@@ -233,7 +265,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LayoutDoctorNoteInput"
         android:clickable="true"/>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
