@@ -1,5 +1,6 @@
 package com.example.mypillclock.Activities
 
+import SwipeToDeleteCallback
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -17,7 +18,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.EnvironmentCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.DatabaseHelper
 import com.example.mypillclock.Fragments.PillItemAdapter
@@ -121,6 +124,8 @@ class MainActivity : AppCompatActivity() {
         val itemAdapter = PillItemAdapter(this, SavedPillList)
         rvPillItem.adapter = itemAdapter
 
+
+//        TODO(Step1: Touch Item, go to EditPillActivity Page)
         itemAdapter.setOnClickListener(object : PillItemAdapter.OnClickListener {
             override fun onClick(position: Int, model: PillInfo) {
                 val intent = Intent(
@@ -131,6 +136,24 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+
+// TODO(Step 2: swipe item, show delete item option)
+        val deleteSwipeHandler = object : SwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                // TODO (Step 6: Call the adapter function when it is swiped for delete)
+                // START
+                val adapter = rvPillItem.adapter as PillItemAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+
+                getItemListFromLocalDB() // Gets the latest list from the local database after item being delete from it.
+                // END
+            }
+        }
+        val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
+        deleteItemTouchHelper.attachToRecyclerView(rvPillItem)
+        // END
+
+
 
 }
 

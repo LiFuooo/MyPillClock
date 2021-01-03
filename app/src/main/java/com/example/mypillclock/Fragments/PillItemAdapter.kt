@@ -33,12 +33,12 @@ open class PillItemAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentItem = itemsList[position]
-        val displayString = currentItem.name + ",  " + currentItem.amount + currentItem.amountType +
-                ", id = ${currentItem.id}"
+        val displayString = currentItem.name + ",  " + currentItem.RemindTime+
+                " ,id = ${currentItem.id}"
 
 
         holder.itemView.apply {
-            tvPillItem_Qty.text = currentItem.amount.toString()
+            tvPillItem_Qty.text = currentItem.amount.toString() +" " + currentItem.amountType
             tvPillItem_content.text = displayString
 
             holder.itemView.setOnClickListener{

@@ -27,7 +27,7 @@ class AddPillActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_pill)
 
 
-//        spinner part  ------------------------------------------------------------------
+//        TODo(PillType spinner part) ------------------------------------------------------------------
         val spinner: Spinner = findViewById(R.id.spinnerAmountType)
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
@@ -40,7 +40,7 @@ class AddPillActivity : AppCompatActivity() {
             // Apply the adapter to the spinner
             spinner.adapter = adapter
         }
-// Spinner Part END ------------------------------------------------------------------------------
+// ToDO(Spinner Part END )------------------------------------------------------------------------------
 
 
 //        Save Button Part ------------------------------------------------------------------------
@@ -160,7 +160,7 @@ class AddPillActivity : AppCompatActivity() {
 
 
     fun showTimePickerDialog(v: View) {
-        AddPillTimePickerFragment().show(supportFragmentManager, "timePicker")
+        AddPillTimePickerFragment().show(supportFragmentManager, "timePickerAdd")
     }
 
 

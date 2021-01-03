@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".Activities.AddPillActivity"
+    tools:context=".Activities.EditPillActivity"
     android:id="@+id/editPillActivity">
 
     <!--    Pill Name -->
@@ -35,7 +35,7 @@
             android:layout_weight="3"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:text="Pill_1"
+            android:hint="Pill_1"
             android:maxEms="15"
             android:textSize="@dimen/etPillName_textSize"
             android:orientation="horizontal" />
@@ -251,7 +251,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <!--    Save Button -->
+    <!--    UPDATE AND SAVE Button -->
     <Button
         android:id="@+id/updatePillBtn"
         android:layout_width="wrap_content"
