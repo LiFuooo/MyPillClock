@@ -10,6 +10,7 @@ data class PillInfo(
         val frequency:Int,
         val amount: Int,
         val amountType:String,
+        val remindStartDate:String,
         val RemindTime: String,
         val rxNumber: String,
         val doctorNote: String

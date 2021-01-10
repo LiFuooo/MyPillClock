@@ -10,9 +10,10 @@
 
     <string name="TextViewPillName"> Pill Name:</string>
     <string name="TextViewDuration">Duration (Days): </string>
-    <string name="TextViewFrequency">Frequency (Hours): </string>
+    <string name="TextViewFrequency">Frequency (hours between two doses): </string>
     <string name="TextViewAmount">Amount: </string>
     <string name="TextViewTime">Remind Time: </string>
+    <string name="TextViewDate">Remind Start Date:</string>
     <string name="PillQty">1</string>
     <string name="NoteFromDoctor">Note From Doctor: </string>
     <string name="save">Save</string>

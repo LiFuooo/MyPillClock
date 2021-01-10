@@ -111,9 +111,12 @@
 
 
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -127,9 +130,15 @@ import com.example.mypillclock.R
 /**
  * A abstract class which we will use for delete feature.
  */
-abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleCallback(
+    0,
+    ItemTouchHelper.LEFT
+) {
 
-    private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_baseline_delete_withcross_24)
+    private val deleteIcon = ContextCompat.getDrawable(
+        context,
+        R.drawable.ic_baseline_delete_withcross_24
+    )
     private val intrinsicWidth = deleteIcon!!.intrinsicWidth
     private val intrinsicHeight = deleteIcon!!.intrinsicHeight
     private val background = ColorDrawable()
@@ -137,7 +146,10 @@ abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleC
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
 
 
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
         /**
          * To disable "swipe" for specific item return 0 here.
          * For example:
@@ -148,7 +160,11 @@ abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleC
         return super.getMovementFlags(recyclerView, viewHolder)
     }
 
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         return false
     }
 
@@ -160,16 +176,31 @@ abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleC
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
         val isCanceled = dX == 0f && !isCurrentlyActive
+        Log.i("dX", dX.toString())
+        Log.i("dY", dY.toString())
 
         if (isCanceled) {
-            clearCanvas(c, itemView.right + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
+            clearCanvas(
+                c,
+                itemView.right + dX,
+                itemView.top.toFloat(),
+                itemView.right.toFloat(),
+                itemView.bottom.toFloat()
+            )
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             return
         }
 
         // Draw the red delete background
         background.color = backgroundColor
-        background.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
+        background.setBounds(
+            itemView.right + dX.toInt(),
+            itemView.top,
+            itemView.right,
+            itemView.bottom
+        )
+        Log.i("itemView.right", itemView.right.toString())
+        Log.i("iView.right+dX.toInt()", (itemView.right + dX.toInt()).toString())
         background.draw(c)
 
         // Calculate position of delete icon
@@ -183,11 +214,35 @@ abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleC
         deleteIcon!!.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
         deleteIcon.draw(c)
 
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        super.onChildDraw(c, recyclerView, viewHolder, dX / 4, dY, actionState, isCurrentlyActive)
     }
 
     private fun clearCanvas(c: Canvas?, left: Float, top: Float, right: Float, bottom: Float) {
         c?.drawRect(left, top, right, bottom, clearPaint)
     }
-}
+
+
+
+//    fun onSwiped(viewHolder: RecyclerView.ViewHolder?, swipeDir: Int) {
+//
+//        // Show delete confirmation if swipped left
+//        if (swipeDir == ItemTouchHelper.LEFT) {
+//            val builder: AlertDialog.Builder = Builder(getActivity())
+//            builder.setMessage("Are you sure you want to delete?")
+//                .setCancelable(false)
+//                .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+//                    deleteItem(viewHolder)
+//                    //                                    getActivity().finish();
+//                })
+//                .setNegativeButton("No",
+//                    DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+//            val alert: AlertDialog = builder.create()
+//            alert.show()
+//        } else if (swipeDir == ItemTouchHelper.RIGHT) {
+//            // Show edit dialog
+//        }
+//    }
+//}
 // END
+
+}

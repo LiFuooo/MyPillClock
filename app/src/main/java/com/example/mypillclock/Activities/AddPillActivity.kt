@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.DatabaseHelper
+import com.example.mypillclock.Fragments.AddPillDatePickerFragment
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.activity_add_pill.*
 import kotlinx.serialization.json.Json
@@ -51,6 +52,7 @@ class AddPillActivity : AppCompatActivity() {
             val frequency = etFrequency.text.toString().trim().toIntOrNull()
             val amount = etPillAmount.text.toString().trim().toIntOrNull()
             val amountType = spinnerAmountType.selectedItem.toString().trim()
+            val remindStartDate = tvPillDatePicker.text.toString().trim()
             val remindTime = tvPillTimePicker.text.toString().trim()
             val rxNumber = tvRxNumber.text.toString().trim()
             val doctorNote = etDoctorNote.text.toString().trim()
@@ -78,6 +80,10 @@ class AddPillActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please select an Amount Type!", Toast.LENGTH_SHORT).show()
             }
 
+            if (remindStartDate.isEmpty()) {
+                Toast.makeText(this, "Remind start date is Empty!", Toast.LENGTH_SHORT).show()
+            }
+
             if (remindTime.isEmpty()) {
                 Toast.makeText(this, "Remind Time is Empty!", Toast.LENGTH_SHORT).show()
             }
@@ -91,6 +97,7 @@ class AddPillActivity : AppCompatActivity() {
                 && frequency != null
                 && amount != null
                 && amountType.isNotEmpty()
+                && remindStartDate.isNotEmpty()
                 && remindTime.isNotEmpty()
                 && rxNumber.isNotEmpty()
             ) {
@@ -106,6 +113,7 @@ class AddPillActivity : AppCompatActivity() {
                     frequency,
                     amount,
                     amountType,
+                    remindStartDate,
                     remindTime,
                     rxNumber,
                     doctorNote
@@ -144,7 +152,6 @@ class AddPillActivity : AppCompatActivity() {
         if (isFormFilled) {
             Log.e("AddPillActivity", "isFormFilled = $isFormFilled")
 //            val pillInfoJson = Json.encodeToString(PillInfo.serializer(), pill)
-            val status = databaseHelper.addPill(pill)
             try {
                 databaseHelper.addPill(pill)
                 setResult(Activity.RESULT_OK)
@@ -153,11 +160,13 @@ class AddPillActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "Pill Save to DataBase FAILED!", Toast.LENGTH_SHORT).show()
             }
-            Log.e("AddPillActivity", "status = $status")
 
         }
     }
 
+    fun showStartDatePickerDialog(v: View) {
+        AddPillDatePickerFragment().show(supportFragmentManager, "datePickerAdd")
+    }
 
     fun showTimePickerDialog(v: View) {
         AddPillTimePickerFragment().show(supportFragmentManager, "timePickerAdd")

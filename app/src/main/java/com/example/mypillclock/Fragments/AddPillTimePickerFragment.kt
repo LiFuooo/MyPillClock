@@ -24,9 +24,15 @@ class AddPillTimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetLi
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
         // Do something with the time chosen by the user
-//        TextViewTimePicker.text = ("$hourOfDay").toString()
         val tv: TextView = activity?.findViewById(R.id.tvPillTimePicker) as TextView
-        tv.text = "${getHourAMPM(hourOfDay)}:$minute ${getAMPM(hourOfDay)}"
+
+        val minuteFormatted =
+            if(minute < 10){
+                "0${minute}"
+            } else{
+                minute
+            }
+        tv.text = "${getHourAMPM(hourOfDay)}:$minuteFormatted ${getAMPM(hourOfDay)}"
     }
 
     private fun getAMPM(hour:Int):String{

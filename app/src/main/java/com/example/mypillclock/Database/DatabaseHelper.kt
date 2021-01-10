@@ -19,6 +19,7 @@ class DatabaseHelper {
         val frequency: Column<Int> = integer("frequency")
         val amount: Column<Int> = integer("amount")
         val amountType: Column<String> = varchar("amountType", 50)
+        val remindStartDate:Column<String> = varchar("remindStartDate", 20)
         val remindTime: Column<String> = varchar("remindTime", 50)
         val rxNumber: Column<String> = varchar("Rx_Number", 50)
         val doctorNote: Column<String> = varchar("doctorNote", 200)
@@ -34,6 +35,7 @@ class DatabaseHelper {
         var frequency by DBExposedPillsTable.frequency
         var amount by DBExposedPillsTable.amount
         var amountType by DBExposedPillsTable.amountType
+        var remindStartDate by DBExposedPillsTable.remindStartDate
         var remindTime by DBExposedPillsTable.remindTime
         var rxNumber by DBExposedPillsTable.rxNumber
         var doctorNote by DBExposedPillsTable.doctorNote
@@ -54,6 +56,7 @@ class DatabaseHelper {
                 frequency = pillInfoJson.frequency
                 amount = pillInfoJson.amount
                 amountType = pillInfoJson.amountType
+                remindStartDate = pillInfoJson.remindStartDate
                 remindTime = pillInfoJson.RemindTime
                 rxNumber = pillInfoJson.rxNumber
                 doctorNote = pillInfoJson.doctorNote
@@ -76,6 +79,7 @@ class DatabaseHelper {
                     dbExposedPillInstance.frequency,
                     dbExposedPillInstance.amount,
                     dbExposedPillInstance.amountType,
+                    dbExposedPillInstance.remindStartDate,
                     dbExposedPillInstance.remindTime,
                     dbExposedPillInstance.rxNumber,
                     dbExposedPillInstance.doctorNote
@@ -109,6 +113,7 @@ class DatabaseHelper {
             pillToBeUpdated.frequency = afterEditPillInfoJson.frequency
             pillToBeUpdated.amount = afterEditPillInfoJson.amount
             pillToBeUpdated.amountType = afterEditPillInfoJson.amountType
+            pillToBeUpdated.remindStartDate = afterEditPillInfoJson.remindStartDate
             pillToBeUpdated.remindTime = afterEditPillInfoJson.RemindTime
             pillToBeUpdated.rxNumber = afterEditPillInfoJson.rxNumber
             pillToBeUpdated.doctorNote = afterEditPillInfoJson.doctorNote

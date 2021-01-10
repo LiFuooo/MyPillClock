@@ -2,27 +2,22 @@ package com.example.mypillclock.Activities
 
 
 import android.app.Activity
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.TextView
-import android.widget.TimePicker
 import android.widget.Toast
-import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.DatabaseHelper
+import com.example.mypillclock.Fragments.EditPillDatePickerFragment
 import com.example.mypillclock.Fragments.EditPillTimePickerFragment
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_add_pill.*
 import kotlinx.android.synthetic.main.activity_edit_pill.*
 import kotlinx.serialization.json.Json
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,32 +52,6 @@ class EditPillActivity : AppCompatActivity() {
                 spinnerAmountTypeEdit.setSelection(spinnerPosition)}
 
 
-//                TODO(Set Time Picker default value)
-
-//                val sdf = SimpleDateFormat("HH:mm")
-//                var date: Date? = null
-//                try {
-//                    date = sdf.parse(ToBeEditedPillInfoDetail.RemindTime)
-//                    Log.i("date in Clock", date.toString())
-//                } catch (e: ParseException) {
-//                }
-//                val c: Calendar = Calendar.getInstance()
-//                c.setTime(date)
-//
-//                val picker = TimePicker(applicationContext)
-////            picker.setIs24HourView(true)
-//            if (Build.VERSION.SDK_INT >= 23) {
-//                picker.hour = c.get(Calendar.HOUR_OF_DAY)
-//                picker.minute = c.get(Calendar.MINUTE)
-//            }
-//            else {
-//                picker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY))
-//                picker.setCurrentMinute(c.get(Calendar.MINUTE))
-//            }
-//
-//            Log.i("picker.hour ", picker.hour.toString())
-//            Log.i("picker.minute ", picker.minute.toString())
-
 
 
 
@@ -93,6 +62,7 @@ class EditPillActivity : AppCompatActivity() {
             etDurationEdit.setText(ToBeEditedPillInfoDetail.duration.toString())
             etFrequencyEdit.setText(ToBeEditedPillInfoDetail.frequency.toString())
             etPillAmountEdit.setText(ToBeEditedPillInfoDetail.amount.toString())
+            tvPillDatePickerEdit.text = ToBeEditedPillInfoDetail.remindStartDate
             tvPillTimePickerEdit.text = ToBeEditedPillInfoDetail.RemindTime
             Log.i("Line tvPillTimePickerE", tvPillTimePickerEdit.text.toString())
             etRxNumberEdit.setText(ToBeEditedPillInfoDetail.rxNumber)
@@ -108,6 +78,7 @@ class EditPillActivity : AppCompatActivity() {
             val frequency = etFrequencyEdit.text.toString().trim().toIntOrNull()
             val amount = etPillAmountEdit.text.toString().trim().toIntOrNull()
             val amountType = spinnerAmountTypeEdit.selectedItem.toString().trim()
+            val remindStartDate = tvPillDatePickerEdit.text.toString().trim()
             val remindTime = tvPillTimePickerEdit.text.toString().trim()
             val rxNumber = tvRxNumberEdit.text.toString().trim()
             val doctorNote = etDoctorNoteEdit.text.toString().trim()
@@ -135,6 +106,10 @@ class EditPillActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please select an Amount Type!", Toast.LENGTH_SHORT).show()
             }
 
+            if (remindStartDate.isEmpty()) {
+                Toast.makeText(this, "Remind Start Date is Empty!", Toast.LENGTH_SHORT).show()
+            }
+
             if (remindTime.isEmpty()) {
                 Toast.makeText(this, "Remind Time is Empty!", Toast.LENGTH_SHORT).show()
             }
@@ -148,6 +123,7 @@ class EditPillActivity : AppCompatActivity() {
                 && frequency != null
                 && amount != null
                 && amountType.isNotEmpty()
+                && remindStartDate.isNotEmpty()
                 && remindTime.isNotEmpty()
                 && rxNumber.isNotEmpty()
             ) {
@@ -166,6 +142,7 @@ class EditPillActivity : AppCompatActivity() {
                     frequency,
                     amount,
                     amountType,
+                    remindStartDate,
                     remindTime,
                     rxNumber,
                     doctorNote
@@ -200,9 +177,19 @@ class EditPillActivity : AppCompatActivity() {
         }
     }
 
+    fun showDatePickerDialogEdit(v: View) {
+        val sdf = SimpleDateFormat("yyyy-mm-dd")
+
+        var dateOnClock: Date = sdf.parse(tvPillDatePickerEdit.text.toString())
+        EditPillDatePickerFragment(dateOnClock).show(supportFragmentManager, "datePickerEdit")
+    }
+
 
     fun showTimePickerDialogEdit(v: View) {
-            EditPillTimePickerFragment().show(supportFragmentManager, "timePickerEdit")
+        val sdf = SimpleDateFormat("hh:mm a")
+
+        var timeOnClock: Date = sdf.parse(tvPillTimePickerEdit.text.toString())
+            EditPillTimePickerFragment(timeOnClock).show(supportFragmentManager, "timePickerEdit")
         }
 
 

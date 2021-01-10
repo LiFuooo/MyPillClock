@@ -69,29 +69,33 @@
             android:inputType="number"
             android:maxEms="15"
             android:textSize="@dimen/etDuration_textSize"
-            android:text="20"
+            android:hint="How many days you need to take it?"
             android:orientation="horizontal" />
     </LinearLayout>
 
     <!--    Frequency Layout-->
+
+    <!--    Amount Layout-->
     <LinearLayout
         android:id="@+id/FrequencyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DurationLayout">
 
         <TextView
             android:id="@+id/tvFrequency"
-            android:layout_width="60dp"
+            android:layout_width="101dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/tvFrequency_textSize"
-            android:text="@string/TextViewFrequency" />
+            android:text="@string/TextViewFrequency"
+            android:textSize="@dimen/tvFrequency_textSize" />
 
         <EditText
             android:id="@+id/etFrequency"
@@ -100,16 +104,15 @@
             android:layout_weight="2"
             android:autofillHints=""
             android:gravity="center"
+            android:hint="How many hours between two doses?"
             android:inputType="number"
             android:maxEms="15"
-            android:textSize="@dimen/etFrequency_textSize"
-            android:text="3"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:textSize="@dimen/etFrequency_textSize" />
 
 
     </LinearLayout>
 
-    <!--    Amount Layout-->
     <LinearLayout
         android:id="@+id/AmountLayout"
         android:layout_width="match_parent"
@@ -152,6 +155,43 @@
 
     </LinearLayout>
 
+
+    <!--    Pill Remind Start Date Layout-->
+    <LinearLayout
+        android:id="@+id/PillRemindStartDateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AmountLayout">
+
+        <TextView
+            android:id="@+id/tvPillRemindStartDate"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/tvPillRemindDate_textSize"
+            android:text="@string/TextViewDate"
+            />
+
+        <TextView
+            android:id="@+id/tvPillDatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textSize="@dimen/tvPillTimePicker_textSize"
+            android:hint="@string/hint_time"
+            android:text="2020-01-01"
+            android:onClick="showStartDatePickerDialog" />
+
+    </LinearLayout>
+
     <!--    Pill Remind Time Layout-->
     <LinearLayout
         android:id="@+id/PillRemindTimeLayout"
@@ -163,7 +203,7 @@
         android:layout_margin="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AmountLayout">
+        app:layout_constraintTop_toBottomOf="@+id/PillRemindStartDateLayout">
 
         <TextView
             android:id="@+id/tvPillRemindTime"
@@ -183,7 +223,7 @@
             android:focusableInTouchMode="false"
             android:textSize="@dimen/tvPillTimePicker_textSize"
             android:hint="@string/hint_time"
-            android:text="13:05PM"
+            android:text="3:30PM"
             android:onClick="showTimePickerDialog" />
 
     </LinearLayout>

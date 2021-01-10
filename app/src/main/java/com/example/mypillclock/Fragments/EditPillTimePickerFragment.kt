@@ -16,51 +16,35 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditPillTimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class EditPillTimePickerFragment(val timeOnClock : Date) : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val sdf = SimpleDateFormat("HH:mm")
-        var date: Date = sdf.parse(tvPillTimePickerEdit.text.toString())
-//        if(sdf.parse(tvPillRemindTimeEdit.text.toString()) != null){
-//            val date = sdf.parse(tvPillRemindTimeEdit.text.toString())
-//                Log.i("date in Clock", date.toString())
-//                val c: Calendar = Calendar.getInstance()
-//                c.setTime(date)}
-//                var date: Date = sdf.parse(tvPillRemindTimeEdit.text.toString())
-//        try {
-//            date = sdf.parse(tvPillRemindTimeEdit.text.toString())
-//            Log.i("date in Clock", date.toString())
-//        } catch (e: ParseException) {
-//        }
-//                val c: Calendar = Calendar.getInstance()
-//                c.setTime(date)
-//        val picker = TimePicker(applicationContext)
-////            picker.setIs24HourView(true)
-//            if (Build.VERSION.SDK_INT >= 23) {
-//                picker.hour = c.get(Calendar.HOUR_OF_DAY)
-//                picker.minute = c.get(Calendar.MINUTE)
-//            }
-//            else {
-//                picker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY))
-//                picker.setCurrentMinute(c.get(Calendar.MINUTE))
-//            }
         val c = Calendar.getInstance()
-        c.time = date
+        c.time = timeOnClock
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
-        Log.i("time clock", tvPillTimePickerEdit.text.toString())
-//        val hour = 1
-//        val minute = 3
+        var am_pm = ""
+        if (c.get(Calendar.AM_PM) == Calendar.AM)
+            am_pm = "AM";
+        else if (c.get(Calendar.AM_PM) == Calendar.PM)
+            am_pm = "PM";
+
+
+
                 // Create a new instance of TimePickerDialog and return it
                 return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
             }
 //        }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        // Do something with the time chosen by the user
-//        tvPillRemindTimeEdit.text = ("$hourOfDay").toString()
         val tv: TextView = activity?.findViewById(R.id.tvPillTimePickerEdit) as TextView
-        tv.text = "${getHourAMPM(hourOfDay)}:$minute ${getAMPM(hourOfDay)}"
+        val minuteFormatted =
+            if(minute < 10){
+                "0${minute}"
+            } else{
+                minute
+            }
+        tv.text = "${getHourAMPM(hourOfDay)}:$minuteFormatted ${getAMPM(hourOfDay)}"
     }
 
     private fun getAMPM(hour:Int):String{

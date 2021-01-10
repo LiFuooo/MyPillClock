@@ -2,22 +2,17 @@ package com.example.mypillclock.Activities
 
 import SwipeToDeleteCallback
 import android.app.Activity
-import android.content.Context
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.Environment.getExternalStorageDirectory
 import android.util.Log
-import android.util.Log.INFO
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.os.EnvironmentCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,15 +20,11 @@ import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.DatabaseHelper
 import com.example.mypillclock.Fragments.PillItemAdapter
 import com.example.mypillclock.R
+import com.example.mypillclock.Utilities.NotificationHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.io.File
-import java.io.FileWriter
-import java.io.PrintWriter
-import java.util.jar.Manifest
-import java.util.logging.Level.INFO
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,13 +52,14 @@ class MainActivity : AppCompatActivity() {
 
             val externalFileDir = openFileOutput("test.txt", MODE_PRIVATE)
             Log.i("externalFileDir", externalFileDir.toString())
-
-//
         }
         setupPermissions()
 
+
+//connect database
         Database.connect("jdbc:h2:${filesDir.absolutePath}/PillInfo", "org.h2.Driver")
         transaction {
+//            SchemaUtils.drop(DatabaseHelper.DBExposedPillsTable)
             SchemaUtils.create(DatabaseHelper.DBExposedPillsTable)
         }
 
@@ -82,14 +74,14 @@ class MainActivity : AppCompatActivity() {
 //        setupListOfDataIntoRecycleView()
 
         var fakePillList = mutableListOf<PillInfo>(
-            PillInfo(1, "name1", 24, 30, 1, "pills", "12:00PM", "123-098x", "No Food"),
-            PillInfo(2, "name2", 2, 3, 2, "pills", "12:00PM", "123-098x", "No Food"),
-            PillInfo(3, "name3", 24, 30, 1, "pills", "12:00PM", "123-098x", "No Food"),
-            PillInfo(4, "name4", 24, 30, 1, "pills", "12:00PM", "nul123-098xl", "No Food"),
-            PillInfo(5, "name5", 2, 3, 20, "pills", "12:00PM", "123-098x", "No Food"),
-            PillInfo(6, "name6", 24, 30, 100, "pills", "12:00PM", "123-098x", "No Food"),
-            PillInfo(7, "name7", 2, 3, 3, "pills", "12:00PM", "nu123-098xll", "No Food"),
-            PillInfo(8, "name8", 24, 30, 1, "pills", "12:00PM", "123-098x", "No Food")
+            PillInfo(1, "name1", 24, 30, 1, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
+            PillInfo(2, "name2", 2, 3, 2, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
+            PillInfo(3, "name3", 24, 30, 1, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
+            PillInfo(4, "name4", 24, 30, 1, "pills", "2020-01-09","12:00PM", "nul123-098xl", "No Food"),
+            PillInfo(5, "name5", 2, 3, 20, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
+            PillInfo(6, "name6", 24, 30, 100, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
+            PillInfo(7, "name7", 2, 3, 3, "pills", "2020-01-09","12:00PM", "nu123-098xll", "No Food"),
+            PillInfo(8, "name8", 24, 30, 1, "pills", "2020-01-09","12:00PM", "123-098x", "No Food")
         )
 //        val adapter = PillItemAdapter(this, fakePillList)
 //        rvPillItem.adapter = adapter
@@ -98,6 +90,11 @@ class MainActivity : AppCompatActivity() {
 
         getItemListFromLocalDB()
 
+//set up notification channel
+        val pillNotification = NotificationHelper()
+        pillNotification.createNotificationChannel(this,
+            NotificationManagerCompat.IMPORTANCE_DEFAULT, false,
+            getString(R.string.app_name), "App notification channel.")
 
 
     }
@@ -140,18 +137,37 @@ class MainActivity : AppCompatActivity() {
 // TODO(Step 2: swipe item, show delete item option)
         val deleteSwipeHandler = object : SwipeToDeleteCallback(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // TODO (Step 6: Call the adapter function when it is swiped for delete)
-                // START
-                val adapter = rvPillItem.adapter as PillItemAdapter
-                adapter.removeAt(viewHolder.adapterPosition)
 
-                getItemListFromLocalDB() // Gets the latest list from the local database after item being delete from it.
-                // END
+                // Call the adapter function when it is swiped for delete
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this@MainActivity)
+                    builder.setMessage("Are you sure you want to delete?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                            val adapter = rvPillItem.adapter as PillItemAdapter
+                            adapter.removeAt(viewHolder.adapterPosition)
+                            getItemListFromLocalDB()
+                        })
+                        .setNegativeButton("Cancel",
+                            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                    val alert: AlertDialog = builder.create()
+                    alert.show()
             }
         }
+
+//        delteItemTouchHelper
         val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
         deleteItemTouchHelper.attachToRecyclerView(rvPillItem)
         // END
+
+//       TODO( Notification Part)
+        val getSavedPillList = DatabaseHelper().getPillListFromDB()
+        getSavedPillList.forEach {
+            val pillName = it.name
+            NotificationHelper().createNotificationChannel(this,
+                NotificationManagerCompat.IMPORTANCE_LOW, true,
+                pillName, "Notification channel for cats.")
+        }
+
 
 
 
