@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.DatabaseHelper
+import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Fragments.PillItemAdapter
 import com.example.mypillclock.R
-import com.example.mypillclock.Utilities.NotificationHelper
+import com.example.mypillclock.Alarm.NotificationHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         Database.connect("jdbc:h2:${filesDir.absolutePath}/PillInfo", "org.h2.Driver")
         transaction {
 //            SchemaUtils.drop(DatabaseHelper.DBExposedPillsTable)
-            SchemaUtils.create(DatabaseHelper.DBExposedPillsTable)
+            SchemaUtils.create(pillInfoDBHelper.DBExposedPillsTable)
         }
 
 //        AddPill FAB
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     //    function to get Pill list from database
     private fun getItemListFromLocalDB(){
-        val getSavedPillList = DatabaseHelper().getPillListFromDB()
+        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
 
         if(getSavedPillList.size > 0){
             rvPillItem.visibility = View.VISIBLE
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         // END
 
 //       TODO( Notification Part)
-        val getSavedPillList = DatabaseHelper().getPillListFromDB()
+        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
         getSavedPillList.forEach {
             val pillName = it.name
             NotificationHelper().createNotificationChannel(this,

@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.DatabaseHelper
+import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Fragments.EditPillDatePickerFragment
 import com.example.mypillclock.Fragments.EditPillTimePickerFragment
 import com.example.mypillclock.R
@@ -194,7 +194,7 @@ class EditPillActivity : AppCompatActivity() {
 
 
     fun UpdatePillRecord(isFormFilled: Boolean, newPill: PillInfo) {
-            val databaseHelper = DatabaseHelper()
+            val databaseHelper = pillInfoDBHelper()
             if (isFormFilled) {
                 Log.e("AddPillActivity", "isFormFilled = $isFormFilled")
 //            val pillInfoJson = Json.encodeToString(PillInfo.serializer(), pill)

@@ -1,4 +1,4 @@
-package com.example.mypillclock.Utilities
+package com.example.mypillclock.Alarm
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,16 +6,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.mypillclock.Activities.MainActivity
-import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.DatabaseHelper
+import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_edit_pill.*
-import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,7 +38,7 @@ class NotificationHelper() {
 
     fun createPillNotification(context: Context, channelId: String) {
 //        get pill Info from DB
-        val getSavedPillList = DatabaseHelper().getPillListFromDB()
+        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
         val sdfTime = SimpleDateFormat("hh:mm a")
 
 //        get pill date and time for each pill

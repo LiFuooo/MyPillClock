@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class DatabaseHelper {
+class pillInfoDBHelper {
 
     object DBExposedPillsTable : IntIdTable() {
         val name: Column<String> = varchar("name", 50)

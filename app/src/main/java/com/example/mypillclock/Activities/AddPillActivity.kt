@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.DatabaseHelper
+import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Fragments.AddPillDatePickerFragment
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.activity_add_pill.*
@@ -148,7 +148,7 @@ class AddPillActivity : AppCompatActivity() {
 
     //    function to save pill info to database
     private fun addPillRecord(isFormFilled: Boolean, pill: PillInfo) {
-        val databaseHelper = DatabaseHelper()
+        val databaseHelper = pillInfoDBHelper()
         if (isFormFilled) {
             Log.e("AddPillActivity", "isFormFilled = $isFormFilled")
 //            val pillInfoJson = Json.encodeToString(PillInfo.serializer(), pill)
