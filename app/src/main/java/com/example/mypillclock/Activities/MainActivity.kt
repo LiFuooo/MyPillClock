@@ -3,6 +3,7 @@ package com.example.mypillclock.Activities
 import SwipeToDeleteCallback
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,14 +14,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mypillclock.Alarm.NotificationHelper
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Fragments.PillItemAdapter
 import com.example.mypillclock.R
-import com.example.mypillclock.Alarm.NotificationHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -36,18 +39,30 @@ class MainActivity : AppCompatActivity() {
 
 
         fun setupPermissions() {
-            val permissionRead = ContextCompat.checkSelfPermission(this,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            val permissionWrite = ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val permissionRead = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            val permissionWrite = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
 
             if (permissionRead != PackageManager.PERMISSION_GRANTED ) {
                 Log.e("permission", "MainActivity Permission to Read denied")
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),1)
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    1
+                )
             }
             if (permissionWrite != PackageManager.PERMISSION_GRANTED) {
                 Log.e("permission", "MainActivity Permission to Write denied")
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
+                )
             }
 
             val externalFileDir = openFileOutput("test.txt", MODE_PRIVATE)
@@ -56,32 +71,108 @@ class MainActivity : AppCompatActivity() {
         setupPermissions()
 
 
-//connect database
+//    ToDo: connect database
         Database.connect("jdbc:h2:${filesDir.absolutePath}/PillInfo", "org.h2.Driver")
         transaction {
 //            SchemaUtils.drop(DatabaseHelper.DBExposedPillsTable)
             SchemaUtils.create(pillInfoDBHelper.DBExposedPillsTable)
         }
 
-//        AddPill FAB
+//        TODO: Add Pill when clicking FAB
         AddPillFab.setOnClickListener {
             val intent = Intent(this, AddPillActivity::class.java).also {
                 startActivityForResult(it, ADD_PILL_ACTIVITY_REQUEST_CODE)
             }
         }
 
+//        TODO: set bottom Fragment Navigation
+        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
+        navigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.ic_home -> {
+                    val a = Intent(this@MainActivity, MainActivity::class.java)
+                    startActivity(a)
+                }
+                R.id.ic_clock_in -> {
+                    val  b= Intent(this@MainActivity, ClockInActivity::class.java)
+                    startActivity(b)
+                }
+                R.id.ic_diary -> {
+                    val c = Intent(this@MainActivity, ClockInActivity::class.java)
+                    startActivity(c)
+                }
+            }
+            true
+        }
+
+
 // get PillList into rv
 //        setupListOfDataIntoRecycleView()
 
         var fakePillList = mutableListOf<PillInfo>(
-            PillInfo(1, "name1", 24, 30, 1, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
-            PillInfo(2, "name2", 2, 3, 2, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
-            PillInfo(3, "name3", 24, 30, 1, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
-            PillInfo(4, "name4", 24, 30, 1, "pills", "2020-01-09","12:00PM", "nul123-098xl", "No Food"),
-            PillInfo(5, "name5", 2, 3, 20, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
-            PillInfo(6, "name6", 24, 30, 100, "pills", "2020-01-09","12:00PM", "123-098x", "No Food"),
-            PillInfo(7, "name7", 2, 3, 3, "pills", "2020-01-09","12:00PM", "nu123-098xll", "No Food"),
-            PillInfo(8, "name8", 24, 30, 1, "pills", "2020-01-09","12:00PM", "123-098x", "No Food")
+            PillInfo(
+                1,
+                "name1",
+                24,
+                30,
+                1,
+                "pills",
+                "2020-01-09",
+                "12:00PM",
+                "123-098x",
+                "No Food"
+            ),
+            PillInfo(2, "name2", 2, 3, 2, "pills", "2020-01-09", "12:00PM", "123-098x", "No Food"),
+            PillInfo(
+                3,
+                "name3",
+                24,
+                30,
+                1,
+                "pills",
+                "2020-01-09",
+                "12:00PM",
+                "123-098x",
+                "No Food"
+            ),
+            PillInfo(
+                4,
+                "name4",
+                24,
+                30,
+                1,
+                "pills",
+                "2020-01-09",
+                "12:00PM",
+                "nul123-098xl",
+                "No Food"
+            ),
+            PillInfo(5, "name5", 2, 3, 20, "pills", "2020-01-09", "12:00PM", "123-098x", "No Food"),
+            PillInfo(
+                6,
+                "name6",
+                24,
+                30,
+                100,
+                "pills",
+                "2020-01-09",
+                "12:00PM",
+                "123-098x",
+                "No Food"
+            ),
+            PillInfo(
+                7,
+                "name7",
+                2,
+                3,
+                3,
+                "pills",
+                "2020-01-09",
+                "12:00PM",
+                "nu123-098xll",
+                "No Food"
+            ),
+            PillInfo(8, "name8", 24, 30, 1, "pills", "2020-01-09", "12:00PM", "123-098x", "No Food")
         )
 //        val adapter = PillItemAdapter(this, fakePillList)
 //        rvPillItem.adapter = adapter
@@ -90,11 +181,24 @@ class MainActivity : AppCompatActivity() {
 
         getItemListFromLocalDB()
 
-//set up notification channel
-        val pillNotification = NotificationHelper()
-        pillNotification.createNotificationChannel(this,
-            NotificationManagerCompat.IMPORTANCE_DEFAULT, false,
-            getString(R.string.app_name), "App notification channel.")
+
+//        TODO: Notification Part
+        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
+//        getSavedPillList.forEach {
+//            val pillName = it.name
+//            NotificationHelper().createNotificationChannel(
+//                this,
+//                NotificationManagerCompat.IMPORTANCE_LOW, true,
+//                pillName, "Notification channel for cats."
+//            )
+//        }
+
+        NotificationHelper().createNotificationChannel(this)
+        val pillToNotify = getSavedPillList[0]
+
+        notifi_test_btn.setOnClickListener{
+            NotificationHelper().createPillNotification(this, pillToNotify)
+        }
 
 
     }
@@ -158,18 +262,6 @@ class MainActivity : AppCompatActivity() {
         val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
         deleteItemTouchHelper.attachToRecyclerView(rvPillItem)
         // END
-
-//       TODO( Notification Part)
-        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
-        getSavedPillList.forEach {
-            val pillName = it.name
-            NotificationHelper().createNotificationChannel(this,
-                NotificationManagerCompat.IMPORTANCE_LOW, true,
-                pillName, "Notification channel for cats.")
-        }
-
-
-
 
 }
 

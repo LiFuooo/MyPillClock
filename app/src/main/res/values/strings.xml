@@ -24,6 +24,9 @@
     <string name="Update">UPDATE AND SAVE</string>
     <string name="RxNumber">Rx Number</string>
     <string name="etRxNumberEditDefaultText">0090-klx</string>
+    <string name="pillNotificationChannelName">pillNotification</string>
+    <string name="checkClockInHistory">Clock-in History</string>
+    <string name="notification_channel_description">RemindPillOnTime</string>
 
 
 </resources>

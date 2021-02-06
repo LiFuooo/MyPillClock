@@ -15,7 +15,7 @@ class reminderDBHelper {
 
     object reminderDataTable : IntIdTable() {
         val name: Column<String> = varchar("name", 50)
-        var days: Column<String> = varchar("days")
+        var days: Column<String> = varchar("days",30)
         val hour: Column<Int> = integer("hour")
         val minute: Column<Int> = integer("minute")
 

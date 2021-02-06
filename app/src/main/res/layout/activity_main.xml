@@ -6,15 +6,27 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:backgroundTint="#FFFFFF"
+    android:id="@+id/activity_main_layout"
     tools:context=".Activities.MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fl_wrapper">
+
+        <Button
+            android:id="@+id/notifi_test_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tvMain"
-        android:layout_width="395dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="Hello World!"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -40,27 +52,34 @@
             android:gravity="center"
             android:text="@string/NoMoreRecords"
             android:textSize="18sp" />
+
+
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:itemBackground="@color/colorGrey"
+        app:itemIconTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:menu="@menu/nav_menu" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/AddPillFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="255dp"
-        android:layout_marginTop="632dp"
-        android:layout_marginEnd="180dp"
-        android:layout_marginBottom="180dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/colorGreen"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.277"
         app:srcCompat="@drawable/ic_baseline_add_24" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

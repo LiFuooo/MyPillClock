@@ -9,14 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.item_pill.view.*
+import kotlinx.android.synthetic.main.item_clockin.view.*
 
 
 //https://github.com/android/views-widgets-samples/tree/main/RecyclerViewKotlin/
 
-open class PillItemAdapter(
-        val context:Context,
-        var itemsList:MutableList<PillInfo>
+open class ClockInPillItemAdapter(
+
+    val context: Context,
+    var itemsList:MutableList<PillInfo>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onClickListener:OnClickListener? = null
@@ -24,7 +25,7 @@ open class PillItemAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_pill,
+            R.layout.item_clockin,
             parent,
             false)
         return PillViewHolder(itemView)
@@ -39,8 +40,8 @@ open class PillItemAdapter(
 
 
         holder.itemView.apply {
-            tvPillItem_Qty.text = currentItem.amount.toString() +" " + currentItem.amountType
-            tvPillItem_content.text = displayString
+            clockInItemTvPillName.text = currentItem.name
+            clockInItemtvCount.text = countClockIn()
 
             holder.itemView.setOnClickListener{
                 if(onClickListener != null){
@@ -49,15 +50,15 @@ open class PillItemAdapter(
             }
 
             if (position % 2 == 0) {
-                llPillItem.setBackgroundColor(
-                        ContextCompat.getColor(
-                                context,
-                                R.color.colorLightGray))
+                clockInItem.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.colorLightGray))
             } else {
-                llPillItem.setBackgroundColor(
-                        ContextCompat.getColor(
-                                context,
-                                R.color.white))
+                clockInItem.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.white))
             }
         }
     }
@@ -78,7 +79,7 @@ open class PillItemAdapter(
 //        if(isDeleted > 0){
 //            itemsList.removeAt(position)
 ////            notifyItemMoved(position-1,position)
-        }
+    }
 
 
     fun setOnClickListener(onClickListener: OnClickListener){
@@ -89,30 +90,12 @@ open class PillItemAdapter(
         fun onClick(position:Int, model: PillInfo)
     }
 
-    class PillViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
+    class PillViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
 
-//    View.OnClickListener {
-//        var etPillName = itemView.etPillName
-//        var etDuration = itemView.etDuration
-//        var etFrequency = itemView.etFrequency
-//        var etPillAmount = itemView.etPillAmount
-////        var spinnerAmountType = itemView.spinnerAmountType.selectedItem
-//        var tvPillTimePicker = itemView.tvPillTimePicker
-//        var etDoctorNote = itemView.etDoctorNote
-////        var AmountTypeIndex = itemView.spinnerAmountType.selectedItemPosition
-//
-//
-//
-//
-//    init{
-//        itemView.setOnClickListener(this)
-//    }
-//
-//        override fun onClick(p0: View?) {
-//            TODO("Not yet implemented")
-//        }
-//    }
+    fun countClockIn(): String {
+        return "you have clock-in for 2 days"
 
+    }
 
 
 
