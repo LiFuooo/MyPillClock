@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity() {
         val pillToNotify = getSavedPillList[0]
 
         notifi_test_btn.setOnClickListener{
-            NotificationHelper().createPillNotification(this, pillToNotify)
+            NotificationHelper().withActionPillNotificationBuilder(this, pillToNotify)
         }
 
 

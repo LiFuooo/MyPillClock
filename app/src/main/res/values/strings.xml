@@ -10,7 +10,8 @@
 
     <string name="TextViewPillName"> Pill Name:</string>
     <string name="TextViewDuration">Duration (Days): </string>
-    <string name="TextViewFrequency">Frequency (hours between two doses): </string>
+    <string name="TextViewFrequency">Frequency (times per day): </string>
+    <string name="etFrequencyHint">1 = once per day</string>
     <string name="TextViewAmount">Amount: </string>
     <string name="TextViewTime">Remind Time: </string>
     <string name="TextViewDate">Remind Start Date:</string>
@@ -27,6 +28,8 @@
     <string name="pillNotificationChannelName">pillNotification</string>
     <string name="checkClockInHistory">Clock-in History</string>
     <string name="notification_channel_description">RemindPillOnTime</string>
+    <string name="action1_takingitnow">Take it now</string>
+    <string name="action2_remindMeLater">Remind me later</string>
 
 
 </resources>

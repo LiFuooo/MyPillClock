@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mypillclock.DataClass.ClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.clockInTimeDBHelper
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Fragments.ClockInPillItemAdapter
 import com.example.mypillclock.Fragments.PillItemAdapter
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.activity_clock_in.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ClockInActivity : AppCompatActivity() {
 
@@ -30,12 +35,28 @@ class ClockInActivity : AppCompatActivity() {
         }
 
 
-        //    function to show the list of pill Info in rv
-         fun setupListOfDataIntoClockInRV(SavedPillList: MutableList<PillInfo>) {
-            rvClockInPillItem.layoutManager = LinearLayoutManager(this)
+    //    function to show the list of pill Info in rv
+    fun setupListOfDataIntoClockInRV(SavedPillList: MutableList<PillInfo>) {
+        rvClockInPillItem.layoutManager = LinearLayoutManager(this)
 
-            val itemAdapter = ClockInPillItemAdapter(this, SavedPillList)
-            rvClockInPillItem.adapter = itemAdapter
+        val itemAdapter = ClockInPillItemAdapter(this, SavedPillList)
+        rvClockInPillItem.adapter = itemAdapter
+    }
 
-        }
+
+    fun onClockInOnePill(clockInData: ClockInDataClass){
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
+
+        clockInTimeDBHelper().addClockInTime(clockInData)
+//        change icon color to red
+    }
+
+
+
+
+
+
+
+
     }
