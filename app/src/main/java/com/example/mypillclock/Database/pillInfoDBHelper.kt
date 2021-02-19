@@ -125,4 +125,21 @@ class pillInfoDBHelper {
             DBExposedPillEntity.findById(id)
         }
     }
+
+
+    fun addSampleDataToDB(){
+        for (i in 1..8){
+            addPill(PillInfo(
+                1,
+                "name_ + $i",
+                8 * i,
+                30 + i,
+                i+1,
+                "pills",
+                "2020-01-09",
+                "12:00PM",
+                "123-098x",
+                "No Food"))
+        }
+    }
 }

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="10dp"
-    tools:context=".Fragments.PillItemAdapter"
+    tools:context=".Utilities.PillItemAdapter"
     android:id="@+id/llPillItem"
     android:clickable="true"
     android:focusable="true">

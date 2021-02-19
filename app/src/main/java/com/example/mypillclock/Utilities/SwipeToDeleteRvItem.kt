@@ -10,7 +10,7 @@
 //import androidx.recyclerview.widget.ItemTouchHelper
 //import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE
 //import androidx.recyclerview.widget.RecyclerView
-//import com.example.mypillclock.Fragments.PillItemAdapter
+//import com.example.mypillclock.Utilities.PillItemAdapter
 //import com.example.mypillclock.R
 //
 //class SwipeToDeleteCallBack(context: Context) :ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){

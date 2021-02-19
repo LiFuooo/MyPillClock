@@ -1,4 +1,4 @@
-package com.example.mypillclock.Fragments
+package com.example.mypillclock.Utilities
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ open class PillItemAdapter(
         var itemsList:MutableList<PillInfo>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var onClickListener:OnClickListener? = null
+    private var onClickListener: OnClickListener? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

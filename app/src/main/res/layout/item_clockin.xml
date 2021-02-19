@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Fragments.PillItemAdapter"
+    tools:context=".Utilities.PillItemAdapter"
     android:id="@+id/clockInItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -14,7 +14,8 @@
         android:layout_height="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_wb_sunny_24" />
+        app:srcCompat="@drawable/ic_baseline_wb_sunny_24"
+        android:clickable="true"/>
 
     <TextView
         android:id="@+id/clockInItemTvPillName"

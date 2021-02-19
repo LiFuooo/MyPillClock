@@ -40,29 +40,12 @@ class NotificationHelper() {
 
 
 
-    fun noActionPillNotificationBuilder(context: Context,  pillInfo: PillInfo): NotificationCompat.Builder {
-//        get pill Info from DB
-        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
-        val sdfTime = SimpleDateFormat("hh:mm a")
 
-        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
-            setSmallIcon(R.drawable.pill_notification_icon)
-            setContentTitle("Pill Clock")
-            setContentText("It's time to take ${pillInfo.amount} ${pillInfo.amountType.toString()}  ${pillInfo.name}")
-//                setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
-            priority = NotificationCompat.PRIORITY_DEFAULT
-            setAutoCancel(false)
-
-
-            val activityActionIntent = Intent(context, ClockInActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-
-            val pendingIntent = PendingIntent.getActivity(context, 0, activityActionIntent, 0)
-            setContentIntent(pendingIntent)
-        }
+    fun createPillNotification(context: Context,pillInfo: PillInfo){
+        val notificationBuilder = withActionPillNotificationBuilder(context, pillInfo)
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(notificationId,notificationBuilder.build())
     }
-
 
     fun withActionPillNotificationBuilder(context: Context,  pillInfo: PillInfo): NotificationCompat.Builder {
 //        get pill Info from DB
@@ -125,6 +108,30 @@ class NotificationHelper() {
 
 
 
+
+
+//    fun noActionPillNotificationBuilder(context: Context,  pillInfo: PillInfo): NotificationCompat.Builder {
+////        get pill Info from DB
+//        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
+//        val sdfTime = SimpleDateFormat("hh:mm a")
+//
+//        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+//            setSmallIcon(R.drawable.pill_notification_icon)
+//            setContentTitle("Pill Clock")
+//            setContentText("It's time to take ${pillInfo.amount} ${pillInfo.amountType.toString()}  ${pillInfo.name}")
+////                setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
+//            priority = NotificationCompat.PRIORITY_DEFAULT
+//            setAutoCancel(false)
+//
+//
+//            val activityActionIntent = Intent(context, ClockInActivity::class.java).apply {
+//                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            }
+//
+//            val pendingIntent = PendingIntent.getActivity(context, 0, activityActionIntent, 0)
+//            setContentIntent(pendingIntent)
+//        }
+//    }
 
 
 

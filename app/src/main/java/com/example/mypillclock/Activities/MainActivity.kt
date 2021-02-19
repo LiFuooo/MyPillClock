@@ -1,9 +1,7 @@
 package com.example.mypillclock.Activities
 
 import SwipeToDeleteCallback
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.NotificationManager
+import android.app.*
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,16 +10,15 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.Alarm.NotificationHelper
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.pillInfoDBHelper
-import com.example.mypillclock.Fragments.PillItemAdapter
+import com.example.mypillclock.Utilities.PillItemAdapter
 import com.example.mypillclock.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -77,6 +74,11 @@ class MainActivity : AppCompatActivity() {
 //            SchemaUtils.drop(DatabaseHelper.DBExposedPillsTable)
             SchemaUtils.create(pillInfoDBHelper.DBExposedPillsTable)
         }
+        transaction {
+//            SchemaUtils.drop(PillClockInDBHelper.clockInTimeTable)
+            SchemaUtils.create(PillClockInDBHelper.clockInTimeTable)
+        }
+
 
 //        TODO: Add Pill when clicking FAB
         AddPillFab.setOnClickListener {
@@ -86,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        TODO: set bottom Fragment Navigation
+
         val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
         navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -94,11 +97,11 @@ class MainActivity : AppCompatActivity() {
                     startActivity(a)
                 }
                 R.id.ic_clock_in -> {
-                    val  b= Intent(this@MainActivity, ClockInActivity::class.java)
+                    val  b= Intent(this, ClockInActivity::class.java)
                     startActivity(b)
                 }
                 R.id.ic_diary -> {
-                    val c = Intent(this@MainActivity, ClockInActivity::class.java)
+                    val c = Intent(this, ClockInActivity::class.java)
                     startActivity(c)
                 }
             }
@@ -109,96 +112,37 @@ class MainActivity : AppCompatActivity() {
 // get PillList into rv
 //        setupListOfDataIntoRecycleView()
 
-        var fakePillList = mutableListOf<PillInfo>(
-            PillInfo(
-                1,
-                "name1",
-                24,
-                30,
-                1,
-                "pills",
-                "2020-01-09",
-                "12:00PM",
-                "123-098x",
-                "No Food"
-            ),
-            PillInfo(2, "name2", 2, 3, 2, "pills", "2020-01-09", "12:00PM", "123-098x", "No Food"),
-            PillInfo(
-                3,
-                "name3",
-                24,
-                30,
-                1,
-                "pills",
-                "2020-01-09",
-                "12:00PM",
-                "123-098x",
-                "No Food"
-            ),
-            PillInfo(
-                4,
-                "name4",
-                24,
-                30,
-                1,
-                "pills",
-                "2020-01-09",
-                "12:00PM",
-                "nul123-098xl",
-                "No Food"
-            ),
-            PillInfo(5, "name5", 2, 3, 20, "pills", "2020-01-09", "12:00PM", "123-098x", "No Food"),
-            PillInfo(
-                6,
-                "name6",
-                24,
-                30,
-                100,
-                "pills",
-                "2020-01-09",
-                "12:00PM",
-                "123-098x",
-                "No Food"
-            ),
-            PillInfo(
-                7,
-                "name7",
-                2,
-                3,
-                3,
-                "pills",
-                "2020-01-09",
-                "12:00PM",
-                "nu123-098xll",
-                "No Food"
-            ),
-            PillInfo(8, "name8", 24, 30, 1, "pills", "2020-01-09", "12:00PM", "123-098x", "No Food")
-        )
+
 //        val adapter = PillItemAdapter(this, fakePillList)
 //        rvPillItem.adapter = adapter
 //        rvPillItem.layoutManager = LinearLayoutManager(this)
 //
+
+//       ----- add sample data to DB for testing------
+//        val pillInfoDB = pillInfoDBHelper()
+//        pillInfoDB.addSampleDataToDB()
+//       ---------------------------------------------
+
 
         getItemListFromLocalDB()
 
 
 //        TODO: Notification Part
         val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
-//        getSavedPillList.forEach {
-//            val pillName = it.name
-//            NotificationHelper().createNotificationChannel(
-//                this,
-//                NotificationManagerCompat.IMPORTANCE_LOW, true,
-//                pillName, "Notification channel for cats."
-//            )
-//        }
+
+
 
         NotificationHelper().createNotificationChannel(this)
         val pillToNotify = getSavedPillList[0]
 
+
         notifi_test_btn.setOnClickListener{
-            NotificationHelper().withActionPillNotificationBuilder(this, pillToNotify)
+//            NotificationHelper().createPillNotification(this,pillToNotify)
+//            AlarmSchedule().scheduleAlarms(pillToNotify, this)
+            startActivity(Intent(this, ClockInHistoryActivity::class.java))
         }
+
+
 
 
     }

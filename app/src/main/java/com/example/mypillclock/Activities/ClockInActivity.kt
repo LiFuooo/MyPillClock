@@ -1,20 +1,17 @@
 package com.example.mypillclock.Activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mypillclock.DataClass.ClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.clockInTimeDBHelper
 import com.example.mypillclock.Database.pillInfoDBHelper
-import com.example.mypillclock.Fragments.ClockInPillItemAdapter
-import com.example.mypillclock.Fragments.PillItemAdapter
+import com.example.mypillclock.Utilities.ClockInPillItemAdapter
 import com.example.mypillclock.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_clock_in.*
-import org.jetbrains.exposed.sql.transactions.transaction
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 class ClockInActivity : AppCompatActivity() {
 
@@ -32,6 +29,29 @@ class ClockInActivity : AppCompatActivity() {
             } else {
                 rvClockInPillItem.visibility = View.GONE
             }
+
+
+
+//        TODO: set navigation bar
+        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
+        navigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.ic_home -> {
+                    val a = Intent(this, MainActivity::class.java)
+                    startActivity(a)
+                }
+                R.id.ic_clock_in -> {
+                    val b = Intent(this, ClockInActivity::class.java)
+                    startActivity(b)
+                }
+                R.id.ic_diary -> {
+                    val c = Intent(this, ClockInActivity::class.java)
+                    startActivity(c)
+                }
+            }
+            true
+        }
+
         }
 
 
@@ -41,21 +61,41 @@ class ClockInActivity : AppCompatActivity() {
 
         val itemAdapter = ClockInPillItemAdapter(this, SavedPillList)
         rvClockInPillItem.adapter = itemAdapter
+
+
+//
+////        TODO(Step1: Touch Item, change icon color)
+//        itemAdapter.setOnClickListener(object : ClockInPillItemAdapter.OnClickListener {
+//            override fun onClick(position: Int, model: PillInfo) {
+////                clockInItemIv.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_green_light))
+//
+//        })
+//
+//    }
     }
 
 
-    fun onClockInOnePill(clockInData: ClockInDataClass){
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        val currentDate = sdf.format(Date())
+//    override fun onClick(position: Int, model: PillInfo) {
+//        Toast.makeText(this, "clicked Item", Toast.LENGTH_LONG).show()
+////        clockInItemIv.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_green_light))
+//
+//
+//    }
+//
+//
+//    fun onClockInItemClick(position:Int){
+//        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+//        val currentDate = sdf.format(Date())
+//
+////        clockInTimeDBHelper().addClockInTime(clockInData)
+////        change icon color to green
+//        clockInItemIv.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_green_light))
+//
+//    }
 
-        clockInTimeDBHelper().addClockInTime(clockInData)
-//        change icon color to red
+    fun addCount(alreadyCount: Int): Int {
+        return alreadyCount + 1
     }
-
-
-
-
-
 
 
 

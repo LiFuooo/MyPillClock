@@ -30,6 +30,8 @@
     <string name="notification_channel_description">RemindPillOnTime</string>
     <string name="action1_takingitnow">Take it now</string>
     <string name="action2_remindMeLater">Remind me later</string>
+    <string name="clockinHistory_today">Actions of Today</string>
+    <string name="string_clock_in_hitsory_item">pill_name_here</string>
 
 
 </resources>

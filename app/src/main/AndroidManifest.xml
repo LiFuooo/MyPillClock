@@ -23,12 +23,8 @@
         <activity android:name=".Activities.AddPillActivity" />
         <activity android:name=".Activities.EditPillActivity"></activity>
         <activity android:name=".Activities.ClockInActivity"></activity>
-        <receiver android:name=".Alarm.PillBroadcastReceiver"  android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
-            </intent-filter>
-        </receiver>
+        <activity android:name=".Activities.ClockInHistoryActivity"></activity>
+        <receiver android:name=".Alarm.PillBroadcastReceiver"  android:exported="true" android:enabled="true"/>
     </application>
 
 </manifest>
