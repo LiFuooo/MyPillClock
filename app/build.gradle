@@ -7,6 +7,11 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 
     defaultConfig {
         applicationId "com.example.mypillclock"
@@ -32,7 +37,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -40,7 +45,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.google.android.material:material:1.3.0-beta01'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     debugImplementation 'im.dino:dbinspector:3.4.1@qqr'
@@ -50,6 +55,8 @@ dependencies {
     implementation "com.h2database:h2:1.4.199"
     //noinspection GradleCompatible
     implementation "com.android.support:support-compat:28.0.0"
+    implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
+
 
 
 

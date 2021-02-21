@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(b)
                 }
                 R.id.ic_diary -> {
-                    val c = Intent(this, ClockInActivity::class.java)
+                    val c = Intent(this, DiaryMainActivity::class.java)
                     startActivity(c)
                 }
             }
