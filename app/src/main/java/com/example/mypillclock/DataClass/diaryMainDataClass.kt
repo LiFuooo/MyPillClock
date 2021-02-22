@@ -1,12 +1,21 @@
 package com.example.mypillclock.DataClass
+import java.io.Serializable
 
-class diaryMainDataClass {
+@kotlinx.serialization.Serializable
+data class diaryMainDataClass(
+    var icons:Int,
+    var categoryName:String
 
-    var icons:Int ? = 0
-    var alpha:String ? = null
+):Serializable
 
-    constructor(icons: Int?, alpha: String?) {
-        this.icons = icons
-        this.alpha = alpha
-    }
-}
+
+//class diaryMainDataClass {
+//
+//    var icons:Int ? = 0
+//    var alpha:String ? = null
+//
+//    constructor(icons: Int?, alpha: String?) {
+//        this.icons = icons
+//        this.alpha = alpha
+//    }
+//}

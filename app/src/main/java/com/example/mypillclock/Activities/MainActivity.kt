@@ -16,12 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.Alarm.NotificationHelper
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.DiaryCategoryDbHelper
 import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Utilities.PillItemAdapter
 import com.example.mypillclock.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_clock_in.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.btm_navi
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -79,6 +82,11 @@ class MainActivity : AppCompatActivity() {
             SchemaUtils.create(PillClockInDBHelper.clockInTimeTable)
         }
 
+        transaction {
+//            SchemaUtils.drop(PillClockInDBHelper.clockInTimeTable)
+            SchemaUtils.create(DiaryCategoryDbHelper.DiaryCategoryTable)
+        }
+
 
 //        TODO: Add Pill when clicking FAB
         AddPillFab.setOnClickListener {
@@ -88,16 +96,18 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        TODO: set bottom Fragment Navigation
-
-        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
-        navigation.setOnNavigationItemSelectedListener { item ->
+//        val btm_navi = findViewById<View>(R.id.btm_navi) as BottomNavigationView
+        btm_navi.selectedItemId = R.id.ic_home
+        btm_navi.itemIconTintList = ContextCompat.getColorStateList(this, R.color.color_bnv1)
+        btm_navi.itemTextColor = ContextCompat.getColorStateList(this, R.color.color_bnv1)
+        btm_navi.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.ic_home -> {
-                    val a = Intent(this@MainActivity, MainActivity::class.java)
+                    val a = Intent(this, MainActivity::class.java)
                     startActivity(a)
                 }
                 R.id.ic_clock_in -> {
-                    val  b= Intent(this, ClockInActivity::class.java)
+                    val b = Intent(this, ClockInActivity::class.java)
                     startActivity(b)
                 }
                 R.id.ic_diary -> {
@@ -107,6 +117,24 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+//        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
+//        navigation.setOnNavigationItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.ic_home -> {
+//                    val a = Intent(this@MainActivity, MainActivity::class.java)
+//                    startActivity(a)
+//                }
+//                R.id.ic_clock_in -> {
+//                    val  b= Intent(this, ClockInActivity::class.java)
+//                    startActivity(b)
+//                }
+//                R.id.ic_diary -> {
+//                    val c = Intent(this, DiaryMainActivity::class.java)
+//                    startActivity(c)
+//                }
+//            }
+//            true
+//        }
 
 
 // get PillList into rv

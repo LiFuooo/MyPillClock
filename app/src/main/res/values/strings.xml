@@ -33,6 +33,9 @@
     <string name="clockinHistory_today">Actions of Today</string>
     <string name="string_clock_in_hitsory_item">pill_name_here</string>
     <string name="tv_diary_main_cv_tv">Food</string>
+    <string name="et_dialog_add_dairy_category">Category Name</string>
+    <string name="btn1_text_dialog_add_dairy_category">Add</string>
+    <string name="btn2_text_dialog_add_dairy_category">Cancel</string>
 
 
 </resources>

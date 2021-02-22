@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.diaryMainDataClass
 import com.example.mypillclock.R
 
-class DiaryMainRvAdapter(var context: Context, var arrayList: ArrayList<diaryMainDataClass>) :
+class DiaryMainRvAdapter(var context: Context, var arrayList: MutableList<diaryMainDataClass>) :
     RecyclerView.Adapter<DiaryMainRvAdapter.ItemHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryMainRvAdapter.ItemHolder {
         val viewHolder = LayoutInflater.from(parent.context)
-            .inflate(R.layout.activity_diary_main_cardview, parent, false)
+            .inflate(R.layout.card_view_item_diary_main, parent, false)
         return ItemHolder(viewHolder)
     }
 
@@ -24,10 +24,10 @@ class DiaryMainRvAdapter(var context: Context, var arrayList: ArrayList<diaryMai
         val charItem: diaryMainDataClass = arrayList[position]
 
         holder.icons.setImageResource(charItem.icons!!)
-        holder.titles.text = charItem.alpha
+        holder.titles.text = charItem.categoryName
 
         holder.titles.setOnClickListener {
-            Toast.makeText(context, charItem.alpha, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, charItem.categoryName, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -50,4 +50,6 @@ class DiaryMainRvAdapter(var context: Context, var arrayList: ArrayList<diaryMai
         var titles = itemView.findViewById<TextView>(R.id.tv_diary_main_cardView)
 
     }
+
+
 }
