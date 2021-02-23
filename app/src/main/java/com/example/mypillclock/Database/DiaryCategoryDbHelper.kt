@@ -40,7 +40,7 @@ class DiaryCategoryDbHelper {
         transaction {
             DiaryCategoryEntity.new {
                 icons = diaryMainDataClassJson.icons
-                categoryName = diaryCategoryData.categoryName
+                categoryName = diaryMainDataClassJson.categoryName
             }
         }
 

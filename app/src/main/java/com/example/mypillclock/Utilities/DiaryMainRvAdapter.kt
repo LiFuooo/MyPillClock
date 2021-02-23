@@ -2,7 +2,6 @@ package com.example.mypillclock.Utilities
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.Activities.*
 import com.example.mypillclock.DataClass.PillInfo
@@ -18,48 +16,48 @@ import com.example.mypillclock.DataClass.diaryMainDataClass
 import com.example.mypillclock.R
 
 
-// https://stackoverflow.com/questions/28767413/how-to-open-a-different-activity-on-recyclerview-item-onclick
 
+// https://stackoverflow.com/questions/28767413/how-to-open-a-different-activity-on-recyclerview-item-onclick
+// https://camposha.info/android-recyclerview-master-detail-open-new-activitypass-data/
+
+// use this one:
+//https://codingwithmitch.com/blog/android-recyclerview-onclicklistener/
 
 class DiaryMainRvAdapter(var context: Context, var arrayList: MutableList<diaryMainDataClass>) :
-    RecyclerView.Adapter<DiaryMainRvAdapter.ItemHolder>(){
+    RecyclerView.Adapter<DiaryMainRvAdapter.ViewHolder>(){
 
     private lateinit var onClickListener: OnClickListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryMainRvAdapter.ItemHolder {
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryMainRvAdapter.ViewHolder {
         val viewHolder = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_view_item_diary_main, parent, false)
-        return ItemHolder(viewHolder)
+        return ViewHolder(viewHolder)
     }
 
-    override fun onBindViewHolder(holder: DiaryMainRvAdapter.ItemHolder, position: Int) {
-        val charItem: diaryMainDataClass = arrayList[position]
+    override fun onBindViewHolder(holder: DiaryMainRvAdapter.ViewHolder, position: Int) {
+        val diaryCategory: diaryMainDataClass = arrayList[position]
 
 
-        holder.icons.setImageResource(charItem.icons!!)
-        holder.titles.text = charItem.categoryName
-
-        holder.titles.setOnClickListener {
-            Toast.makeText(context, charItem.categoryName, Toast.LENGTH_LONG).show()
-            startActivity(context, Intent(context, DiaryFoodActivity::class.java), Bundle())
-
-
-        }
-    }
-
-    override fun onBindViewHolder(
-        holder: DiaryMainRvAdapter.ItemHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
+        holder.icons.setImageResource(diaryCategory.icons!!)
+        holder.titles.text = diaryCategory.categoryName
 
         holder.itemView.setOnClickListener {
-            Log.i("rv_diary_item", "Clicked position  = $position, titles =  ${holder.titles}")
-//
-//            startActivity(Intent(context, MainActivity::class.java))
+           Log.i("viewHolder postion", position.toString())
+//            Toast.makeText(context, diaryCategory.categoryName, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(context, DiaryFoodActivity::class.java)
+            intent.putExtra("holder position", position)
+            intent.putExtra("category name", diaryCategory.categoryName)
+                context.startActivity(intent)
+
+
         }
-        super.onBindViewHolder(holder, position, payloads)
     }
+
+
 
 
     override fun getItemCount(): Int {
@@ -72,18 +70,46 @@ class DiaryMainRvAdapter(var context: Context, var arrayList: MutableList<diaryM
     }
 
     interface OnClickListener{
-        fun onClick(position:Int, model: PillInfo)
+        fun onClick(position: Int, model: PillInfo)
     }
 
 
-    inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val context = itemView.context
-//        val position = itemView.getposi
-//        init {
-            var icons = itemView.findViewById<ImageView>(R.id.iv_diary_main_cardView)
-            var titles = itemView.findViewById<TextView>(R.id.tv_diary_main_cardView)
+        var icons = itemView.findViewById<ImageView>(R.id.iv_diary_main_cardView)
+        var titles = itemView.findViewById<TextView>(R.id.tv_diary_main_cardView)
+    }
+//        private var itemClickListener: ItemClickListener? = null
+//
+//
+//        override fun onClick(v: View?) {
+//            val intent: Intent
+//            intent = if (getAdapterPosition() === 0) {
+//                Intent(context, OneActivity::class.java)
+//            } else if (ThemeReader.getPosition() === sth2) {
+//                Intent(context, SecondActivity::class.java)
+//            } else {
+//                Intent(context, DifferentActivity::class.java)
+//            }
+//            context.startActivity(intent)
+//        }
+//
+//
+//        override fun onClick(v: View) {
+//            itemClickListener.onItemClick(v, layoutPosition)
+//        }
+//
+//        fun setItemClickListener(ic: ItemClickListener?) {
+//            itemClickListener = ic
+//        }
 
 
+
+//    }
+
+//    interface ItemClickListener {
+//        fun onItemClick(v: View?, pos: Int)
+//    }
 //        fun onClick(itemView: View){
 //            itemView.getLayoutPosition()
 //        }
@@ -104,7 +130,18 @@ class DiaryMainRvAdapter(var context: Context, var arrayList: MutableList<diaryM
 //                break;
 //            }
 //            context.startActivity(intent);
-//        }
+//        }public void onClick(View v) {
+//
+//    final Intent intent;
+//    if (getAdapterPosition() == sth){
+//       intent =  new Intent(context, OneActivity.class);
+//    } else if (getPosition() == sth2){
+//       intent =  new Intent(context, SecondActivity.class);
+//    } else {
+//       intent =  new Intent(context, DifferentActivity.class);
+//    }
+//    context.startActivity(intent);
+//}
 
 //            itemView.setOnClickListener {
 //                Log.i("rv_diary_item", "Clicked position  = $position, titles =  ${holder.titles}")
@@ -114,7 +151,7 @@ class DiaryMainRvAdapter(var context: Context, var arrayList: MutableList<diaryM
 
 //        }
 
-    }
+
 
 
 }
