@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.Alarm.NotificationHelper
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.DiaryCategoryDbHelper
+import com.example.mypillclock.Database.DiaryItemClockInDBHelper
 import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Utilities.PillItemAdapter
@@ -83,9 +84,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         transaction {
-//            SchemaUtils.drop(PillClockInDBHelper.clockInTimeTable)
+//            SchemaUtils.drop(DiaryCategoryDbHelper.DiaryCategoryTable)
             SchemaUtils.create(DiaryCategoryDbHelper.DiaryCategoryTable)
         }
+        transaction {
+//            SchemaUtils.drop(DiaryItemClockInDBHelper.diaryItemclockInTimeTable)
+            SchemaUtils.create(DiaryItemClockInDBHelper.diaryItemclockInTimeTable)
+        }
+
 
 
 //        TODO: Add Pill when clicking FAB

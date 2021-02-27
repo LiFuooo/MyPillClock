@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.DiaryFoodActivity">
+    tools:context=".Activities.DiaryCategoryItemsActivity">
 
     <TextView
         android:id="@+id/tv_test"
@@ -19,7 +19,7 @@
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_diary_food_main"
+        android:id="@+id/rv_diary_item_in_category"
         android:layout_width="407dp"
         android:layout_height="508dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,7 +27,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_test"
-        tools:listitem="@layout/card_view_item_diary_food">
+        tools:listitem="@layout/card_view_item_diary_item_detail">
 
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

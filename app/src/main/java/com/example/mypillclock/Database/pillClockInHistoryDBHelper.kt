@@ -115,6 +115,8 @@ class PillClockInDBHelper {
         return getAllClockInListFromDB().size
     }
 
+
+
     fun addFakeDataToDB(){
         val now = System.currentTimeMillis()
         val tomorrow = now + 1000*24*60*60

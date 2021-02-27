@@ -47,9 +47,8 @@ class DiaryItemInCategoryDBHelper {
 
     }
 
-    fun defautListOfCategory(categoryName:String){
-
-        Food.some
+    fun defautListOfCategory(categoryName:String): List<DiaryItemInCategoryDataClass> {
+        return Food.list
     }
 
 

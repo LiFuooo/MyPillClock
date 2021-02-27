@@ -48,7 +48,7 @@ class DiaryMainRvAdapter(var context: Context, var arrayList: MutableList<diaryM
 //            Toast.makeText(context, diaryCategory.categoryName, Toast.LENGTH_SHORT).show()
             Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
 
-            val intent = Intent(context, DiaryFoodActivity::class.java)
+            val intent = Intent(context, DiaryCategoryItemsActivity::class.java)
             intent.putExtra("holder position", position)
             intent.putExtra("category name", diaryCategory.categoryName)
                 context.startActivity(intent)

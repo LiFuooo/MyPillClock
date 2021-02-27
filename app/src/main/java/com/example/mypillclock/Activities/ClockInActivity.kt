@@ -2,6 +2,9 @@ package com.example.mypillclock.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -86,19 +89,26 @@ class ClockInActivity : AppCompatActivity() {
 
         val itemAdapter = ClockInPillItemAdapter(this, SavedPillList)
         rvClockInPillItem.adapter = itemAdapter
-
-
-//
-////        TODO(Step1: Touch Item, change icon color)
-//        itemAdapter.setOnClickListener(object : ClockInPillItemAdapter.OnClickListener {
-//            override fun onClick(position: Int, model: PillInfo) {
-////                clockInItemIv.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_green_light))
-//
-//        })
-//
-//    }
     }
 
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.clock_in_toolbar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var itemview = item.itemId
+        if (item.itemId == R.id.toolbar_clockIn_calendar){
+            Log.i("diaryPage", "Add button pushed")
+//            start activity of clock in calendar
+            val intent = Intent(this, ClockInHistoryActivity::class.java)
+            this.startActivity(intent)
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 //    override fun onClick(position: Int, model: PillInfo) {
 //        Toast.makeText(this, "clicked Item", Toast.LENGTH_LONG).show()
