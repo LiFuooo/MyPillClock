@@ -1,38 +1,39 @@
 package com.example.mypillclock.DefaultDataObjects
 
-import com.example.mypillclock.DataClass.DiaryItemInCategoryDataClass
-import com.example.mypillclock.DataClass.diaryMainDataClass
+import com.example.mypillclock.DataClass.DiaryItemDataClass
+import com.example.mypillclock.DataClass.DiaryMainDataClass
 import com.example.mypillclock.R
 
 object Food {
+    val CATEGORY_FOOD = DiaryMainDataClass(0,R.drawable.ic_baseline_fastfood_24, "Food")
     val list = mutableListOf(
-        DiaryItemInCategoryDataClass(
+        DiaryItemDataClass(
             0,
-            "Food",
+            CATEGORY_FOOD,
             "Beef",
             R.drawable.ic_baseline_fastfood_24),
 
-        DiaryItemInCategoryDataClass(
+        DiaryItemDataClass(
             1,
-            "Food",
+            CATEGORY_FOOD,
             "Chicken",
             R.drawable.ic_baseline_fastfood_24),
 
-        DiaryItemInCategoryDataClass(
+        DiaryItemDataClass(
             2,
-            "Food",
+            CATEGORY_FOOD,
             "Pork",
             R.drawable.ic_baseline_fastfood_24),
 
-        DiaryItemInCategoryDataClass(
+        DiaryItemDataClass(
             3,
-            "Food",
+            CATEGORY_FOOD,
             "Burger",
             R.drawable.ic_baseline_fastfood_24),
 
-        DiaryItemInCategoryDataClass(
+        DiaryItemDataClass(
             4,
-            "Food",
+            CATEGORY_FOOD,
             "Sandwich",
             R.drawable.ic_baseline_fastfood_24)
     )

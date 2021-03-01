@@ -1,20 +1,17 @@
 package com.example.mypillclock.Database
 
-import com.example.mypillclock.DataClass.DiaryItemClockInDataClass
-import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.DataClass.pillClockInDataClass
+import com.example.mypillclock.DataClass.DiaryClockInDataClass
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.text.SimpleDateFormat
 
-class DiaryItemClockInDBHelper {
+class DiaryClockInDBHelper {
 
     object diaryItemclockInTimeTable : IntIdTable() {
         val category: Column<String> = varchar("category", 50)
@@ -35,7 +32,7 @@ class DiaryItemClockInDBHelper {
 
     }
 
-    fun addDiaryItemClockInRecord(itemClockInData: DiaryItemClockInDataClass) {
+    fun addDiaryItemClockInRecord(itemClockInData: DiaryClockInDataClass) {
 
         transaction {
             DiaryItemClockInTimeEntity.new {
@@ -50,11 +47,11 @@ class DiaryItemClockInDBHelper {
 
 
     // output data type is MutableList<PillInfo>
-    fun getAllDiaryItemClockInListFromDB():MutableList<DiaryItemClockInDataClass> {
+    fun getAllDiaryItemClockInListFromDB():MutableList<DiaryClockInDataClass> {
         return  transaction {
             val query = DiaryItemClockInTimeEntity.all()
             query.map { itemClockInDataInstance: DiaryItemClockInTimeEntity ->
-                DiaryItemClockInDataClass(
+                DiaryClockInDataClass(
                     itemClockInDataInstance.id.value,
                     itemClockInDataInstance.category,
                     itemClockInDataInstance.itemName,
@@ -66,7 +63,7 @@ class DiaryItemClockInDBHelper {
 
 
 
-    fun deleteDiaryItemClockInRecord(diaryItemClockInData: DiaryItemClockInDataClass) {
+    fun deleteDiaryItemClockInRecord(diaryItemClockInData: DiaryClockInDataClass) {
 
         transaction {
             diaryItemclockInTimeTable.deleteWhere {
@@ -77,10 +74,10 @@ class DiaryItemClockInDBHelper {
     }
 
 
-    fun updateDiaryItemClockInRecord(updatedDiaryItemClockInData: DiaryItemClockInDataClass) {
+    fun updateDiaryItemClockInRecord(updatedDiaryItemClockInData: DiaryClockInDataClass) {
 
-        val updatedDiaryItemClockInTimeString = Json.encodeToString(DiaryItemClockInDataClass.serializer(), updatedDiaryItemClockInData)
-        val updatedDiaryItemClockInTimeJson = Json.decodeFromString(DiaryItemClockInDataClass.serializer(), updatedDiaryItemClockInTimeString)
+        val updatedDiaryItemClockInTimeString = Json.encodeToString(DiaryClockInDataClass.serializer(), updatedDiaryItemClockInData)
+        val updatedDiaryItemClockInTimeJson = Json.decodeFromString(DiaryClockInDataClass.serializer(), updatedDiaryItemClockInTimeString)
         val DiaryItemclockInRecordTobeUpdated = queryOneDiaryItem(updatedDiaryItemClockInData.id) ?: error("The id does not exists")
 
         transaction {
@@ -97,7 +94,7 @@ class DiaryItemClockInDBHelper {
         }
     }
 
-    fun findRecordsByDate(dateToMatch:String): MutableList<DiaryItemClockInDataClass> {
+    fun findRecordsByDate(dateToMatch:String): MutableList<DiaryClockInDataClass> {
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val allRecords = getAllDiaryItemClockInListFromDB()
 

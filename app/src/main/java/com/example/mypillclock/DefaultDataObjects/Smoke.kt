@@ -1,12 +1,13 @@
 package com.example.mypillclock.DefaultDataObjects
 
-import com.example.mypillclock.DataClass.DiaryItemInCategoryDataClass
+import com.example.mypillclock.DataClass.DiaryItemDataClass
+import com.example.mypillclock.DataClass.DiaryMainDataClass
 import com.example.mypillclock.R
 
 object Smoke {
-    val CATEGORY_SMOKE = "Smoke"
+    val CATEGORY_SMOKE = DiaryMainDataClass(0,R.drawable.ic_baseline_smoking_rooms_24, "Smoking")
     val list = mutableListOf(
-        DiaryItemInCategoryDataClass(
+        DiaryItemDataClass(
             0,
             CATEGORY_SMOKE,
             "cigarette",

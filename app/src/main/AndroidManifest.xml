@@ -25,7 +25,7 @@
         <activity android:name=".Activities.ClockInActivity"></activity>
         <activity android:name=".Activities.ClockInHistoryActivity"></activity>
         <activity android:name=".Activities.DiaryMainActivity"></activity>
-        <activity android:name=".Activities.DiaryCategoryItemsActivity"></activity>
+        <activity android:name=".Activities.DiaryItemsActivity"></activity>
         <receiver android:name=".Alarm.PillBroadcastReceiver"  android:exported="true" android:enabled="true"/>
     </application>
 

@@ -3,9 +3,9 @@ import java.io.Serializable
 
 
 @kotlinx.serialization.Serializable
-data class DiaryItemInCategoryDataClass(
+data class DiaryItemDataClass(
     val id:Int,
-    var categoryName:String,
+    var category: DiaryMainDataClass,
     val itemName:String,
     val itemIcon:Int
 ):Serializable

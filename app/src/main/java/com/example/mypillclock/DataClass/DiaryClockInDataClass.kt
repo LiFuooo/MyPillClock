@@ -3,7 +3,7 @@ import java.io.Serializable
 
 
 @kotlinx.serialization.Serializable
-data class DiaryItemClockInDataClass (
+data class DiaryClockInDataClass (
     val id:Int,
     val category:String,
     val itemName:String,

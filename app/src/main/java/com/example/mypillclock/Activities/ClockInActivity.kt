@@ -39,46 +39,8 @@ class ClockInActivity : AppCompatActivity() {
 
 
 //        TODO: set navigation bar
-//        val bnv = findViewById<View>(R.id.btm_navi) as BottomNavigationView
-        btm_navi.selectedItemId = R.id.ic_clock_in
-        btm_navi.itemIconTintList = ContextCompat.getColorStateList(this, R.color.color_bnv2)
-        btm_navi.itemTextColor = ContextCompat.getColorStateList(this, R.color.color_bnv2)
+        createBottomNavBar(R.id.ic_clock_in, btm_navi)
 
-        btm_navi.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.ic_home -> {
-                    val a = Intent(this, MainActivity::class.java)
-                    startActivity(a)
-                }
-                R.id.ic_clock_in -> {
-                    val b = Intent(this, ClockInActivity::class.java)
-                    startActivity(b)
-                }
-                R.id.ic_diary -> {
-                    val c = Intent(this, DiaryMainActivity::class.java)
-                    startActivity(c)
-                }
-            }
-            true
-        }
-//        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
-//        navigation.setOnNavigationItemSelectedListener { item ->
-//            when (item.itemId) {
-//                R.id.ic_home -> {
-//                    val a = Intent(this, MainActivity::class.java)
-//                    startActivity(a)
-//                }
-//                R.id.ic_clock_in -> {
-//                    val b = Intent(this, ClockInActivity::class.java)
-//                    startActivity(b)
-//                }
-//                R.id.ic_diary -> {
-//                    val c = Intent(this, DiaryMainActivity::class.java)
-//                    startActivity(c)
-//                }
-//            }
-//            true
-//        }
 
         }
 

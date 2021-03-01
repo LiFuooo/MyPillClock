@@ -16,14 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.Alarm.NotificationHelper
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.DiaryCategoryDbHelper
-import com.example.mypillclock.Database.DiaryItemClockInDBHelper
-import com.example.mypillclock.Database.PillClockInDBHelper
-import com.example.mypillclock.Database.pillInfoDBHelper
+import com.example.mypillclock.Database.*
 import com.example.mypillclock.Utilities.PillItemAdapter
 import com.example.mypillclock.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_clock_in.*
+import kotlinx.android.synthetic.main.activity_diary_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.btm_navi
 import org.jetbrains.exposed.sql.Database
@@ -32,6 +29,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 
 class MainActivity : AppCompatActivity() {
+    val recreateDatabase = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
 
-            if (permissionRead != PackageManager.PERMISSION_GRANTED ) {
+            if (permissionRead != PackageManager.PERMISSION_GRANTED) {
                 Log.e("permission", "MainActivity Permission to Read denied")
                 ActivityCompat.requestPermissions(
                     this,
@@ -74,24 +72,21 @@ class MainActivity : AppCompatActivity() {
 
 //    ToDo: connect database
         Database.connect("jdbc:h2:${filesDir.absolutePath}/PillInfo", "org.h2.Driver")
-        transaction {
-//            SchemaUtils.drop(DatabaseHelper.DBExposedPillsTable)
-            SchemaUtils.create(pillInfoDBHelper.DBExposedPillsTable)
+        if (recreateDatabase) {
+            transaction {
+                val table = arrayOf(
+                    pillInfoDBHelper.DBExposedPillsTable,
+                    PillClockInDBHelper.clockInTimeTable,
+                    DiaryCategoryDbHelper.DiaryCategoryTable,
+                    DiaryItemDBHelper.DiaryItemsTable,
+                    DiaryClockInDBHelper.diaryItemclockInTimeTable
+                )
+                SchemaUtils.drop(*table)
+                SchemaUtils.create(*table)
+                DiaryCategoryDbHelper().addDefaultCategoriesToDB()
+                DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
+            }
         }
-        transaction {
-//            SchemaUtils.drop(PillClockInDBHelper.clockInTimeTable)
-            SchemaUtils.create(PillClockInDBHelper.clockInTimeTable)
-        }
-
-        transaction {
-//            SchemaUtils.drop(DiaryCategoryDbHelper.DiaryCategoryTable)
-            SchemaUtils.create(DiaryCategoryDbHelper.DiaryCategoryTable)
-        }
-        transaction {
-//            SchemaUtils.drop(DiaryItemClockInDBHelper.diaryItemclockInTimeTable)
-            SchemaUtils.create(DiaryItemClockInDBHelper.diaryItemclockInTimeTable)
-        }
-
 
 
 //        TODO: Add Pill when clicking FAB
@@ -103,26 +98,7 @@ class MainActivity : AppCompatActivity() {
 
 //        TODO: set bottom Fragment Navigation
 //        val btm_navi = findViewById<View>(R.id.btm_navi) as BottomNavigationView
-        btm_navi.selectedItemId = R.id.ic_home
-        btm_navi.itemIconTintList = ContextCompat.getColorStateList(this, R.color.color_bnv1)
-        btm_navi.itemTextColor = ContextCompat.getColorStateList(this, R.color.color_bnv1)
-        btm_navi.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.ic_home -> {
-                    val a = Intent(this, MainActivity::class.java)
-                    startActivity(a)
-                }
-                R.id.ic_clock_in -> {
-                    val b = Intent(this, ClockInActivity::class.java)
-                    startActivity(b)
-                }
-                R.id.ic_diary -> {
-                    val c = Intent(this, DiaryMainActivity::class.java)
-                    startActivity(c)
-                }
-            }
-            true
-        }
+        createBottomNavBar(R.id.ic_home, btm_navi)
 //        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
 //        navigation.setOnNavigationItemSelectedListener { item ->
 //            when (item.itemId) {
@@ -167,25 +143,23 @@ class MainActivity : AppCompatActivity() {
 
 
         NotificationHelper().createNotificationChannel(this)
-        val pillToNotify = getSavedPillList[0]
+//        val pillToNotify = getSavedPillList[0]
 
 
-        notifi_test_btn.setOnClickListener{
+        notifi_test_btn.setOnClickListener {
 //            NotificationHelper().createPillNotification(this,pillToNotify)
 //            AlarmSchedule().scheduleAlarms(pillToNotify, this)
             startActivity(Intent(this, ClockInHistoryActivity::class.java))
         }
 
 
-
-
     }
 
     //    function to get Pill list from database
-    private fun getItemListFromLocalDB(){
+    private fun getItemListFromLocalDB() {
         val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
 
-        if(getSavedPillList.size > 0){
+        if (getSavedPillList.size > 0) {
             rvPillItem.visibility = View.VISIBLE
             tvNoMorePillRecords.visibility = View.GONE
             setupListOfDataIntoRecycleView(getSavedPillList)
@@ -197,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
 
     //    function to show the list of pill Info in rv
-    private fun setupListOfDataIntoRecycleView(SavedPillList: MutableList<PillInfo>){
+    private fun setupListOfDataIntoRecycleView(SavedPillList: MutableList<PillInfo>) {
         rvPillItem.layoutManager = LinearLayoutManager(this)
 
         val itemAdapter = PillItemAdapter(this, SavedPillList)
@@ -221,18 +195,18 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                 // Call the adapter function when it is swiped for delete
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(this@MainActivity)
-                    builder.setMessage("Are you sure you want to delete?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
-                            val adapter = rvPillItem.adapter as PillItemAdapter
-                            adapter.removeAt(viewHolder.adapterPosition)
-                            getItemListFromLocalDB()
-                        })
-                        .setNegativeButton("Cancel",
-                            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-                    val alert: AlertDialog = builder.create()
-                    alert.show()
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this@MainActivity)
+                builder.setMessage("Are you sure you want to delete?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                        val adapter = rvPillItem.adapter as PillItemAdapter
+                        adapter.removeAt(viewHolder.adapterPosition)
+                        getItemListFromLocalDB()
+                    })
+                    .setNegativeButton("Cancel",
+                        DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                val alert: AlertDialog = builder.create()
+                alert.show()
             }
         }
 
@@ -241,15 +215,15 @@ class MainActivity : AppCompatActivity() {
         deleteItemTouchHelper.attachToRecyclerView(rvPillItem)
         // END
 
-}
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == ADD_PILL_ACTIVITY_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == ADD_PILL_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 getItemListFromLocalDB()
-            } else{
+            } else {
                 Log.e("Acctivity_Main", "Canceled or Back Pressed")
             }
         }
@@ -259,8 +233,6 @@ class MainActivity : AppCompatActivity() {
         var ADD_PILL_ACTIVITY_REQUEST_CODE = 1
         var EXTRA_PILL_DETAIL = "ExtraPillDetail"
     }
-
-
 
 
 }

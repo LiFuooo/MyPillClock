@@ -16,7 +16,7 @@
         android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/iv_diary_food_cardView"
+            android:id="@+id/iv_diary_item_cardView"
             android:layout_width="60dp"
             android:layout_height="60dp"
             app:srcCompat="@drawable/ic_baseline_fastfood_24"
@@ -26,10 +26,10 @@
             />
 
         <TextView
-            android:id="@+id/tv_diary_food_cardView"
+            android:id="@+id/tv_diary_item_cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_diary_food_cardView"
+            android:layout_below="@+id/iv_diary_item_cardView"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
             android:gravity="center" />

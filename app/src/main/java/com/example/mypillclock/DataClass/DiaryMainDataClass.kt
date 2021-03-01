@@ -2,9 +2,10 @@ package com.example.mypillclock.DataClass
 import java.io.Serializable
 
 @kotlinx.serialization.Serializable
-data class diaryMainDataClass(
-    var icons:Int,
-    var categoryName:String
+data class DiaryMainDataClass(
+    val id: Int,
+    val icons:Int,
+    val categoryName:String
 
 ):Serializable
 
