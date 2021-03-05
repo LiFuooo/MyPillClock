@@ -26,7 +26,7 @@
     <string name="RxNumber">Rx Number</string>
     <string name="etRxNumberEditDefaultText">0090-klx</string>
     <string name="pillNotificationChannelName">pillNotification</string>
-    <string name="checkClockInHistory">Clock-in History</string>
+    <string name="btn_pillClockin_item_history">Clock-in History</string>
     <string name="notification_channel_description">RemindPillOnTime</string>
     <string name="action1_takingitnow">Take it now</string>
     <string name="action2_remindMeLater">Remind me later</string>
@@ -34,8 +34,19 @@
     <string name="string_clock_in_hitsory_item">pill_name_here</string>
     <string name="tv_diary_main_cv_tv">Food</string>
     <string name="et_dialog_add_dairy_category">Category Name</string>
-    <string name="btn1_text_dialog_add_dairy_category">Add</string>
+    <string name="btn1_text_dialog_add_diary_category">Add</string>
+    <string name="btn1_text_dialog_add_diary_item">Add</string>
     <string name="btn2_text_dialog_add_dairy_category">Cancel</string>
+    <string name="btn2_text_dialog_add_dairy_item">Cancel</string>
+    <string name="DiariesOfToday">Diaries of Today</string>
+    <string name="string_clock_in_hitsory_diary_item">Diary Item 1</string>
+    <string name="string2_clock_in_hitsory_diary_item">13:00</string>
+    <string name="string2_clock_in_hitsory_item">14:00</string>
+    <string name="diary_item_menu_back">back</string>
+    <string name="diary_item_menu_add">add</string>
+    <string name="et_dialog_add_dairy_item">Diary Item Name</string>
+    <string name="tv_pillClockin_item_pillName">pill name</string>
+    <string name="btn_pillClockin_item_clockin">clock in at chosen time</string>
 
 
 </resources>

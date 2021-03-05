@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/iv1_clockinhistory_item"
+        android:id="@+id/iv1_clockinhistory_diary_item"
         android:layout_width="50dp"
         android:layout_height="71dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,35 +16,34 @@
         app:srcCompat="@drawable/ic_baseline_format_list_bulleted_24" />
 
     <ImageView
-        android:id="@+id/iv2_clockinhistory_item"
+        android:id="@+id/iv2_clockinhistory_diary_item"
         android:layout_width="50dp"
         android:layout_height="71dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_clockinhistory_item"
-        app:layout_constraintStart_toEndOf="@+id/iv1_clockinhistory_item"
+        app:layout_constraintEnd_toStartOf="@+id/tv_clockinhistory_diary_item"
+        app:layout_constraintStart_toEndOf="@+id/iv1_clockinhistory_diary_item"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_kayaking_24" />
+        app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
 
     <TextView
-        android:id="@+id/tv_clockinhistory_item"
+        android:id="@+id/tv_clockinhistory_diary_item"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="@string/string_clock_in_hitsory_item"
-        app:layout_constraintStart_toEndOf="@+id/iv2_clockinhistory_item"
+        android:text="@string/string_clock_in_hitsory_diary_item"
+        app:layout_constraintStart_toEndOf="@+id/iv2_clockinhistory_diary_item"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv2_clockinhistory_item"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="158dp" />
 
     <TextView
-        android:id="@+id/tv2_clockinhistory_item"
+        android:id="@+id/tv2_clockinhistory_diary_item"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="@string/string2_clock_in_hitsory_item"
+        android:text="@string/string2_clock_in_hitsory_diary_item"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_clockinhistory_diary_item"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

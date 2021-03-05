@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".Activities.AddPillActivity" />
         <activity android:name=".Activities.EditPillActivity"></activity>
-        <activity android:name=".Activities.ClockInActivity"></activity>
+        <activity android:name=".Activities.PillClockInActivity"></activity>
         <activity android:name=".Activities.ClockInHistoryActivity"></activity>
         <activity android:name=".Activities.DiaryMainActivity"></activity>
         <activity android:name=".Activities.DiaryItemsActivity"></activity>

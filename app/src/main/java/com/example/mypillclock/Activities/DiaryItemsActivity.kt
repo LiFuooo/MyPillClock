@@ -1,106 +1,197 @@
 package com.example.mypillclock.Activities
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mypillclock.DataClass.DiaryClockInDataClass
 import com.example.mypillclock.DataClass.DiaryItemDataClass
 import com.example.mypillclock.DataClass.DiaryMainDataClass
 import com.example.mypillclock.Database.DiaryCategoryDbHelper
+import com.example.mypillclock.Database.DiaryClockInDBHelper
 import com.example.mypillclock.Database.DiaryItemDBHelper
-import com.example.mypillclock.DefaultDataObjects.Drink
 import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.DiaryItemRvAdapter
 import kotlinx.android.synthetic.main.activity_diary_item_show.*
-import kotlinx.android.synthetic.main.activity_diary_main.*
 import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class DiaryItemsActivity: AppCompatActivity() {
 
     private val TAG = "DiaryItemsActivity"
-    private var diaryItemFromCategoryAdapter: DiaryItemRvAdapter? = null
+    private var diaryItemAdapter: DiaryItemRvAdapter? = null
+    private var diaryItemsList: MutableList<DiaryItemDataClass>? = null
+    private var positionFromIntent:Int = 1
+    private var categoryData: DiaryMainDataClass? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_item_show)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+//        DiaryItemDBHelper().deleteAllItemsFromDB()
+//        DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
 
-        DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
         Log.i(TAG, intent.extras.toString())
         if (intent.extras != null) {
-            val position = intent.getIntExtra("holder position", 0)
-           Log.i(TAG, "position = $position")
-            val itemList = getItemListFromDb(position)
-//            setListDataIntoDiaryItemRV(itemList)
+            positionFromIntent = intent.getIntExtra("holder position", 1)
+            Log.i(TAG, "position = $positionFromIntent")
+
+            transaction {
+                val itemList = getItemListFromDb(positionFromIntent + 1)
+                diaryItemsList = itemList
+                setListDataIntoDiaryItemRV(itemList)
+                getCagetoryData()
+            }
         }
 
-//        if (DiaryItemInCategoryDBHelper().isDBTableEmpty()) {
-//            DiaryItemInCategoryDBHelper().setAllDefaultObjectsIntoDB()
-//        }
-
-
     }
 
 
-    private fun initRecyclerView() {
-        val onClick = this::onItemClick
-        diaryItemFromCategoryAdapter = DiaryItemRvAdapter(
-            this,
-            Drink.list,
-            onClick
-        )
-        rv_diary_item_in_category.adapter = diaryItemFromCategoryAdapter
-        rv_diary_item_in_category.layoutManager = GridLayoutManager(
-            this,
-            3,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-    }
-//
-//    private fun getIncomingIntent(intent: Intent): String? {
-//        var comingPosition: String? = null
-//        if (intent.hasExtra("image_url") && intent.hasExtra("image_name")) {
-//            Log.d("Food_getIncomingIntent", "getIncomingIntent: found intent extras.")
-//            comingPosition = intent.getStringExtra("holder position")
-////            val comingCategoryName = intent.getStringExtra("category name")
-//        }
-//        return comingPosition
-//    }
 
-    fun getCategoryName(CategoryPosition: Int): String {
-        val categoryList = DiaryCategoryDbHelper().getCategoryListFromDB()
-        return categoryList[CategoryPosition].categoryName
+    fun onCreateAddItemDialogue() {
+        val dialogueView = layoutInflater.inflate(R.layout.dialog_add_diary_item, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogueView)
+            .setPositiveButton(R.string.btn1_text_dialog_add_diary_item, null) //Set to null. We override the onclick
+            .setNegativeButton(R.string.btn2_text_dialog_add_dairy_item, null)
+            .create()
+
+
+        var etItemName = dialogueView.findViewById<EditText>(R.id.et_dialog_add_dairy_item)as EditText
+
+        dialog.setOnShowListener(DialogInterface.OnShowListener {
+            val positiveBtn: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveBtn.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(view: View?) {
+                    var newItemData: DiaryItemDataClass? = null
+                    Log.i("diaryAlertDialog", "AlertDialog: Add button pushed")
+                    val itemIcon = R.drawable.ic_baseline_kayaking_24
+
+                    if (etItemName.text.toString().isEmpty()) {
+                        Log.i(
+                            "Item Name is empty",
+                            etItemName.text.toString().isEmpty().toString()
+                        )
+                        Toast.makeText(
+                            applicationContext,
+                            "Item name can't be empty",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        val itemName = etItemName.text.toString()
+                        Log.i("categoryData", categoryData?.categoryName.isNullOrEmpty().toString())
+                        val itemData =
+                            categoryData?.let { it1 ->
+                                DiaryItemDataClass(
+                                    if (newItemData == null) 0 else newItemData!!.id,
+                                    it1,
+                                    itemName,
+                                    itemIcon
+                                )
+                            }
+                        if (itemData != null) {
+                            DiaryItemDBHelper().addDiaryItemToDB(itemData)
+                            Log.i("item activity item name", itemData.itemName)
+//                            diaryItemsList?.add(itemData)
+
+                        }
+                        diaryItemAdapter?.notifyDataSetChanged()
+                        dialog.dismiss()
+
+
+                    }
+                }
+            })
+        })
+
+
+        dialog.show()
     }
 
-//    fun getItemList(position: Int){
-//        return transaction {
-//            DiaryCategoryDbHelper.DiaryCategoryEntity[position].items.map{
-//                DiaryItemInCategoryDataClass(
-//                    it.id.value,
-//                    it.category.categoryName,
-//                    it.itemName,
-//                    it.itemIcon)
-//            }.toList()
-//        }
-//    }
+//    should test override onResume() too
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        transaction {
+            val itemList = getItemListFromDb(positionFromIntent + 1)
+            diaryItemsList = itemList
+            setListDataIntoDiaryItemRV(itemList)
+            getCagetoryData()
+        }
+    }
+
+    private fun getCagetoryData(){
+        categoryData = DiaryCategoryDbHelper.DiaryCategoryEntity[positionFromIntent + 1].let {
+            DiaryMainDataClass(
+                it.id.value,
+                it.icons,
+                it.categoryName
+            )}
+    }
+
+
+
+    //setting menu in action bar
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.diary_item_toolbar, menu)
+        return true
+    }
+
+    // actions on click menu items
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_diary_item_add -> {
+            // User chose the "Print" item
+            Toast.makeText(this, "add item btn clicked", Toast.LENGTH_LONG).show()
+            onCreateAddItemDialogue()
+            true
+        }
+
+        android.R.id.home -> {
+            // app icon in action bar clicked; goto parent activity.
+            this.finish()
+            true
+        }
+
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
+    }
 
 
     private fun onItemClick(position: Int) {
 //        TODO: add clock-in data into DB
+        val now = System.currentTimeMillis()
+        val itemClockIn = diaryItemsList?.get(position)?.let { DiaryClockInDataClass(0, it, now) }
+        if (itemClockIn != null) {
+            DiaryClockInDBHelper().addDiaryItemClockInRecordToDB(itemClockIn)
+        }
+//        Toast.makeText(this,"ClockIn position = $position", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "ClockIn item = $itemClockIn", Toast.LENGTH_LONG).show()
     }
 
 
-
-
-   private fun getItemListFromDb(categoryId: Int): MutableList<DiaryItemDataClass> {
-     return DiaryCategoryDbHelper.DiaryCategoryEntity[categoryId].items.toDataClassList().toMutableList()
+    private fun getItemListFromDb(categoryId: Int): MutableList<DiaryItemDataClass> {
+        return DiaryCategoryDbHelper.DiaryCategoryEntity[categoryId].items.toDataClassList()
+            .toMutableList()
     }
 
     private fun SizedIterable<DiaryItemDBHelper.DiaryItemEntity>.toDataClassList() =
-        map { categoryTableyEntity ->
-            categoryTableyEntity.toDataClass()
+        map { categoryTableEntity ->
+            categoryTableEntity.toDataClass()
         }
 
     fun DiaryItemDBHelper.DiaryItemEntity.toDataClass() =
@@ -116,59 +207,21 @@ class DiaryItemsActivity: AppCompatActivity() {
     }
 
 
-
     private fun setListDataIntoDiaryItemRV(list: MutableList<DiaryItemDataClass>) {
         val onClick = this::onItemClick
-        diaryItemFromCategoryAdapter = DiaryItemRvAdapter(this, list, onClick)
-        rv_diary_main.adapter = diaryItemFromCategoryAdapter
-        rv_diary_main.layoutManager = GridLayoutManager(
+        diaryItemAdapter = DiaryItemRvAdapter(this, list, onClick)
+        rv_diary_item.adapter = diaryItemAdapter
+        rv_diary_item.layoutManager = GridLayoutManager(
             this,
-            3,
+            4,
             LinearLayoutManager.VERTICAL,
             false
         )
     }
 
 
-//    fun setListDataIntoDiaryItemRV(DiaryItemList: MutableList<DiaryItemInCategoryDataClass>) {
-//
-//
-//        rv_diary_item_in_category.layoutManager = LinearLayoutManager(this)
-//
-//        val itemAdapter = DiaryItemFromCategoryRvAdapter(this, DiaryItemList)
-//        rv_diary_item_in_category.adapter = itemAdapter
-//
-//
-//        var diaryItemAdapter = DiaryItemInEachCategoryRvAdapter(this, onCategoryClickListener)
-//        rv_diary_item_in_category.adapter = diaryItemAdapter
-//        rv_diary_item_in_category.layoutManager = GridLayoutManager(
-//            this,
-//            3,
-//            LinearLayoutManager.VERTICAL,
-//            false
-//        )
-//    }
 
 
 }
-
-
-
-
-    //    function to save pill info to database
-//    private fun addDiaryItemClockInRecord(itemClicked: DiaryItemClockInDataClass) {
-//        val databaseHelper = DiaryItemClockInDBHelper()
-//            try {
-//                val currentTime = System.currentTimeMillis()
-//                databaseHelper.addDiaryItemClockInRecord(itemClicked,currentTime)
-//                setResult(Activity.RESULT_OK)
-//                Toast.makeText(this, "Pill Saved to DataBase", Toast.LENGTH_SHORT).show()
-//            } catch (e: Exception) {
-//
-//                Toast.makeText(this, "Pill Save to DataBase FAILED!", Toast.LENGTH_SHORT).show()
-//            }
-//
-//    }
-
 
 

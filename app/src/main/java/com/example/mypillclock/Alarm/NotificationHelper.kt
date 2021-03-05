@@ -1,6 +1,5 @@
 package com.example.mypillclock.Alarm
 
-import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,7 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.mypillclock.Activities.ClockInActivity
+import com.example.mypillclock.Activities.PillClockInActivity
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.R
@@ -81,7 +80,7 @@ class NotificationHelper() {
 
     private fun createTakeItNowPendingIntent(context: Context, pillInfo: PillInfo): PendingIntent? {
 
-        val takeItNowIntent = Intent(context, ClockInActivity::class.java).apply {
+        val takeItNowIntent = Intent(context, PillClockInActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //            action = context.getString(R.string.action_medicine_administered)
 //            putExtra(AppGlobalReceiver.NOTIFICATION_ID, reminderData.id)
@@ -95,7 +94,7 @@ class NotificationHelper() {
 
     private fun createremindMeLaterPendingIntent(context: Context, pillInfo: PillInfo): PendingIntent? {
 
-        val remindMeLaterIntent = Intent(context, ClockInActivity::class.java).apply {
+        val remindMeLaterIntent = Intent(context, PillClockInActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //            action = context.getString(R.string.action_medicine_administered)
 //            putExtra(AppGlobalReceiver.NOTIFICATION_ID, reminderData.id)

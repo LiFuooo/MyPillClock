@@ -7,26 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".Activities.DiaryItemsActivity">
 
-    <TextView
-        android:id="@+id/tv_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="this is diary food page"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_diary_item_in_category"
-        android:layout_width="407dp"
-        android:layout_height="508dp"
+        android:id="@+id/rv_diary_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_test"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/card_view_item_diary_item_detail">
 
     </androidx.recyclerview.widget.RecyclerView>

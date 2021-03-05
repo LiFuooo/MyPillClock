@@ -19,7 +19,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvClockInPillItem"
             android:layout_width="match_parent"
-            android:layout_height="476dp"
+            android:layout_height="match_parent"
             android:visibility="visible"
             tools:listitem="@layout/item_clockin" />
     </LinearLayout>

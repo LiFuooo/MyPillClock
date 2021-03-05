@@ -8,39 +8,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/clockInItemIv"
-        android:layout_width="60dp"
-        android:layout_height="80dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_wb_sunny_24"
-        android:clickable="true"/>
-
-    <TextView
-        android:id="@+id/clockInItemTvPillName"
-        android:layout_width="60dp"
-        android:layout_height="80dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/clockInItemIv"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/clockInItemtvCount"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/clockInItemTvPillName"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/checkClockInHistoryBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/checkClockInHistory"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/clockInItemtvCount"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_pillClockIn_image"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/iv_pillclockInItem"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+
+                app:srcCompat="@drawable/ic_baseline_wb_sunny_24" />
+
+            <TextView
+                android:id="@+id/tv_clockInItemPillName"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="@string/tv_pillClockin_item_pillName" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_pill_clockin_add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:text="@string/btn_pillClockin_item_clockin" />
+
+        <Button
+            android:id="@+id/btn_pill_clockin_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/btn_pillClockin_item_history" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

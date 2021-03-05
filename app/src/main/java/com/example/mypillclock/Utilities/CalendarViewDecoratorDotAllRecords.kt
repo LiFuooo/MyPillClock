@@ -1,10 +1,13 @@
 package com.example.mypillclock.Utilities
+
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.text.style.LineBackgroundSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
-
 
 
 //// https://github.com/prolificinteractive/material-calendarview/wiki/Decorators
@@ -31,3 +34,86 @@ class CalendarViewDecoratorDotAllRecords(private val color: Int, dates: Collecti
     }
 }
 
+
+
+
+class DotSpan_left(private val radius: Float,
+                   private val color: Int): LineBackgroundSpan {
+
+    override fun drawBackground(
+        canvas: Canvas,
+        paint: Paint,
+        left: Int,
+        right: Int,
+        top: Int,
+        baseline: Int,
+        bottom: Int,
+        text: CharSequence,
+        start: Int,
+        end: Int,
+        lineNumber: Int
+    ) {
+        val oldColor = paint.color
+        if (color != 0) {
+            paint.color = color
+        }
+        canvas.drawCircle((left + right) / 2 - 5f, bottom + radius, radius, paint)
+        paint.color = oldColor
+    }
+}
+
+
+class DotSpan_right(private val radius: Float,
+                    private val color: Int) : LineBackgroundSpan{
+    override fun drawBackground(
+        canvas: Canvas,
+        paint: Paint,
+        left: Int,
+        right: Int,
+        top: Int,
+        baseline: Int,
+        bottom: Int,
+        text: CharSequence,
+        start: Int,
+        end: Int,
+        lineNumber: Int
+    ) {
+        val oldColor = paint.color
+        if (color != 0) {
+            paint.color = color
+        }
+        canvas.drawCircle((left + right) / 2 + 5f, bottom + radius, radius, paint)
+        paint.color = oldColor
+    }
+}
+
+
+
+
+class EventDecorator_left(
+    private val color: Int,
+    private var dates: List<CalendarDay>
+) : DayViewDecorator {
+
+    override fun shouldDecorate(day: CalendarDay) = dates.contains(day)
+
+    override fun decorate(view: DayViewFacade) = with(view) {
+        addSpan(DotSpan_left(3f, color))
+    }
+}
+
+
+
+
+class EventDecorator_right(
+    private val color: Int,
+    private var dates: List<CalendarDay>
+) : DayViewDecorator {
+
+    override fun shouldDecorate(day: CalendarDay) = dates.contains(day)
+
+    override fun decorate(view: DayViewFacade) = with(view) {
+        addSpan(DotSpan_right(3f, color))
+    }
+
+}

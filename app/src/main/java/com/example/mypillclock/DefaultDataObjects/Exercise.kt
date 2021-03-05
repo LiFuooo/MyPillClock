@@ -5,7 +5,7 @@ import com.example.mypillclock.DataClass.DiaryMainDataClass
 import com.example.mypillclock.R
 
 object Exercise {
-    val CATEGORY_EXCERCISE = DiaryMainDataClass(0,R.drawable.ic_baseline_snowboarding_24, "Exercise")
+    val CATEGORY_EXCERCISE = DiaryMainDataClass(3,R.drawable.ic_baseline_snowboarding_24, "Exercise")
     val list = mutableListOf(
         DiaryItemDataClass(
             0,

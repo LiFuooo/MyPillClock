@@ -1,26 +1,20 @@
 package com.example.mypillclock.Utilities
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
-import android.widget.ListView
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.pillClockInDataClass
-import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.R
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class ClockInHistoryListViewAdapter(context: Context,
-                                    var resources:Int,
-                                    var items:MutableList<pillClockInDataClass>,
-                                    var dateSelected:Date):
+class ClockInHistoryPillListViewAdapter(context: Context,
+                                        var resources:Int,
+                                        var items:MutableList<pillClockInDataClass>,
+                                        var dateSelected:Date):
     ArrayAdapter<pillClockInDataClass>(context,resources, items ) {
     private val mContext: Context = context
 
@@ -61,7 +55,7 @@ class ClockInHistoryListViewAdapter(context: Context,
         val dateOfRecord = pillClockInRecord.timeClockIn
         val sdf_Record = sdf.format(dateOfRecord)
         if(sdf_Record == sdf_dateSelected){
-            pillName.text = pillClockInRecord.name
+            pillName.text = pillClockInRecord.pillName
         }
 
         return clockInItemView

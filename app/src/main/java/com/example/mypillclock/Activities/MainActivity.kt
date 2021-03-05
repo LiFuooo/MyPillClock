@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
                 )
                 SchemaUtils.drop(*table)
                 SchemaUtils.create(*table)
-                DiaryCategoryDbHelper().addDefaultCategoriesToDB()
+                pillInfoDBHelper().addSampleDataToDB()
+                DiaryCategoryDbHelper().addAllDefaultCategoriesToDB()
                 DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
             }
         }
@@ -99,24 +100,7 @@ class MainActivity : AppCompatActivity() {
 //        TODO: set bottom Fragment Navigation
 //        val btm_navi = findViewById<View>(R.id.btm_navi) as BottomNavigationView
         createBottomNavBar(R.id.ic_home, btm_navi)
-//        val navigation = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
-//        navigation.setOnNavigationItemSelectedListener { item ->
-//            when (item.itemId) {
-//                R.id.ic_home -> {
-//                    val a = Intent(this@MainActivity, MainActivity::class.java)
-//                    startActivity(a)
-//                }
-//                R.id.ic_clock_in -> {
-//                    val  b= Intent(this, ClockInActivity::class.java)
-//                    startActivity(b)
-//                }
-//                R.id.ic_diary -> {
-//                    val c = Intent(this, DiaryMainActivity::class.java)
-//                    startActivity(c)
-//                }
-//            }
-//            true
-//        }
+
 
 
 // get PillList into rv

@@ -1,7 +1,5 @@
 package com.example.mypillclock.Database
 
-import android.util.Log
-import android.widget.Toast
 import com.example.mypillclock.DataClass.pillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
 import kotlinx.serialization.json.Json
@@ -21,10 +19,6 @@ class PillClockInDBHelper {
         val name: Column<String> = varchar("name", 50)
         val category: Column<String> = varchar("category", 50)
         var clockInTime: Column<Long> = long("clockInTime")
-        var count: Column<Int> = integer("clockInCount")
-
-
-        override val primaryKey = PrimaryKey(id, name = "clock In Time")
     }
 
     //    An entity instance or a row in the table is defined as a class instance:
@@ -33,19 +27,17 @@ class PillClockInDBHelper {
         var name by clockInTimeTable.name
         var category by clockInTimeTable.category
         var clockInTime by clockInTimeTable.clockInTime
-        var count by clockInTimeTable.count
 
 
     }
 
-    fun addClockInRecord(pillInfo: PillInfo, currentTime: Long) {
+    fun addClockInRecord(pillInfo: PillInfo, clockinTime: Long) {
 
         transaction {
             ClockInTimeEntity.new {
                 name = pillInfo.name
-                clockInTime = currentTime
                 category = "Medicine"
-                count = 1
+                clockInTime = clockinTime
             }
         }
 
@@ -63,7 +55,6 @@ class PillClockInDBHelper {
                     clockInTimeInstance.name,
                     clockInTimeInstance.category,
                     clockInTimeInstance.clockInTime,
-                    clockInTimeInstance.count
                 )
             }.toMutableList()
         }
@@ -89,9 +80,8 @@ class PillClockInDBHelper {
         val clockInRecordTobeUpdated = queryOnePill(updatedClockInTimeData.id) ?: error("The id does not exists")
 
         transaction {
-            clockInRecordTobeUpdated.name = updatedClockInTimeJson.name
+            clockInRecordTobeUpdated.name = updatedClockInTimeJson.pillName
             clockInRecordTobeUpdated.clockInTime = updatedClockInTimeJson.timeClockIn
-            clockInRecordTobeUpdated.count = updatedClockInTimeJson.count
 
         }
     }
@@ -127,30 +117,26 @@ class PillClockInDBHelper {
             transaction {
                 ClockInTimeEntity.new {
                     name = "pill_1_record"
-                    clockInTime = olderDate
                     category = "Medicine"
-                    count = 1
+                    clockInTime = olderDate
                 }
 
                 ClockInTimeEntity.new {
                     name = "pill_2_record"
-                    clockInTime = yesterday
                     category = "Medicine"
-                    count = 1
+                    clockInTime = yesterday
                 }
 
                 ClockInTimeEntity.new {
                     name = "pill_3_record"
-                    clockInTime = now
                     category = "Medicine"
-                    count = 1
+                    clockInTime = now
                 }
 
                 ClockInTimeEntity.new {
                     name = "pill_4_record"
-                    clockInTime = tomorrow
                     category = "Medicine"
-                    count = 1
+                    clockInTime = tomorrow
                 }
             }
         }

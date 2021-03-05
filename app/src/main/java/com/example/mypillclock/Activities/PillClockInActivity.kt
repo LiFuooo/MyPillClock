@@ -6,10 +6,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mypillclock.DataClass.DiaryClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.DiaryClockInDBHelper
 import com.example.mypillclock.Database.pillInfoDBHelper
 import com.example.mypillclock.Utilities.ClockInPillItemAdapter
 import com.example.mypillclock.R
@@ -19,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_clock_in.btm_navi
 import kotlinx.android.synthetic.main.activity_diary_main.*
 
 
-class ClockInActivity : AppCompatActivity() {
+class PillClockInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +50,10 @@ class ClockInActivity : AppCompatActivity() {
 
     //    function to show the list of pill Info in rv
     fun setupListOfDataIntoClockInRV(SavedPillList: MutableList<PillInfo>) {
+        val onClick = this::onItemClick
         rvClockInPillItem.layoutManager = LinearLayoutManager(this)
 
-        val itemAdapter = ClockInPillItemAdapter(this, SavedPillList)
+        val itemAdapter = ClockInPillItemAdapter(this, SavedPillList,onClick)
         rvClockInPillItem.adapter = itemAdapter
     }
 
@@ -63,7 +67,7 @@ class ClockInActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var itemview = item.itemId
         if (item.itemId == R.id.toolbar_clockIn_calendar){
-            Log.i("diaryPage", "Add button pushed")
+            Log.i("diaryPage", "Calendar button pushed")
 //            start activity of clock in calendar
             val intent = Intent(this, ClockInHistoryActivity::class.java)
             this.startActivity(intent)
@@ -72,11 +76,22 @@ class ClockInActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-//    override fun onClick(position: Int, model: PillInfo) {
-//        Toast.makeText(this, "clicked Item", Toast.LENGTH_LONG).show()
+
+    private fun onItemClick(position: Int) {
+//        TODO: add clock-in data into DB
+        val now = System.currentTimeMillis()
+//        val itemClockIn = diaryItemsList?.get(position)?.let { DiaryClockInDataClass(0, it, now) }
+//        if (itemClockIn != null) {
+//            DiaryClockInDBHelper().addDiaryItemClockInRecordToDB(itemClockIn)
+//        }
+//        Toast.makeText(this,"ClockIn position = $position", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "now = $now", Toast.LENGTH_LONG).show()
+    }
+
+
+//    fun onClick(position: Int, model: PillInfo) {
+////        Toast.makeText(this, "clicked Item", Toast.LENGTH_LONG).show()
 ////        clockInItemIv.setColorFilter(ContextCompat.getColor(this, android.R.color.holo_green_light))
-//
-//
 //    }
 //
 //

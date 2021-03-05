@@ -2,10 +2,7 @@ package com.example.mypillclock.Database
 
 import android.util.Log
 import com.example.mypillclock.DataClass.DiaryMainDataClass
-import com.example.mypillclock.DefaultDataObjects.Drink
-import com.example.mypillclock.DefaultDataObjects.Exercise
-import com.example.mypillclock.DefaultDataObjects.Food
-import com.example.mypillclock.DefaultDataObjects.Smoke
+import com.example.mypillclock.DefaultDataObjects.*
 import com.example.mypillclock.R
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
@@ -56,19 +53,20 @@ class DiaryCategoryDbHelper {
         arrayList.add(Food.CATEGORY_FOOD)
         arrayList.add(Drink.CATEGORY_DRINK)
         arrayList.add(Exercise.CATEGORY_EXCERCISE)
-        arrayList.add(DiaryMainDataClass(0,R.drawable.ic_baseline_emoji_emotions_24, "Feeling"))
-        arrayList.add(DiaryMainDataClass(0,R.drawable.ic_baseline_baby_changing_station_24, "Sleep/Get Up Time"))
         arrayList.add(Smoke.CATEGORY_SMOKE)
+        arrayList.add(Feeling.CATEGORY_FEELING)
+        arrayList.add(DiaryMainDataClass(6,R.drawable.ic_baseline_baby_changing_station_24, "Sleep/Get Up Time"))
+
 
         return arrayList
     }
 
-    fun addDefaultCategoriesToDB() {
+    fun addAllDefaultCategoriesToDB() {
         val defaultList = defaultCategories()
         println("defaultList = $defaultList")
         transaction {
             for (i in defaultList.indices){
-                val new = DiaryCategoryEntity.new {
+                val new = DiaryCategoryEntity.new(defaultList[i].id) {
                     icons = defaultList[i].icons
                     categoryName = defaultList[i].categoryName
                 }

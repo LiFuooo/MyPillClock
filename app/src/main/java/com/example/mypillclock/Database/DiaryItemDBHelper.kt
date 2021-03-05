@@ -2,10 +2,7 @@ package com.example.mypillclock.Database
 
 import android.util.Log
 import com.example.mypillclock.DataClass.DiaryItemDataClass
-import com.example.mypillclock.DefaultDataObjects.Drink
-import com.example.mypillclock.DefaultDataObjects.Exercise
-import com.example.mypillclock.DefaultDataObjects.Food
-import com.example.mypillclock.DefaultDataObjects.Smoke
+import com.example.mypillclock.DefaultDataObjects.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -13,6 +10,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.count
+import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DiaryItemDBHelper {
@@ -28,26 +26,24 @@ class DiaryItemDBHelper {
         var category by DiaryCategoryDbHelper.DiaryCategoryEntity referencedOn DiaryItemsTable.category
         var itemName by DiaryItemsTable.itemName
         var itemIcon by DiaryItemsTable.itemIcon
+//        val clockIns by DiaryClockInDBHelper.DiaryItemClockInTimeEntity referrersOn DiaryClockInDBHelper.diaryItemclockInTimeTable.clockInTime
     }
 
-    private fun addDiaryItemEntityToDB(diaryItem: DiaryItemDataClass) {
+    fun addDiaryItemToDB(diaryItem: DiaryItemDataClass) {
         val diaryItemInCategoryString = Json.encodeToString(DiaryItemDataClass.serializer(), diaryItem)
-        Log.i("diaryItemString", "diaryItemString = $diaryItemInCategoryString")
+//        Log.i("diaryItemString", "diaryItemString = $diaryItemInCategoryString")
         val diaryItemInCategorysJson = Json.decodeFromString(DiaryItemDataClass.serializer(), diaryItemInCategoryString)
-        Log.i("diaryItemJson", "diaryItemJson = $diaryItemInCategorysJson")
+//        Log.i("diaryItemJson", "diaryItemJson = $diaryItemInCategorysJson")
 
 
         transaction {
-            Log.i("diaryItem.category.id", diaryItem.category.id.toString())
-            Log.i("categoryEntity", DiaryCategoryDbHelper.DiaryCategoryEntity.toString())
             val categoryEntity = DiaryCategoryDbHelper.DiaryCategoryEntity[diaryItem.category.id]
-
-
             DiaryItemEntity.new {
                 category = categoryEntity
                 itemName = diaryItemInCategorysJson.itemName
                 itemIcon = diaryItemInCategorysJson.itemIcon
             }
+
         }
 
     }
@@ -59,7 +55,8 @@ class DiaryItemDBHelper {
     for (i in 0 until defaultList.size){
         transaction {
             val listItem =  defaultList[i]
-            addDiaryItemEntityToDB(listItem)
+//            Log.i("listItem", listItem.itemName)
+            addDiaryItemToDB(listItem)
         }
     }
     }
@@ -69,10 +66,17 @@ class DiaryItemDBHelper {
         setOneDefaultObjectIntoDB(Drink.list)
         setOneDefaultObjectIntoDB(Exercise.list)
         setOneDefaultObjectIntoDB(Smoke.list)
+        setOneDefaultObjectIntoDB(Feeling.list)
     }
 
     fun isDBTableEmpty(): Boolean {
       return DiaryItemsTable.id.count().toString().toInt() == 0
+    }
+
+    fun deleteAllItemsFromDB(){
+        transaction {
+            DiaryItemsTable.deleteAll()
+        }
     }
 
 

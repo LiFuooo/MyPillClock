@@ -1,6 +1,7 @@
 package com.example.mypillclock.Database
 
-import com.example.mypillclock.DataClass.DiaryClockInDataClass
+import android.util.Log
+import com.example.mypillclock.DataClass.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -14,31 +15,48 @@ import java.text.SimpleDateFormat
 class DiaryClockInDBHelper {
 
     object diaryItemclockInTimeTable : IntIdTable() {
-        val category: Column<String> = varchar("category", 50)
-        val itemName: Column<String> = varchar("itemName", 50)
+        val item = reference("item", DiaryItemDBHelper.DiaryItemsTable)
         var clockInTime: Column<Long> = long("clockInTime")
-
-
-        override val primaryKey = PrimaryKey(id, name = "item clock In Time")
     }
 
     //    An entity instance or a row in the table is defined as a class instance:
     class DiaryItemClockInTimeEntity(id: EntityID<Int>) : IntEntity(id) {
         companion object : IntEntityClass<DiaryItemClockInTimeEntity>(diaryItemclockInTimeTable)
-        var category by diaryItemclockInTimeTable.category
-        var itemName by diaryItemclockInTimeTable.itemName
+        var item by DiaryItemDBHelper.DiaryItemEntity referencedOn DiaryClockInDBHelper.diaryItemclockInTimeTable.item
         var clockInTime by diaryItemclockInTimeTable.clockInTime
 
 
     }
 
-    fun addDiaryItemClockInRecord(itemClockInData: DiaryClockInDataClass) {
+    fun addDiaryItemClockInRecordToDB(itemClockInData: DiaryClockInDataClass) {
 
         transaction {
+            Log.i("addDiaryItemClockInRec", itemClockInData.toString())
+            Log.i("addDiaryItemClockIn id", itemClockInData.item.id.toString())
+            val itemEntity = DiaryItemDBHelper.DiaryItemEntity[itemClockInData.item.id]
             DiaryItemClockInTimeEntity.new {
-                category = itemClockInData.category
-                itemName = itemClockInData.itemName
+                item = itemEntity
                 clockInTime = itemClockInData.clockInTime
+            }
+        }
+
+    }
+
+    fun addDiaryItemClockInRecordToDB1(itemClockInData: DiaryClockInDataClass) {
+
+        val itemClockInString = Json.encodeToString(DiaryClockInDataClass.serializer(), itemClockInData)
+        Log.e("itemClockInString", "itemClockInString = $itemClockInString")
+        val itemClockInJson = Json.decodeFromString(DiaryClockInDataClass.serializer(), itemClockInString)
+        Log.e("insideAddPillFun", "pillInfoJson = $itemClockInJson")
+
+        transaction {
+            Log.i("addDiaryItemClockInRec", itemClockInData.toString())
+            Log.i("addDiaryItemClockIn id", itemClockInData.item.id.toString())
+
+            val itemEntity = DiaryItemDBHelper.DiaryItemEntity[itemClockInData.item.id]
+            DiaryItemClockInTimeEntity.new {
+                item = itemEntity
+                clockInTime = itemClockInJson.clockInTime
             }
         }
 
@@ -53,12 +71,27 @@ class DiaryClockInDBHelper {
             query.map { itemClockInDataInstance: DiaryItemClockInTimeEntity ->
                 DiaryClockInDataClass(
                     itemClockInDataInstance.id.value,
-                    itemClockInDataInstance.category,
-                    itemClockInDataInstance.itemName,
+                    diaryItemEntityToDataClass(itemClockInDataInstance.item),
                     itemClockInDataInstance.clockInTime,
                 )
             }.toMutableList()
         }
+    }
+
+    private fun diaryItemEntityToDataClass(diaryItemEntity: DiaryItemDBHelper.DiaryItemEntity): DiaryItemDataClass {
+        return DiaryItemDataClass(
+            diaryItemEntity.id.value,
+            diaryCategoryEntityToDataClass(diaryItemEntity.category),
+            diaryItemEntity.itemName,
+            diaryItemEntity.itemIcon)
+    }
+
+
+    private fun diaryCategoryEntityToDataClass(diaryCategoryEntity: DiaryCategoryDbHelper.DiaryCategoryEntity): DiaryMainDataClass {
+        return DiaryMainDataClass(
+            diaryCategoryEntity.id.value,
+            diaryCategoryEntity.icons,
+            diaryCategoryEntity.categoryName)
     }
 
 
@@ -74,27 +107,29 @@ class DiaryClockInDBHelper {
     }
 
 
-    fun updateDiaryItemClockInRecord(updatedDiaryItemClockInData: DiaryClockInDataClass) {
+// this function is not correct
+//    fun updateDiaryItemClockInRecord(updatedDiaryItemClockInData: DiaryClockInDataClass) {
+//
+//        val updatedDiaryItemClockInTimeString = Json.encodeToString(DiaryClockInDataClass.serializer(), updatedDiaryItemClockInData)
+//        val updatedDiaryItemClockInTimeJson = Json.decodeFromString(DiaryClockInDataClass.serializer(), updatedDiaryItemClockInTimeString)
+//        val DiaryItemclockInRecordTobeUpdated = queryOneDiaryItem(updatedDiaryItemClockInData.id) ?: error("The id does not exists")
+//
+//        transaction {
+//            val itemEntity = DiaryItemDBHelper.DiaryItemEntity[updatedDiaryItemClockInData.item.id]
+//            DiaryItemClockInTimeEntity.new {
+//                item = itemEntity
+//                clockInTime = updatedDiaryItemClockInData.clockInTime
+//            }
+//        }
+//    }
 
-        val updatedDiaryItemClockInTimeString = Json.encodeToString(DiaryClockInDataClass.serializer(), updatedDiaryItemClockInData)
-        val updatedDiaryItemClockInTimeJson = Json.decodeFromString(DiaryClockInDataClass.serializer(), updatedDiaryItemClockInTimeString)
-        val DiaryItemclockInRecordTobeUpdated = queryOneDiaryItem(updatedDiaryItemClockInData.id) ?: error("The id does not exists")
-
-        transaction {
-            DiaryItemclockInRecordTobeUpdated.category = updatedDiaryItemClockInTimeJson.category
-            DiaryItemclockInRecordTobeUpdated.itemName = updatedDiaryItemClockInTimeJson.itemName
-            DiaryItemclockInRecordTobeUpdated.clockInTime = updatedDiaryItemClockInTimeJson.clockInTime
-
-        }
-    }
-
-    private fun queryOneDiaryItem(id: Int): DiaryItemClockInTimeEntity? {
+    private fun queryOneDiaryClockInRecord(id: Int): DiaryItemClockInTimeEntity? {
         return transaction {
             DiaryItemClockInTimeEntity.findById(id)
         }
     }
 
-    fun findRecordsByDate(dateToMatch:String): MutableList<DiaryClockInDataClass> {
+    fun findDiaryClockInRecordByDate(dateToMatch:String): MutableList<DiaryClockInDataClass> {
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val allRecords = getAllDiaryItemClockInListFromDB()
 
@@ -102,6 +137,7 @@ class DiaryClockInDBHelper {
             sdf.format(it.clockInTime) == dateToMatch
         }.toMutableList()
     }
+
 
     fun recordsCount(): Int {
         return getAllDiaryItemClockInListFromDB().size

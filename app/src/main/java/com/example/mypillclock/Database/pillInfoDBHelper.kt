@@ -23,8 +23,6 @@ class pillInfoDBHelper {
         val remindTime: Column<String> = varchar("remindTime", 50)
         val rxNumber: Column<String> = varchar("Rx_Number", 50)
         val doctorNote: Column<String> = varchar("doctorNote", 200)
-
-        override val primaryKey = PrimaryKey(id, name = "PillSaved")
     }
 
     //    An entity instance or a row in the table is defined as a class instance:
@@ -44,9 +42,9 @@ class pillInfoDBHelper {
     fun addPill(pill: PillInfo) {
 
         val pillInfoString = Json.encodeToString(PillInfo.serializer(), pill)
-        Log.e("insideAddPillFun", "pillInfoString = $pillInfoString")
+        Log.i("insideAddPillFun", "pillInfoString = $pillInfoString")
         val pillInfoJson = Json.decodeFromString(PillInfo.serializer(), pillInfoString)
-        Log.e("insideAddPillFun", "pillInfoJson = $pillInfoJson")
+        Log.i("insideAddPillFun", "pillInfoJson = $pillInfoJson")
 
 
         transaction {

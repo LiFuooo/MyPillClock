@@ -20,7 +20,7 @@ fun Activity.createBottomNavBar(pageId: Int, bottomNavigationView: BottomNavigat
 
             }
             R.id.ic_clock_in -> {
-                val b = Intent(this, ClockInActivity::class.java)
+                val b = Intent(this, PillClockInActivity::class.java)
                 startActivity(b)
 
             }
