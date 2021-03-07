@@ -3,10 +3,10 @@ import java.io.Serializable
 
 
 @kotlinx.serialization.Serializable
-data class pillClockInDataClass(
+data class PillClockInDataClass(
     val id:Int,
-    val pillName:String,
-    val categoryS:String = "Medicine",
+    val pillName:PillInfo,
+    val category:String = "Medicine",
     val timeClockIn:Long,
 ):Serializable
 

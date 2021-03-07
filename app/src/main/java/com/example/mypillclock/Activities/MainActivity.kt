@@ -22,7 +22,6 @@ import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.activity_clock_in.*
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.btm_navi
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         if (recreateDatabase) {
             transaction {
                 val table = arrayOf(
-                    pillInfoDBHelper.DBExposedPillsTable,
+                    PillInfoDBHelper.DBExposedPillsTable,
                     PillClockInDBHelper.clockInTimeTable,
                     DiaryCategoryDbHelper.DiaryCategoryTable,
                     DiaryItemDBHelper.DiaryItemsTable,
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 SchemaUtils.drop(*table)
                 SchemaUtils.create(*table)
-                pillInfoDBHelper().addSampleDataToDB()
+                PillInfoDBHelper().addSampleDataToDB()
                 DiaryCategoryDbHelper().addAllDefaultCategoriesToDB()
                 DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
             }
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
 //        TODO: set bottom Fragment Navigation
 //        val btm_navi = findViewById<View>(R.id.btm_navi) as BottomNavigationView
-        createBottomNavBar(R.id.ic_home, btm_navi)
+        createBottomNavBar(R.id.ic_home, btm_navi_main)
 
 
 
@@ -122,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
 
 //        TODO: Notification Part
-        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
+        val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
 
 
 
@@ -141,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
     //    function to get Pill list from database
     private fun getItemListFromLocalDB() {
-        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
+        val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
 
         if (getSavedPillList.size > 0) {
             rvPillItem.visibility = View.VISIBLE

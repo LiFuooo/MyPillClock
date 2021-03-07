@@ -47,6 +47,18 @@
     <string name="et_dialog_add_dairy_item">Diary Item Name</string>
     <string name="tv_pillClockin_item_pillName">pill name</string>
     <string name="btn_pillClockin_item_clockin">clock in at chosen time</string>
+    <string name="str_add_missing_pill_clockin_records">Add Missing Pill Clock-in Records</string>
+    <string name="str_add_missing_pill_clockin_pillName">Pill_1</string>
+    <string name="str_btn_add_missing_pill_clockin_date">Date</string>
+    <string name="str_btn_add_missing_pill_clockin_time">time</string>
+    <string name="str_btn_add_missing_pill_clockin_save">Save</string>
+    <string name="str_tv_ll_one_pill_clockin_history_name_item">Pill_1</string>
+    <string name="str_tv_ll_one_pill_clockin_history_actualTime_item">2021-03-04 16:00</string>
+    <string name="str_tv_ll_one_pill_clockin_history_planTime_item">2021-03-04 12:00</string>
+    <string name="str_tv_ll_one_pill_clockin_history_planTime_header">Sceduled Time</string>
+    <string name="str_tv_ll_one_pill_clockin_history_actualTime_header">Actual Time</string>
+    <string name="str_tv_ll_one_pill_clockin_history_name_header">Pill Name</string>
+    <string name="str_tv_ll_one_pill_clockin_history_isClockedIn_header">Does this dose taken?</string>
 
 
 </resources>

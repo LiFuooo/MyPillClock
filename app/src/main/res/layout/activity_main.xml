@@ -9,25 +9,28 @@
     android:id="@+id/activity_main_layout"
     tools:context=".Activities.MainActivity">
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fl_wrapper">
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/AddPillFab"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/notifi_test_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="test" />
-    </FrameLayout>
 
-    <TextView
-        android:id="@+id/tvMain"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Hello World!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvMain"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Hello World!" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -36,7 +39,8 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMain">
+        app:layout_constraintBottom_toTopOf="@+id/btm_navi_main"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPillItem"
@@ -57,14 +61,14 @@
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/btm_navi"
+        android:id="@+id/btm_navi_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         app:itemIconTint="@color/color_bnv1"
         app:itemTextColor="@color/color_bnv1"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/nav_menu" />
 
 
@@ -78,7 +82,7 @@
         android:focusable="true"
         app:backgroundTint="@color/colorGreen"
         app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/btm_navi_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24" />
 

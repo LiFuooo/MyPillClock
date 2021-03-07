@@ -1,33 +1,37 @@
 package com.example.mypillclock.Utilities
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mypillclock.Activities.ActivityAddMissingPillClockinRecord
+import com.example.mypillclock.Activities.ActivityViewOnePillClockInHistory
+import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillClockInDBHelper
-import com.example.mypillclock.Database.pillInfoDBHelper
+import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.item_clockin.view.*
 
 
 // https://github.com/android/views-widgets-samples/tree/main/RecyclerViewKotlin/
-// https://github.com/carotkut94/Learn-Recycler-View
-// https://www.codeproject.com/Tips/1229751/Handle-Click-Events-of-Multiple-Buttons-Inside-a
-// https://www.youtube.com/watch?v=fiPrO7jpt0Y
+// https://stackoverflow.com/questions/45474333/how-can-i-set-onclicklistener-to-two-buttons-in-recyclerview
+// https://stackoverflow.com/questions/28767413/how-to-open-a-different-activity-on-recyclerview-item-onclick#28767516
 
 open class ClockInPillItemAdapter(
 
     val context: Context,
-    var itemsList:MutableList<PillInfo>,
-    val onClick: (Int) -> Unit):
+    var itemsList: MutableList<PillInfo>,
+    var myListenerObject: MultipleListenerClass
+):
     RecyclerView.Adapter<ClockInPillItemAdapter.pillClockInViewHolder>() {
     private val TAG = "ClockInPillItemAdapter"
-
-    private var onClickListener: OnItemClickListener? = null
+//    private var onClickListener: MultipleListenerInterface? = null
 
 
     override fun onCreateViewHolder(
@@ -39,7 +43,8 @@ open class ClockInPillItemAdapter(
             parent,
             false
         )
-        return pillClockInViewHolder(itemView,onClick,Btn1OnClick)
+
+        return pillClockInViewHolder(itemView, myListenerObject)
     }
 
 
@@ -52,158 +57,123 @@ open class ClockInPillItemAdapter(
 
         holder.itemView.apply {
             tv_clockInItemPillName.text = currentItem.name
+
+
+            if (position % 2 == 0) {
+                ll_pillClockIn_item.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.colorLightGray
+                    )
+                )
+            } else {
+                clockInItem.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.white
+                    )
+                )
+            }
+
         }
-    }
+        }
 
-
-//
-//
-//            holder.pillClockInItemImageView.setOnClickListener {
-//                holder.pillClockInItemImageView.setImageResource(R.drawable.ic_baseline_snowboarding_24)
-//                PillClockInDBHelper().addClockInRecord(currentItem, currentTime)
-//            }
-//
-//
-//
-//
-//            holder.itemView.setOnClickListener {
-//                if (onClickListener != null) {
-//                    onClickListener!!.onClick(position, currentItem)
-//                }
-//
-//            }
-//
-//            if (position % 2 == 0) {
-//                clockInItem.setBackgroundColor(
-//                    ContextCompat.getColor(
-//                        context,
-//                        R.color.colorLightGray
-//                    )
-//                )
-//            } else {
-//                clockInItem.setBackgroundColor(
-//                    ContextCompat.getColor(
-//                        context,
-//                        R.color.white
-//                    )
-//                )
-//            }
-//        }
-//    }
 
 
     override fun getItemCount() = itemsList.size
 
 
-    fun setOnClickListener(onClickListener: OnItemClickListener) {
-        this.onClickListener = onClickListener
+
+    class MultipleListenerClass(context: Context) {
+        val context = context
+        val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
+
+        fun onImageClick(position: Int){
+            Log.i("TAG", "onImageClick")
+            val now = System.currentTimeMillis()
+            val pillClicked = getSavedPillList[position]
+            val pillClockInData = PillClockInDataClass(0,pillClicked,"Medicine", now)
+            PillClockInDBHelper().addClockInRecord(pillClockInData)
+            Log.i("pill clock in", "${getSavedPillList[position]}")
+            Log.i("pill clockin time Long","${pillClockInData.timeClockIn}")
+        }
+        fun onBtnAddClick(position: Int) {
+            // Implement your functionality for onDelete here
+            Log.i("TAG", "on Button 1 Click")
+            val pillClicked = getSavedPillList[position]
+            Log.i("pill name","${pillClicked.name}")
+            val intent = Intent(context, ActivityAddMissingPillClockinRecord::class.java)
+            intent.putExtra("pill position", position)
+            intent.putExtra("pill name", pillClicked.name)
+            context.startActivity(intent)
+        }
+        fun onBtnHistoryClick(position: Int){
+            Log.i("this", "on Button 2 Click")
+            val pillClicked = getSavedPillList[position]
+            val intent = Intent(context, ActivityViewOnePillClockInHistory::class.java)
+            intent.putExtra("pill position", position)
+            intent.putExtra("pill name", pillClicked.name)
+            context.startActivity(intent)
+        }
     }
 
-    interface OnItemClickListener {
-        fun onClick(position: Int, model: PillInfo)
-    }
+//
+//    interface MultipleListenerInterface1 {
+//        fun onImageClick(position: Int, model: PillInfo)
+//        fun onBtnAddClick(position: Int, model: PillInfo)
+//        fun onBtnHistoryClick(position: Int, model: PillInfo)
+//    }
 
 
-
-    inner class pillClockInViewHolder(itemView: View, onClick: (Int) -> Unit, Btn1OnClick:(Int) -> Unit) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class pillClockInViewHolder(
+        itemView: View,
+        listener: MultipleListenerClass
+    ) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         var clockInLinearLayout = itemView.findViewById<LinearLayout>(R.id.ll_pillClockIn_image)
         var pillImage = itemView.findViewById<ImageView>(R.id.iv_pillclockInItem)
         var pillName = itemView.findViewById<TextView>(R.id.tv_clockInItemPillName)
         var btnPillClockinAdd = itemView.findViewById<Button>(R.id.btn_pill_clockin_add)
         var btnPillClockinHistory = itemView.findViewById<Button>(R.id.btn_pill_clockin_history)
+        val pillInfo = itemsList[adapterPosition + 1]
 
-        var pillClockInImageListener: PillClockInImageListener = onClick
-        var pillClockInBtn1Listener: PillClockInBt1Listener = Btn1OnClick
         val now = System.currentTimeMillis()
+
+        var multipleListener = listener
 
         init {
             clockInLinearLayout.setOnClickListener(this)
             btnPillClockinAdd.setOnClickListener(this)
+            btnPillClockinHistory.setOnClickListener(this)
         }
 
 
-        fun clockInLinearLayoutClick(position: Int){
-            val pillInfo = pillInfoDBHelper().getPillListFromDB()[position]
-            clockInLinearLayout.setOnClickListener {
-                Toast.makeText(context, "Clock In Image Clicked", Toast.LENGTH_SHORT).show()
-//            add clock in data to DB
-                PillClockInDBHelper().addClockInRecord(pillInfo, now)
-                Toast.makeText(context, "pillInfo Clock In: $pillInfo", Toast.LENGTH_SHORT).show()
 
-        }
-        }
-
-         fun pillClockInAddBtnClick(position: Int) {
-             val pillInfo = pillInfoDBHelper().getPillListFromDB()[adapterPosition]
-             btnPillClockinAdd.setOnClickListener {
-                 Toast.makeText(context, "btnPillClockinAdd Clicked", Toast.LENGTH_SHORT).show()
-//            add clock in data to DB
-//                PillClockInDBHelper().addClockInRecord(pillInfo, now)
-//                Toast.makeText(context, "pillInfo Clock In: $pillInfo", Toast.LENGTH_SHORT).show()
-
-             }
-         }
 
         override fun onClick(view: View) {
-            Toast.makeText(context, "ClockInPillItemAdpter onClick", Toast.LENGTH_SHORT).show()
-            Log.i(TAG, "pillClockInImageListener override onClick: $adapterPosition")
-            pillClockInImageListener(adapterPosition)
-            pillClockInBtn1Listener(adapterPosition)
+            Log.i("adapter Position", "$adapterPosition")
+            Log.i("itemsList count", "${itemsList.count()}")
+                when (view.id) {
+                    R.id.ll_pillClockIn_image -> multipleListener.onImageClick(
+                        this.layoutPosition
 
+                    )
+                    R.id.btn_pill_clockin_add -> multipleListener.onBtnAddClick(
+                        this.layoutPosition
+
+                    )
+                    R.id.btn_pill_clockin_history -> multipleListener.onBtnHistoryClick(
+                        this.layoutPosition
+
+                    )
+                    else -> {
+                    }
+                }
         }
 
-        fun imageOnClick(view: View) {
-            Toast.makeText(context, "fun image onClick", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "pillClockInImageListener onClick: $adapterPosition")
-            pillClockInImageListener(adapterPosition)
-            pillClockInBtn1Listener(adapterPosition)
-
-        }
 
     }
-
-
-//    inner class clockInItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-//        View.OnClickListener {
-//        val pillClockInItemImageView = itemView.ll_pillClockIn
-//        val clockInItemPillName = itemView.clockInItemTvPillName
-//        val ClockInItemBtn = itemView.tv_clockInItemPillName
-//
-////        init {
-////            itemView.setOnClickListener(this)
-////        }
-//
-//
-//        fun onClick(p0: View?) {
-//            val position = adapterPosition
-//            if (position != RecyclerView.NO_POSITION) {
-////                listener.onItemClick(AdapterView,p0,position,0)
-//            }
-//        }
-//    }
-//        R.id.btn_pill_clockin_add
-
-//            public void onClick(View v) {
-//                onClickListener.classOnClick(v, getAdapterPosition());
-//            }
-//        })
-//        mDaysBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onClickListener.daysOnClick(v, getAdapterPosition());
-//            }
-//        })
-
-
-
 }
-
-typealias PillClockInImageListener  = (Int) -> Unit
-typealias PillClockInBt1Listener  = (Int) -> Unit
-
-
-
 
 

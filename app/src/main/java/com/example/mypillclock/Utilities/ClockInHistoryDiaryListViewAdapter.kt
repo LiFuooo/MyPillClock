@@ -62,7 +62,6 @@ class ClockInHistoryDiaryListViewAdapter (context: Context,
             val timeString = sdf_time.format(dateOfRecord)
 
 
-
             val sdf_Record = sdf.format(dateOfRecord)
             if(sdf_Record == sdf_dateSelected){
                 diaryItemName.text = diaryClockInRecord.item.itemName

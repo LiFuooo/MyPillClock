@@ -25,7 +25,7 @@ class DiaryMainRvAdapter(var context: Context,
     RecyclerView.Adapter<DiaryMainRvAdapter.ViewHolder>() {
 
     private val TAG = "DiaryMainRvAdapter"
-    private var mOnCategoryListener: OnCategoryListener? = null
+//    private var mOnCategoryListener: OnCategoryListener? = null
 
 
 
@@ -51,9 +51,6 @@ class DiaryMainRvAdapter(var context: Context,
         return arrayList.size
     }
 
-    fun setOnItemClickListener(mOnCategoryListener: OnCategoryListener) {
-        this.mOnCategoryListener = mOnCategoryListener
-    }
 
 
     inner class ViewHolder(itemView: View, onClick: (Int) -> Unit) :
@@ -74,7 +71,6 @@ class DiaryMainRvAdapter(var context: Context,
             onCategoryListener(adapterPosition)
         }
     }
-
 
 }
 typealias OnCategoryListener  = (Int) -> Unit

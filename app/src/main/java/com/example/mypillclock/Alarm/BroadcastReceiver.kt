@@ -3,17 +3,13 @@ package com.example.mypillclock.Alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
-import android.util.Log
-import android.widget.Toast
-import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.pillInfoDBHelper
+import com.example.mypillclock.Database.PillInfoDBHelper
 
 private const val TAG = "MyBroadcastReceiver"
 
 class PillBroadcastReceiver() : BroadcastReceiver() {
 
-    val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
+    val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
     val pillToNotify = getSavedPillList[0]
 
     override fun onReceive(context: Context, intent: Intent) {

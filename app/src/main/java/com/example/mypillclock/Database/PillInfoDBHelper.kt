@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class pillInfoDBHelper {
+class PillInfoDBHelper {
 
     object DBExposedPillsTable : IntIdTable() {
         val name: Column<String> = varchar("name", 50)
@@ -129,7 +129,7 @@ class pillInfoDBHelper {
         for (i in 1..8){
             addPill(PillInfo(
                 1,
-                "name_ + $i",
+                "name_$i",
                 8 * i,
                 30 + i,
                 i+1,

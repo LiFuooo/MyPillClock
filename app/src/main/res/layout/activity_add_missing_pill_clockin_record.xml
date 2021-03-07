@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_add_missing_pill_clockin_title"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/str_add_missing_pill_clockin_records"
+            android:layout_marginTop="100dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_add_missing_pill_clockin_pillName"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/str_add_missing_pill_clockin_pillName"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_add_missing_pill_clockin_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="2021-03-05"
+                android:layout_marginLeft="150dp"/>
+
+            <Button
+                android:id="@+id/btn_add_missing_pill_clockin_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:text="@string/str_btn_add_missing_pill_clockin_date"
+                android:onClick="pillColckInShowDatePickerDialog"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_add_missing_pill_clockin_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="10:00 am"
+                android:layout_marginLeft="150dp"/>
+
+            <Button
+                android:id="@+id/btn_add_missing_pill_clockin_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:text="@string/str_btn_add_missing_pill_clockin_time"
+                android:onClick="pillColckInShowTimePickerDialog"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_add_missing_pill_clockin_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_btn_add_missing_pill_clockin_save"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

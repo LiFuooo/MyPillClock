@@ -4,6 +4,8 @@ package com.example.mypillclock.Activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -16,7 +18,6 @@ import com.example.mypillclock.Utilities.*
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.android.synthetic.main.activity_clock_in_history.*
-import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,14 +27,20 @@ class ClockInHistoryActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_clock_in_history)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
 //         pill ClockIn DB helper
         val pillClockInDBHelper = PillClockInDBHelper()
-//        Add fake data to DB for testing
-        pillClockInDBHelper.deleteAllRecords()
-        pillClockInDBHelper.addFakeDataToDB()
-        val allHistoryRecords = pillClockInDBHelper.getAllClockInListFromDB()
+
+
+//------------ Add fake data to DB for testing ---------------
+//        pillClockInDBHelper.deleteAllRecords()
+//        pillClockInDBHelper.addFakeDataToDB()
+//-------------------- TEST OVER -----------------------------
+
+
+        val allPillClockInHistoryRecords = pillClockInDBHelper.getAllClockInListFromDB()
 
 
         //         diary ClockIn DB helper
@@ -71,7 +78,7 @@ class ClockInHistoryActivity: AppCompatActivity() {
         mCalendarView.setSelectedDate(today)
 
         val daysListHelper = ClockInHistoryDBCalenderAdapter()
-        val DiaryDaysListHelper = DiaryItemClockInDBCalendarAdapter()
+        val diaryDaysListHelper = DiaryItemClockInDBCalendarAdapter()
 
         val circleDecorator = CurrentDayDecorator(this)
         mCalendarView.addDecorator(circleDecorator)
@@ -85,7 +92,7 @@ class ClockInHistoryActivity: AppCompatActivity() {
 
         val eventDecorator_right = EventDecorator_right(
             colorDiary,
-            DiaryDaysListHelper.hasRecordDays())
+            diaryDaysListHelper.hasRecordDays())
         mCalendarView.addDecorator(eventDecorator_right)
 
 
@@ -94,10 +101,28 @@ class ClockInHistoryActivity: AppCompatActivity() {
         val dateSelected =  mCalendarView.selectedDate.calendar.time
         val selectedDateFormatted = sdf.format(dateSelected)
         val tvOfClockinHistory = findViewById<TextView>(R.id.tv_clockInHistory_activity)
-        tvOfClockinHistory.text = "Pill of $selectedDateFormatted"
-
         val tvOfClockinDiaryHistory = findViewById<TextView>(R.id.tv_diaryClockInHistory_title)
+        tvOfClockinHistory.text = "Pill of $selectedDateFormatted"
         tvOfClockinDiaryHistory.text = "Diary of $selectedDateFormatted"
+
+
+
+//        set Today's records into List view
+        val pillClockInRecordToday = pillClockInDBHelper.findRecordsByDate(todayFormatted)
+        pillClockInListView.adapter =ClockInHistoryPillListViewAdapter(
+            this@ClockInHistoryActivity,
+            R.layout.item_clock_in_history_pill,
+            pillClockInRecordToday,
+            dateSelected)
+
+
+
+        val DiaryClockInRecordToday = dirayClockInDBHelper.findDiaryClockInRecordByDate(todayFormatted)
+        diaryClockInListView.adapter =ClockInHistoryDiaryListViewAdapter(
+            this@ClockInHistoryActivity,
+            R.layout.item_clock_in_history_diary,
+            DiaryClockInRecordToday,
+            dateSelected)
 
 
 
@@ -107,8 +132,8 @@ class ClockInHistoryActivity: AppCompatActivity() {
 //             1. change text View text
             val dateSelected =  date.calendar.time
             val selectedDateFormatted = sdf.format(dateSelected)
-            val tvOfClockinHistory = findViewById<TextView>(R.id.tv_clockInHistory_activity)
-            tvOfClockinHistory.text = "Activity of $selectedDateFormatted"
+            tvOfClockinHistory.text = "Pill of $selectedDateFormatted"
+            tvOfClockinDiaryHistory.text = "Diary of $selectedDateFormatted"
 
 
 //            2. set records into List View
@@ -133,4 +158,37 @@ class ClockInHistoryActivity: AppCompatActivity() {
 
 
     }
+
+
+
+
+    //setting menu in action bar
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.clock_in_history_activity_toolbar, menu)
+        return true
+    }
+
+    // actions on click menu items
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+//        R.id.action_diary_item_add -> {
+//            // User chose the "Print" item
+//            Toast.makeText(this, "add item btn clicked", Toast.LENGTH_LONG).show()
+//            onCreateAddItemDialogue()
+//            true
+//        }
+
+        android.R.id.home -> {
+            // app icon in action bar clicked; goto parent activity.
+            this.finish()
+            true
+        }
+
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
+    }
+
 }

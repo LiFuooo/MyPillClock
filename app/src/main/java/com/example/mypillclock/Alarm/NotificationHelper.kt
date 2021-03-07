@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.mypillclock.Activities.PillClockInActivity
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.pillInfoDBHelper
+import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.R
 import java.text.SimpleDateFormat
 
@@ -48,7 +48,7 @@ class NotificationHelper() {
 
     fun withActionPillNotificationBuilder(context: Context,  pillInfo: PillInfo): NotificationCompat.Builder {
 //        get pill Info from DB
-        val getSavedPillList = pillInfoDBHelper().getPillListFromDB()
+        val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
         val sdfTime = SimpleDateFormat("hh:mm a")
 
         val takeItNowPendingIntent = createTakeItNowPendingIntent(context, pillInfo)

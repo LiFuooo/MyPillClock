@@ -65,6 +65,12 @@ class DiaryMainActivity: AppCompatActivity() {
         )
     }
 
+    private fun onCategoryClick(position: Int) {
+        val intent = Intent(this, DiaryItemsActivity::class.java)
+        intent.putExtra("holder position", position)
+        this.startActivity(intent)
+    }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,11 +137,7 @@ class DiaryMainActivity: AppCompatActivity() {
 
 
 
-    private fun onCategoryClick(position: Int) {
-        val intent = Intent(this, DiaryItemsActivity::class.java)
-            intent.putExtra("holder position", position)
-        this.startActivity(intent)
-    }
+
 
 
 }

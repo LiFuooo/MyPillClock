@@ -26,6 +26,8 @@
         <activity android:name=".Activities.ClockInHistoryActivity"></activity>
         <activity android:name=".Activities.DiaryMainActivity"></activity>
         <activity android:name=".Activities.DiaryItemsActivity"></activity>
+        <activity android:name=".Activities.ActivityAddMissingPillClockinRecord"></activity>
+        <activity android:name=".Activities.ActivityViewOnePillClockInHistory"></activity>
         <receiver android:name=".Alarm.PillBroadcastReceiver"  android:exported="true" android:enabled="true"/>
     </application>
 

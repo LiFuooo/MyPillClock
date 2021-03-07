@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Activities.ActivityViewOnePillClockInHistory">
+
+    <LinearLayout
+        android:id="@+id/ll_one_pill_clockin_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_ll_one_pill_clockin_history_name_header"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/str_tv_ll_one_pill_clockin_history_name_header" />
+
+        <TextView
+            android:id="@+id/tv_ll_one_pill_clockin_history_actualTime_header"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/str_tv_ll_one_pill_clockin_history_actualTime_header" />
+
+        <TextView
+            android:id="@+id/tv_ll_one_pill_clockin_history_planTime_header"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/str_tv_ll_one_pill_clockin_history_planTime_header" />
+
+        <TextView
+            android:id="@+id/tv_ll_one_pill_clockin_history_isClockedIn_header"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/str_tv_ll_one_pill_clockin_history_isClockedIn_header" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_one_pill_clockin_history"
+        tools:listitem="@layout/item_one_pill_clockin_history" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

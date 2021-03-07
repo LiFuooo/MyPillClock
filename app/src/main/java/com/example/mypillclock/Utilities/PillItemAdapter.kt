@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.pillInfoDBHelper
+import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.item_pill.view.*
 
@@ -68,7 +68,7 @@ open class PillItemAdapter(
 
 
     fun removeAt(position: Int){
-        val dbHandler = pillInfoDBHelper()
+        val dbHandler = PillInfoDBHelper()
         try {
             dbHandler.deletePill(itemsList[position])
         } catch (e:Exception){

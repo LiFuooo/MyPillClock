@@ -1,24 +1,32 @@
 package com.example.mypillclock.Fragments
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
 import android.widget.DatePicker
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.mypillclock.R
 import java.util.*
 
-class AddPillDatePickerFragment:DialogFragment(),DatePickerDialog.OnDateSetListener {
+// https://stackoverflow.com/questions/4467816/datepicker-shows-wrong-value-of-month#4467894
+
+class AddPillDatePickerFragment(
+    val textViewId:Int)
+    :DialogFragment(),
+    DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default values for the picker
         val c = Calendar.getInstance()
         val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
-        val month = c.get(Calendar.MONTH) +1
+        val month = c.get(Calendar.MONTH)+1
         val year = c.get(Calendar.YEAR)
 
 
@@ -28,7 +36,7 @@ class AddPillDatePickerFragment:DialogFragment(),DatePickerDialog.OnDateSetListe
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val tv: TextView = activity?.findViewById(R.id.tvPillDatePicker) as TextView
+        val tv: TextView = activity?.findViewById(textViewId) as TextView
 
         val monthString = if(month < 10){
             "0$month";
@@ -46,4 +54,7 @@ class AddPillDatePickerFragment:DialogFragment(),DatePickerDialog.OnDateSetListe
         Log.i("dayOfMonthString", dayOfMonthString)
         tv.text = "$year-$monthString-$dayOfMonthString"
     }
+
+
+
 }

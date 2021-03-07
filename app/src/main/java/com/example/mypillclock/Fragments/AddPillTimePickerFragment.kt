@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.mypillclock.R
 import java.util.*
 
-class AddPillTimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class AddPillTimePickerFragment(val textViewID:Int) : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current time as the default values for the picker
@@ -24,7 +24,7 @@ class AddPillTimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetLi
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
         // Do something with the time chosen by the user
-        val tv: TextView = activity?.findViewById(R.id.tvPillTimePicker) as TextView
+        val tv: TextView = activity?.findViewById(textViewID) as TextView
 
         val minuteFormatted =
             if(minute < 10){
@@ -32,7 +32,8 @@ class AddPillTimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetLi
             } else{
                 minute
             }
-        tv.text = "${getHourAMPM(hourOfDay)}:$minuteFormatted ${getAMPM(hourOfDay)}"
+//        tv.text = "${getHourAMPM(hourOfDay)}:$minuteFormatted ${getAMPM(hourOfDay)}"
+        tv.text = "$hourOfDay:$minuteFormatted"
     }
 
     private fun getAMPM(hour:Int):String{
