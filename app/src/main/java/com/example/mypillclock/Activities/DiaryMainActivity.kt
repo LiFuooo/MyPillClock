@@ -68,6 +68,7 @@ class DiaryMainActivity: AppCompatActivity() {
     private fun onCategoryClick(position: Int) {
         val intent = Intent(this, DiaryItemsActivity::class.java)
         intent.putExtra("holder position", position)
+        intent.putExtra("Category ID", position)
         this.startActivity(intent)
     }
 

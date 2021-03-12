@@ -69,6 +69,7 @@
             android:inputType="number"
             android:maxEms="15"
             android:textSize="@dimen/etDuration_textSize"
+            android:text="1"
             android:hint="How many days you need to take it?"
             android:orientation="horizontal" />
     </LinearLayout>
@@ -105,6 +106,7 @@
             android:autofillHints=""
             android:gravity="center"
             android:hint="@string/etFrequencyHint"
+            android:text="1"
             android:inputType="number"
             android:maxEms="15"
             android:orientation="horizontal"
@@ -187,7 +189,7 @@
             android:focusableInTouchMode="false"
             android:textSize="@dimen/tvPillTimePicker_textSize"
             android:hint="@string/hint_time"
-            android:text="2020-01-01"
+            android:text="2020-03-11"
             android:onClick="showStartDatePickerDialog" />
 
     </LinearLayout>
@@ -223,7 +225,7 @@
             android:focusableInTouchMode="false"
             android:textSize="@dimen/tvPillTimePicker_textSize"
             android:hint="@string/hint_time"
-            android:text="3:30PM"
+            android:text="13:23"
             android:onClick="showTimePickerDialog" />
 
     </LinearLayout>

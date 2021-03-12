@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mypillclock.Alarm.AlarmSchedule
 import com.example.mypillclock.Alarm.NotificationHelper
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.*
@@ -28,7 +29,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 
 class MainActivity : AppCompatActivity() {
-    val recreateDatabase = true
+    var recreateDatabase = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -78,21 +79,24 @@ class MainActivity : AppCompatActivity() {
                     PillClockInDBHelper.clockInTimeTable,
                     DiaryCategoryDbHelper.DiaryCategoryTable,
                     DiaryItemDBHelper.DiaryItemsTable,
-                    DiaryClockInDBHelper.diaryItemclockInTimeTable
+                    DiaryClockInDBHelper.diaryItemclockInTimeTable,
+                    PillScheduleTimeDBHelper.pillScheduleTimeTable
                 )
-                SchemaUtils.drop(*table)
-                SchemaUtils.create(*table)
-                PillInfoDBHelper().addSampleDataToDB()
-                DiaryCategoryDbHelper().addAllDefaultCategoriesToDB()
-                DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
+//                SchemaUtils.drop(*table)
+//                SchemaUtils.create(*table)
+//                PillInfoDBHelper().addSampleDataToDB()
+//                DiaryCategoryDbHelper().addAllDefaultCategoriesToDB()
+//                DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
             }
         }
 
 
 //        TODO: Add Pill when clicking FAB
         AddPillFab.setOnClickListener {
+            recreateDatabase = false
             val intent = Intent(this, AddPillActivity::class.java).also {
                 startActivityForResult(it, ADD_PILL_ACTIVITY_REQUEST_CODE)
+
             }
         }
 
@@ -126,13 +130,17 @@ class MainActivity : AppCompatActivity() {
 
 
         NotificationHelper().createNotificationChannel(this)
-//        val pillToNotify = getSavedPillList[0]
 
 
         notifi_test_btn.setOnClickListener {
 //            NotificationHelper().createPillNotification(this,pillToNotify)
-//            AlarmSchedule().scheduleAlarms(pillToNotify, this)
-            startActivity(Intent(this, ClockInHistoryActivity::class.java))
+//            if (getSavedPillList.count() != 0){
+////                val pillToNotify = getSavedPillList[0]
+//                getSavedPillList.forEach {
+//                AlarmSchedule(it).scheduleAlarms(it, this)
+//                }
+//            }
+//            startActivity(Intent(this, ClockInHistoryActivity::class.java))
         }
 
 
@@ -141,6 +149,7 @@ class MainActivity : AppCompatActivity() {
     //    function to get Pill list from database
     private fun getItemListFromLocalDB() {
         val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
+        Log.i("Main getSavedPillList", getSavedPillList.size.toString())
 
         if (getSavedPillList.size > 0) {
             rvPillItem.visibility = View.VISIBLE

@@ -3,23 +3,29 @@ package com.example.mypillclock.Alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillInfoDBHelper
+import com.example.mypillclock.Database.PillScheduleTimeDBHelper
+import com.example.mypillclock.Utilities.DataClassEntityConverter
 
-private const val TAG = "MyBroadcastReceiver"
 
-class PillBroadcastReceiver() : BroadcastReceiver() {
+class PillBroadcastReceiver : BroadcastReceiver() {
 
-    val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
-    val pillToNotify = getSavedPillList[0]
-
+    private val TAG = "PillBroadcastReceiver"
     override fun onReceive(context: Context, intent: Intent) {
 
-//        val service = Intent(context, NotificationHelper::class.java)
-//        service.putExtra("reason", intent.getStringExtra("reason"))
-//        service.putExtra("timestamp", intent.getLongExtra("timestamp", 0))
-//
-//        context.startService(service)
-        NotificationHelper().createPillNotification(context,pillToNotify)
+        val pillToAlarmID = intent.extras?.getString("pillToAlarmID")?.toInt()
+        Log.i(TAG, pillToAlarmID.toString())
+        if(pillToAlarmID != null){
+            val pillToNotifyEntity = PillInfoDBHelper().queryOnePillById(pillToAlarmID)
+            Log.i("$TAG pillToNotifyEntity", pillToNotifyEntity.toString())
+            if(pillToNotifyEntity != null){
+                NotificationHelper().createPillNotification(context,pillToNotifyEntity)
+                PillScheduleTimeDBHelper().addOneRecordWithScheduleTime(System.currentTimeMillis(),pillToNotifyEntity)
+            }
+        }
+
     }
 
 }

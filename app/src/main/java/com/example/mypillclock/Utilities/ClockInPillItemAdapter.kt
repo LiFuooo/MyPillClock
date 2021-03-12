@@ -96,6 +96,7 @@ open class ClockInPillItemAdapter(
             PillClockInDBHelper().addClockInRecord(pillClockInData)
             Log.i("pill clock in", "${getSavedPillList[position]}")
             Log.i("pill clockin time Long","${pillClockInData.timeClockIn}")
+            Toast.makeText(context, "${pillClicked.name} Clock-in Success!", Toast.LENGTH_SHORT).show()
         }
         fun onBtnAddClick(position: Int) {
             // Implement your functionality for onDelete here
@@ -105,14 +106,15 @@ open class ClockInPillItemAdapter(
             val intent = Intent(context, ActivityAddMissingPillClockinRecord::class.java)
             intent.putExtra("pill position", position)
             intent.putExtra("pill name", pillClicked.name)
+            intent.putExtra("pill id", pillClicked.id)
             context.startActivity(intent)
         }
         fun onBtnHistoryClick(position: Int){
             Log.i("this", "on Button 2 Click")
             val pillClicked = getSavedPillList[position]
             val intent = Intent(context, ActivityViewOnePillClockInHistory::class.java)
-            intent.putExtra("pill position", position)
-            intent.putExtra("pill name", pillClicked.name)
+//            intent.putExtra("pill position", position)
+            intent.putExtra("pill id", pillClicked.id)
             context.startActivity(intent)
         }
     }
@@ -155,10 +157,12 @@ open class ClockInPillItemAdapter(
             Log.i("adapter Position", "$adapterPosition")
             Log.i("itemsList count", "${itemsList.count()}")
                 when (view.id) {
-                    R.id.ll_pillClockIn_image -> multipleListener.onImageClick(
-                        this.layoutPosition
+                    R.id.ll_pillClockIn_image -> {
+                        multipleListener.onImageClick(this.layoutPosition)
+                        this.pillImage.setImageResource(R.drawable.ic_baseline_wb_sunny_24)
 
-                    )
+                    }
+
                     R.id.btn_pill_clockin_add -> multipleListener.onBtnAddClick(
                         this.layoutPosition
 

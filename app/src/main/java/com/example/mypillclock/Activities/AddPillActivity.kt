@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypillclock.Alarm.AlarmSchedule
 import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillInfoDBHelper
@@ -16,6 +17,7 @@ import com.example.mypillclock.Fragments.AddPillDatePickerFragment
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.activity_add_pill.*
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.transactions.transaction
 
 
 class AddPillActivity : AppCompatActivity() {
@@ -131,8 +133,20 @@ class AddPillActivity : AppCompatActivity() {
                 val json = Json { allowStructuredMapKeys = true }
 
 
-//                Add Pill to Database
+//                1. Add Pill to Database
                 addPillRecord(isFormFilled, pill)
+//                2. get pillEntity By DataClass
+//                transaction {
+
+                val pillEntity = PillInfoDBHelper().queryOnePillEntityByDataClass(pill)
+
+
+//                3. schedule alarm
+                if(pillEntity != null){
+
+                AlarmSchedule(pillEntity).scheduleAlarms(this)
+                }
+//                }
 
 
                 Intent(this, MainActivity::class.java).also {
@@ -150,14 +164,14 @@ class AddPillActivity : AppCompatActivity() {
     private fun addPillRecord(isFormFilled: Boolean, pill: PillInfo) {
         val databaseHelper = PillInfoDBHelper()
         if (isFormFilled) {
-            Log.e("AddPillActivity", "isFormFilled = $isFormFilled")
+            Log.i("AddPillActivity", "isFormFilled = $isFormFilled")
 //            val pillInfoJson = Json.encodeToString(PillInfo.serializer(), pill)
             try {
                 databaseHelper.addPill(pill)
                 setResult(Activity.RESULT_OK)
                 Toast.makeText(this, "Pill Saved to DataBase", Toast.LENGTH_SHORT).show()
+                Log.i("AddPillActivity pill", pill.toString())
             } catch (e: Exception) {
-
                 Toast.makeText(this, "Pill Save to DataBase FAILED!", Toast.LENGTH_SHORT).show()
             }
 

@@ -55,8 +55,7 @@ class DiaryCategoryDbHelper {
         arrayList.add(Exercise.CATEGORY_EXCERCISE)
         arrayList.add(Smoke.CATEGORY_SMOKE)
         arrayList.add(Feeling.CATEGORY_FEELING)
-        arrayList.add(DiaryMainDataClass(6,R.drawable.ic_baseline_baby_changing_station_24, "Sleep/Get Up Time"))
-
+        arrayList.add(SleepGetUp.CATEGORY_SLEEP)
 
         return arrayList
     }

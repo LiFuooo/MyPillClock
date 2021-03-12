@@ -1,9 +1,10 @@
 package com.example.mypillclock.Database
 
 import android.util.Log
-import com.example.mypillclock.DataClass.DiaryItemDataClass
 import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Utilities.DataClassEntityConverter
+import com.example.mypillclock.Utilities.DateTimeFormatConverter
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -29,8 +30,6 @@ class PillClockInDBHelper {
         var name by PillInfoDBHelper.DBExposedPillEntity referencedOn clockInTimeTable.name
         var category by clockInTimeTable.category
         var clockInTime by clockInTimeTable.clockInTime
-
-
     }
 
     fun addClockInRecord(pillClockInData: PillClockInDataClass) {
@@ -46,8 +45,49 @@ class PillClockInDBHelper {
                 name = pillInfoEntity
                 category = "Medicine"
                 clockInTime = pillClockInData.timeClockIn
+
             }
         }
+
+    }
+
+    fun getScheduleClockIntime(pillInfo: PillInfo){
+        val startDateTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
+        val startDateTimeLong = DateTimeFormatConverter().timeStringToLong(startDateTimeString)
+        val now = DateTimeFormatConverter().now
+//        val interval:Long = (24 / pillInfo.frequency * 1000* 60 * 60).toLong()
+//        below is for test
+        val interval:Long = (24 / pillInfo.frequency * 1000).toLong()
+        val endDateTime = startDateTimeLong + (pillInfo.duration*1000*24*60*60).toLong()
+
+        var lastScheduleTime = if (PillClockInDBHelper.ClockInTimeEntity.count().toInt() == 0){
+            startDateTimeLong
+        } else{
+            getLastScheduleTime()
+        }
+
+
+
+    }
+
+
+
+//    fun addOneRecordWithScheduleTime(scheduleTimeIn:Long, pillInfo: PillInfo){
+//
+//        transaction {
+//
+//            ClockInTimeEntity.new {
+//                name = DataClassEntityConverter().pillInfoDataClassToEntity(pillInfo)
+//                category = "Medicine"
+//                clockInTime = null
+//                scheduleTime = scheduleTimeIn
+//                isClockIn = false
+//            }
+//        }
+//    }
+
+    private fun getLastScheduleTime(): Long {
+        return PillClockInDBHelper.ClockInTimeEntity[-1].clockInTime
 
     }
 
@@ -73,6 +113,7 @@ class PillClockInDBHelper {
                         clockInTimeInstance.name.doctorNote),
                     clockInTimeInstance.category,
                     clockInTimeInstance.clockInTime,
+
                 )
             }.toMutableList()
         }

@@ -1,4 +1,6 @@
 package com.example.mypillclock.DataClass
+import com.example.mypillclock.Database.PillClockInDBHelper
+import org.jetbrains.exposed.sql.Column
 import java.io.Serializable
 
 
@@ -7,6 +9,6 @@ data class PillClockInDataClass(
     val id:Int,
     val pillName:PillInfo,
     val category:String = "Medicine",
-    val timeClockIn:Long,
+    var timeClockIn:Long,
 ):Serializable
 

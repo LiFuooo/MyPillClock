@@ -2,13 +2,16 @@ package com.example.mypillclock.Database
 
 import android.util.Log
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.PillInfoDBHelper.DBExposedPillsTable.name
+import com.example.mypillclock.Database.PillInfoDBHelper.DBExposedPillsTable.remindStartDate
+import com.example.mypillclock.Database.PillInfoDBHelper.DBExposedPillsTable.remindTime
+import com.example.mypillclock.Utilities.DateTimeFormatConverter
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PillInfoDBHelper {
@@ -103,7 +106,7 @@ class PillInfoDBHelper {
 
         val afterEditPillInfoString = Json.encodeToString(PillInfo.serializer(), pillAfterEdit)
         val afterEditPillInfoJson = Json.decodeFromString(PillInfo.serializer(), afterEditPillInfoString)
-        val pillToBeUpdated = queryOnePill(pillAfterEdit.id) ?: error("The id does not exists")
+        val pillToBeUpdated = queryOnePillById(pillAfterEdit.id) ?: error("The id does not exists")
 
         transaction {
             pillToBeUpdated.name = afterEditPillInfoJson.name
@@ -118,15 +121,26 @@ class PillInfoDBHelper {
         }
     }
 
-    private fun queryOnePill(id: Int): DBExposedPillEntity? {
+    fun queryOnePillById(id: Int): DBExposedPillEntity? {
         return transaction {
             DBExposedPillEntity.findById(id)
         }
     }
 
+    fun queryOnePillEntityByDataClass(pill: PillInfo): DBExposedPillEntity? {
+        return transaction {
+        DBExposedPillEntity.find { DBExposedPillsTable.name eq pill.name }.firstOrNull()
+        }
+
+
+    }
+
 
     fun addSampleDataToDB(){
-        for (i in 1..8){
+        val now = DateTimeFormatConverter().now
+        val date = DateTimeFormatConverter().timeLongToDateString(now)!!
+        val time = DateTimeFormatConverter().timeLongToTimeString(now)!!
+        for (i in 1..3){
             addPill(PillInfo(
                 1,
                 "name_$i",
@@ -134,8 +148,8 @@ class PillInfoDBHelper {
                 30 + i,
                 i+1,
                 "pills",
-                "2020-01-09",
-                "12:00PM",
+                date,
+                time,
                 "123-098x",
                 "No Food"))
         }

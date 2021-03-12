@@ -59,6 +59,7 @@
     <string name="str_tv_ll_one_pill_clockin_history_actualTime_header">Actual Time</string>
     <string name="str_tv_ll_one_pill_clockin_history_name_header">Pill Name</string>
     <string name="str_tv_ll_one_pill_clockin_history_isClockedIn_header">Does this dose taken?</string>
+    <string name="str_tb_one_pill_schedule_actual_time_page_download">Download</string>
 
 
 </resources>

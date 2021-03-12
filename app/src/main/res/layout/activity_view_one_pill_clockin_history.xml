@@ -24,18 +24,18 @@
             android:text="@string/str_tv_ll_one_pill_clockin_history_name_header" />
 
         <TextView
-            android:id="@+id/tv_ll_one_pill_clockin_history_actualTime_header"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/str_tv_ll_one_pill_clockin_history_actualTime_header" />
-
-        <TextView
             android:id="@+id/tv_ll_one_pill_clockin_history_planTime_header"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/str_tv_ll_one_pill_clockin_history_planTime_header" />
+
+        <TextView
+            android:id="@+id/tv_ll_one_pill_clockin_history_actualTime_header"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/str_tv_ll_one_pill_clockin_history_actualTime_header" />
 
         <TextView
             android:id="@+id/tv_ll_one_pill_clockin_history_isClockedIn_header"
@@ -46,6 +46,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_viewOnePillClockInHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"

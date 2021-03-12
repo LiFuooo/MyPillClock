@@ -14,18 +14,20 @@
         android:text="@string/str_tv_ll_one_pill_clockin_history_name_item" />
 
     <TextView
+        android:id="@+id/tv_ll_one_pill_clockin_history_planTime_item"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/str_tv_ll_one_pill_clockin_history_planTime_item" />
+
+
+    <TextView
         android:id="@+id/tv_ll_one_pill_clockin_history_actualTime_item"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/str_tv_ll_one_pill_clockin_history_actualTime_item" />
 
-    <TextView
-        android:id="@+id/tv_ll_one_pill_clockin_history_planTime_item"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/str_tv_ll_one_pill_clockin_history_planTime_item" />
 
     <ImageView
         android:id="@+id/iv_ll_one_pill_clockin_history_istaken__item"

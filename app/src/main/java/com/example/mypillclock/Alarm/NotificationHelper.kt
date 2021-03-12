@@ -40,24 +40,24 @@ class NotificationHelper() {
 
 
 
-    fun createPillNotification(context: Context,pillInfo: PillInfo){
-        val notificationBuilder = withActionPillNotificationBuilder(context, pillInfo)
+    fun createPillNotification(context: Context,pillEntity: PillInfoDBHelper.DBExposedPillEntity){
+        val notificationBuilder = withActionPillNotificationBuilder(context, pillEntity)
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(notificationId,notificationBuilder.build())
     }
 
-    fun withActionPillNotificationBuilder(context: Context,  pillInfo: PillInfo): NotificationCompat.Builder {
+    fun withActionPillNotificationBuilder(context: Context, pillEntity: PillInfoDBHelper.DBExposedPillEntity): NotificationCompat.Builder {
 //        get pill Info from DB
         val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
         val sdfTime = SimpleDateFormat("hh:mm a")
 
-        val takeItNowPendingIntent = createTakeItNowPendingIntent(context, pillInfo)
-        val remindMeLaterPendingIntent = createremindMeLaterPendingIntent(context,pillInfo)
+        val takeItNowPendingIntent = createTakeItNowPendingIntent(context, pillEntity)
+        val remindMeLaterPendingIntent = createremindMeLaterPendingIntent(context,pillEntity)
 
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.pill_notification_icon)
             setContentTitle("Pill Clock")
-            setContentText("It's time to take ${pillInfo.amount} ${pillInfo.amountType.toString()}  ${pillInfo.name}")
+            setContentText("It's time to take ${pillEntity.amount} ${pillEntity.amountType.toString()}  ${pillEntity.name}")
 //                setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
             priority = NotificationCompat.PRIORITY_DEFAULT
             setContentIntent(takeItNowPendingIntent)
@@ -78,7 +78,7 @@ class NotificationHelper() {
 
 
 
-    private fun createTakeItNowPendingIntent(context: Context, pillInfo: PillInfo): PendingIntent? {
+    private fun createTakeItNowPendingIntent(context: Context, pillEntity: PillInfoDBHelper.DBExposedPillEntity): PendingIntent? {
 
         val takeItNowIntent = Intent(context, PillClockInActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -92,7 +92,7 @@ class NotificationHelper() {
     }
 
 
-    private fun createremindMeLaterPendingIntent(context: Context, pillInfo: PillInfo): PendingIntent? {
+    private fun createremindMeLaterPendingIntent(context: Context, pillEntity: PillInfoDBHelper.DBExposedPillEntity): PendingIntent? {
 
         val remindMeLaterIntent = Intent(context, PillClockInActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

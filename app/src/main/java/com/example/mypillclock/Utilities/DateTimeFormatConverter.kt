@@ -22,8 +22,14 @@ class DateTimeFormatConverter {
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         return dateFormatter.format(time)
     }
+
     fun timeLongToTimeString(time:Long): String? {
         val dateFormatter = SimpleDateFormat("HH:mm")
+        return dateFormatter.format(time)
+    }
+
+    fun timeLongToDateTimeString(time:Long): String? {
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
         return dateFormatter.format(time)
     }
 

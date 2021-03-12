@@ -3,50 +3,31 @@ package com.example.mypillclock.Alarm
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Entity
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.PillClockInDBHelper
+import com.example.mypillclock.Database.PillInfoDBHelper
+import com.example.mypillclock.Database.PillScheduleTimeDBHelper
 import com.example.mypillclock.R
 import java.util.*
 
-class AlarmSchedule {
+class AlarmSchedule(pillInfoEntity: PillInfoDBHelper.DBExposedPillEntity) {
+    private val pillToAlarm = pillInfoEntity
 
     fun createPendingIntent(context: Context): PendingIntent?{
         val intent = Intent(context.applicationContext, PillBroadcastReceiver()::class.java).apply {
             action = context.getString(R.string.action1_takingitnow)
-//            type = "$day-${reminderData.name}-${reminderData.medicine}-${reminderData.type.name}"
-//            putExtra(ReminderDialog.KEY_ID, reminderData.id)
+            putExtra("pillToAlarmID",pillToAlarm.id.toString())
         }
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
 
 
-    fun getFirstAlarmTimeInMillis(pillToAlarm: PillInfo): Long {
-        val year = pillToAlarm.remindStartDate.slice(0..3).toInt()
-        val month = pillToAlarm.remindStartDate.slice(4..5).toInt()
-        val dayOfMonth = pillToAlarm.remindStartDate.slice(6..7).toInt()
-
-        val hourOfDay = pillToAlarm.RemindTime.slice(0..2).toInt()
-        val minute = pillToAlarm.RemindTime.slice(3..4).toInt()
-
-
-        val datetimeToAlarm = Calendar.getInstance(Locale.getDefault())
-        datetimeToAlarm.timeInMillis = System.currentTimeMillis()
-//        datetimeToAlarm.set(YEAR, year)
-//        datetimeToAlarm.set(MONTH, month)
-//        datetimeToAlarm.set(DAY_OF_MONTH, dayOfMonth)
-//
-//        datetimeToAlarm.set(HOUR_OF_DAY, hourOfDay)
-//        datetimeToAlarm.set(MINUTE, minute)
-//        datetimeToAlarm.set(SECOND, 0)
-//        datetimeToAlarm.set(MILLISECOND, 0)
-
-        return datetimeToAlarm.timeInMillis
-    }
-
-
-
-    fun scheduleAlarms(pillToAlarm: PillInfo, context: Context) {
+    fun scheduleAlarms(context: Context) {
 
         val alarmIntent = createPendingIntent(context)
         val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -62,10 +43,36 @@ class AlarmSchedule {
             repeatInMilliseconds,
             alarmIntent)
 
+//        PillScheduleTimeDBHelper().addOneRecordWithScheduleTime(System.currentTimeMillis(),pillToAlarm)
+        Toast.makeText(context, "addPillClockSchedule to DB", Toast.LENGTH_SHORT).show()
+        Log.i("Add Schedule",pillToAlarm.name)
+
 
     }
 
 
+//    fun getFirstAlarmTimeInMillis(pillToAlarm: PillInfo): Long {
+//        val year = pillToAlarm.remindStartDate.slice(0..3).toInt()
+//        val month = pillToAlarm.remindStartDate.slice(4..5).toInt()
+//        val dayOfMonth = pillToAlarm.remindStartDate.slice(6..7).toInt()
+//
+//        val hourOfDay = pillToAlarm.RemindTime.slice(0..2).toInt()
+//        val minute = pillToAlarm.RemindTime.slice(3..4).toInt()
+//
+//
+//        val datetimeToAlarm = Calendar.getInstance(Locale.getDefault())
+//        datetimeToAlarm.timeInMillis = System.currentTimeMillis()
+////        datetimeToAlarm.set(YEAR, year)
+////        datetimeToAlarm.set(MONTH, month)
+////        datetimeToAlarm.set(DAY_OF_MONTH, dayOfMonth)
+////
+////        datetimeToAlarm.set(HOUR_OF_DAY, hourOfDay)
+////        datetimeToAlarm.set(MINUTE, minute)
+////        datetimeToAlarm.set(SECOND, 0)
+////        datetimeToAlarm.set(MILLISECOND, 0)
+//
+//        return datetimeToAlarm.timeInMillis
+//    }
 
 //    fun shouldNotifyToday(today: Calender, deteTimeToAlarm: Calender):Boolean{
 //        return today.get(HOUR_OF_DAY) <= datetimeToAlarm.get(HOUR_OF_DAY) &&
