@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +17,9 @@ import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Fragments.EditPillDatePickerFragment
 import com.example.mypillclock.Fragments.EditPillTimePickerFragment
 import com.example.mypillclock.R
+import kotlinx.android.synthetic.main.activity_add_pill.*
 import kotlinx.android.synthetic.main.activity_edit_pill.*
+import kotlinx.android.synthetic.main.activity_edit_pill.rg_edit_pill
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +36,12 @@ class EditPillActivity : AppCompatActivity() {
             ToBeEditedPillInfoDetail = intent.getSerializableExtra(MainActivity.EXTRA_PILL_DETAIL) as PillInfo
             Log.i("ToBeEditedPillInfo", ToBeEditedPillInfoDetail.toString())
         }
+
+
+//        Radio Button Group
+
+
+
 
 
 
@@ -58,8 +67,8 @@ class EditPillActivity : AppCompatActivity() {
 //                ToDo(Set pillInfo )
             val idOfPillBeenEdited = ToBeEditedPillInfoDetail.id
 
-            etPillNameEdit.setText(ToBeEditedPillInfoDetail.name)
-            etDurationEdit.setText(ToBeEditedPillInfoDetail.duration.toString())
+            et_edit_pill_pillName.setText(ToBeEditedPillInfoDetail.name)
+            et_edit_pill_quantity.setText(ToBeEditedPillInfoDetail.quantity.toString())
             etFrequencyEdit.setText(ToBeEditedPillInfoDetail.frequency.toString())
             etPillAmountEdit.setText(ToBeEditedPillInfoDetail.amount.toString())
             tvPillDatePickerEdit.text = ToBeEditedPillInfoDetail.remindStartDate
@@ -73,8 +82,9 @@ class EditPillActivity : AppCompatActivity() {
 
 //        UPDATE AND SAVE  Button Part ------------------------------------------------------------------------
         updatePillBtn.setOnClickListener {
-            val name = etPillNameEdit.text.toString().trim()
-            val duration = etDurationEdit.text.toString().trim().toIntOrNull()
+            val name = et_edit_pill_pillName.text.toString().trim()
+            val quantity = et_edit_pill_quantity.text.toString().trim().toIntOrNull()
+            val isRepetitive = isPillReminderRepetitive()
             val frequency = etFrequencyEdit.text.toString().trim().toIntOrNull()
             val amount = etPillAmountEdit.text.toString().trim().toIntOrNull()
             val amountType = spinnerAmountTypeEdit.selectedItem.toString().trim()
@@ -90,7 +100,7 @@ class EditPillActivity : AppCompatActivity() {
                 Toast.makeText(this, "Pill Name is Empty!", Toast.LENGTH_SHORT).show()
             }
 
-            if (duration == null) {
+            if (quantity == null) {
                 Toast.makeText(this, "Duration is Empty!", Toast.LENGTH_SHORT).show()
             }
 
@@ -119,7 +129,7 @@ class EditPillActivity : AppCompatActivity() {
             }
 
             if (name.isNotEmpty()
-                && duration != null
+                && quantity != null
                 && frequency != null
                 && amount != null
                 && amountType.isNotEmpty()
@@ -138,7 +148,8 @@ class EditPillActivity : AppCompatActivity() {
                 val pillAfterEdit = PillInfo(
                     if (ToBeEditedPillInfoDetail == null) 0 else ToBeEditedPillInfoDetail!!.id,
                     name,
-                    duration,
+                    quantity,
+                    isRepetitive,
                     frequency,
                     amount,
                     amountType,
@@ -212,7 +223,17 @@ class EditPillActivity : AppCompatActivity() {
             }
         }
 
+    private fun isPillReminderRepetitive(): Boolean {
+        var radioaGroupSelectedId: Int = rg_add_pill.checkedRadioButtonId
+        val radio:RadioButton = findViewById(radioaGroupSelectedId)
+        val radioText = radio.text
+        val mystring = resources.getString(R.string.str_add_pill_rb_pill_is_repetitve)
+        var isRepetitive = radioText.toString() == mystring
+        return isRepetitive
     }
+
+
+}
 
 
 

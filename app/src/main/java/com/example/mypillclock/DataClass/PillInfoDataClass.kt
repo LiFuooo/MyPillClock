@@ -6,7 +6,8 @@ import java.io.Serializable
 data class PillInfo(
         val id:Int,
         val name:String,
-        val duration:Int,
+        val quantity:Int,
+        val isRepetitive: Boolean,
         val frequency:Int,
         val amount: Int,
         val amountType:String,

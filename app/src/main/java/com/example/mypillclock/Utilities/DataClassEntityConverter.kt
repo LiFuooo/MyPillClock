@@ -7,7 +7,6 @@ import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Database.PillScheduleTimeDBHelper
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 //    https://blog.jdriven.com/2019/07/kotlin-exposed-a-lightweight-sql-library/
 
@@ -17,7 +16,8 @@ class DataClassEntityConverter {
         return PillInfo(
             pillInfoEntity.id.value,
             pillInfoEntity.name,
-            pillInfoEntity.duration,
+            pillInfoEntity.quantity,
+            pillInfoEntity.isRepetitive,
             pillInfoEntity.frequency,
             pillInfoEntity.amount,
             pillInfoEntity.amountType,
@@ -59,7 +59,8 @@ class DataClassEntityConverter {
                 PillInfo(
                     pillClockInEntity.name.id.value,
                     pillClockInEntity.name.name,
-                    pillClockInEntity.name.duration,
+                    pillClockInEntity.name.quantity,
+                    pillClockInEntity.name.isRepetitive,
                     pillClockInEntity.name.frequency,
                     pillClockInEntity.name.amount,
                     pillClockInEntity.name.amountType,

@@ -2,9 +2,6 @@ package com.example.mypillclock.Database
 
 import android.util.Log
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Database.PillInfoDBHelper.DBExposedPillsTable.name
-import com.example.mypillclock.Database.PillInfoDBHelper.DBExposedPillsTable.remindStartDate
-import com.example.mypillclock.Database.PillInfoDBHelper.DBExposedPillsTable.remindTime
 import com.example.mypillclock.Utilities.DateTimeFormatConverter
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
@@ -18,7 +15,9 @@ class PillInfoDBHelper {
 
     object DBExposedPillsTable : IntIdTable() {
         val name: Column<String> = varchar("name", 50)
-        var duration: Column<Int> = integer("duration")
+        var quantity: Column<Int> = integer("quantity")
+        var isRepetitive:Column<Boolean> = bool("isRepetitve")
+
         val frequency: Column<Int> = integer("frequency")
         val amount: Column<Int> = integer("amount")
         val amountType: Column<String> = varchar("amountType", 50)
@@ -32,7 +31,8 @@ class PillInfoDBHelper {
     class DBExposedPillEntity(id: EntityID<Int>) : IntEntity(id) {
         companion object : IntEntityClass<DBExposedPillEntity>(DBExposedPillsTable)
         var name by DBExposedPillsTable.name
-        var duration by DBExposedPillsTable.duration
+        var quantity by DBExposedPillsTable.quantity
+        var isRepetitive by DBExposedPillsTable.isRepetitive
         var frequency by DBExposedPillsTable.frequency
         var amount by DBExposedPillsTable.amount
         var amountType by DBExposedPillsTable.amountType
@@ -53,7 +53,8 @@ class PillInfoDBHelper {
         transaction {
             DBExposedPillEntity.new {
                 name = pillInfoJson.name
-                duration = pillInfoJson.duration
+                quantity = pillInfoJson.quantity
+                isRepetitive = pillInfoJson.isRepetitive
                 frequency = pillInfoJson.frequency
                 amount = pillInfoJson.amount
                 amountType = pillInfoJson.amountType
@@ -76,7 +77,8 @@ class PillInfoDBHelper {
                 PillInfo(
                     dbExposedPillInstance.id.value,
                     dbExposedPillInstance.name,
-                    dbExposedPillInstance.duration,
+                    dbExposedPillInstance.quantity,
+                    dbExposedPillInstance.isRepetitive,
                     dbExposedPillInstance.frequency,
                     dbExposedPillInstance.amount,
                     dbExposedPillInstance.amountType,
@@ -110,7 +112,7 @@ class PillInfoDBHelper {
 
         transaction {
             pillToBeUpdated.name = afterEditPillInfoJson.name
-            pillToBeUpdated.duration = afterEditPillInfoJson.duration
+            pillToBeUpdated.quantity = afterEditPillInfoJson.quantity
             pillToBeUpdated.frequency = afterEditPillInfoJson.frequency
             pillToBeUpdated.amount = afterEditPillInfoJson.amount
             pillToBeUpdated.amountType = afterEditPillInfoJson.amountType
@@ -145,6 +147,7 @@ class PillInfoDBHelper {
                 1,
                 "name_$i",
                 8 * i,
+                true,
                 30 + i,
                 i+1,
                 "pills",

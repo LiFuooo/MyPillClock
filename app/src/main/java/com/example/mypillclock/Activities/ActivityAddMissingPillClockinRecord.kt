@@ -1,6 +1,5 @@
 package com.example.mypillclock.Activities
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +8,6 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.PillInfoDBHelper
@@ -19,11 +17,7 @@ import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.DataClassEntityConverter
 import com.example.mypillclock.Utilities.DateTimeFormatConverter
 import kotlinx.android.synthetic.main.activity_add_missing_pill_clockin_record.*
-import kotlinx.android.synthetic.main.activity_add_pill.*
-import kotlinx.android.synthetic.main.item_clockin.*
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.*
 
 
 // https://stackoverflow.com/questions/26574277/how-to-override-method-via-keyboard-shortcut-in-android-studio
@@ -58,7 +52,7 @@ class ActivityAddMissingPillClockinRecord:AppCompatActivity() {
                 val pillClockInTime = tv_add_missing_pill_clockin_time.text.toString().trim()
                 val pillClockInDateTimeString = "$pillClockInDate $pillClockInTime"
                 val pillClockInDateTimeLong =
-                    DateTimeFormatConverter().timeStringToLong(pillClockInDateTimeString)
+                    DateTimeFormatConverter().dateTimeStringToLong(pillClockInDateTimeString)
 
 
                 var isFormFilled = false

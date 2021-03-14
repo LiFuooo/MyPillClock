@@ -5,19 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypillclock.Alarm.AlarmSchedule
-import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Fragments.AddPillDatePickerFragment
+import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.activity_add_pill.*
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.transactions.transaction
 
 
 class AddPillActivity : AppCompatActivity() {
@@ -28,6 +25,47 @@ class AddPillActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_pill)
+
+        var radioGroup: RadioGroup? = null
+        lateinit var radioButton: RadioButton
+
+
+//        TODO: is this bottle repetitive radio botton
+//        rg_add_pill.setOnCheckedChangeListener(
+//            RadioGroup.OnCheckedChangeListener { group, checkedId ->
+//                val radio: RadioButton = findViewById(checkedId)
+//                var isRepetitive = radio.text == R.string.str_add_pill_rb_only_this_bottle.toString()
+//                Log.i("isRepetitive", isRepetitive.toString())
+//            })
+//        val rbSelectedItemId: Int = radioGroup!!.checkedRadioButtonId
+//        var isRepetitive = rbSelectedItemId.text == R.string.str_add_pill_rb_only_this_bottle.toString()
+//
+//
+//        var isRepetitive = textOfRbSelected()== R.string.str_add_pill_rb_only_this_bottle.toString()
+//        // Assigning id of RadioGroup
+//        radioGroup = findViewById(R.id.rg_add_pill)
+
+        // Assigning id of Submit button
+//        button = findViewById(R.id.submitButton)
+
+        // Actions to be performed
+        // when Submit button is clicked
+//        button.setOnClickListener {
+//
+//            // Getting the checked radio button id
+//            // from the radio group
+//            val rbSelectedItemId: Int = radioGroup!!.checkedRadioButtonId
+//
+//            // Assigning id of the checked radio button
+//            radioButton = findViewById(rbSelectedItemId)
+//            radioButton.text
+//
+//            // Displaying text of the checked radio button in the form of toast
+//            Toast.makeText(baseContext, radioButton.text, Toast.LENGTH_SHORT).show()
+//        }
+
+
+
 
 
 //        TODo(PillType spinner part) ------------------------------------------------------------------
@@ -46,11 +84,19 @@ class AddPillActivity : AppCompatActivity() {
 // ToDO(Spinner Part END )------------------------------------------------------------------------------
 
 
+//        set toolTipText for Radio Bottons
+//        for some reason, this doesn't work
+        toolTipText()
+
 //        Save Button Part ------------------------------------------------------------------------
 
         saveAddPillBtn.setOnClickListener {
             val name = etPillName.text.toString().trim()
-            val duration = etDuration.text.toString().trim().toIntOrNull()
+            val duration = et_add_pill_quantity.text.toString().trim().toIntOrNull()
+
+
+
+            var isRepetitive = isPillReminderRepetitive()
             val frequency = etFrequency.text.toString().trim().toIntOrNull()
             val amount = etPillAmount.text.toString().trim().toIntOrNull()
             val amountType = spinnerAmountType.selectedItem.toString().trim()
@@ -58,6 +104,7 @@ class AddPillActivity : AppCompatActivity() {
             val remindTime = tvPillTimePicker.text.toString().trim()
             val rxNumber = tvRxNumber.text.toString().trim()
             val doctorNote = etDoctorNote.text.toString().trim()
+
 
             var isFormFilled = false
 
@@ -108,10 +155,12 @@ class AddPillActivity : AppCompatActivity() {
 //                after data saved in database correctly, make the toast
                 Toast.makeText(this, "Pill Info is Saved!", Toast.LENGTH_SHORT).show()
 
+
                 val pill = PillInfo(
                     if (myPill == null) 0 else myPill!!.id,
                     name,
                     duration,
+                    isRepetitive,
                     frequency,
                     amount,
                     amountType,
@@ -188,8 +237,45 @@ class AddPillActivity : AppCompatActivity() {
         AddPillTimePickerFragment(textViewId).show(supportFragmentManager, "timePickerAdd")
     }
 
+    fun textOfRbSelected(view: View): String {
+////        val radio: RadioButton = findViewById(rg_add_pill.checkedRadioButtonId)
+//        val radioGroup = rg_add_pill
+//        val rbSelectedItemId: Int = radioGroup!!.checkedRadioButtonId
+//        val radioButton = findViewById(rbSelectedItemId)
+//        var isRepetitive = radioButton.text == R.string.str_add_pill_rb_only_this_bottle.toString()
+//        return isRepetitive
+//
+//        // Get the clicked radio button instance
+        val radio: RadioButton = findViewById(rg_add_pill.checkedRadioButtonId)
+        return radio.text.toString()
 
-}
+    }
+
+    private fun isPillReminderRepetitive(): Boolean {
+        var radioaGroupSelectedId: Int = rg_add_pill.checkedRadioButtonId
+            val radio:RadioButton = findViewById(radioaGroupSelectedId)
+            val radioText = radio.text
+            val mystring = resources.getString(R.string.str_add_pill_rb_pill_is_repetitve)
+            var isRepetitive = radioText.toString() == mystring
+        return isRepetitive
+    }
+
+    fun toolTipText(){
+        var radioBtnRepetitive:RadioButton = findViewById(R.id.rb_add_pill_repetitive)
+        var radioBtnOnlyOneBottle:RadioButton = findViewById(R.id.rb_add_pill_only_one_bottle)
+        Log.i("andro VERSION.SDK_INT", android.os.Build.VERSION.SDK_INT.toString())
+        if (android.os.Build.VERSION.SDK_INT >= 26){
+            radioBtnRepetitive.tooltipText = "After finish this pill, send me notification to refill."
+            radioBtnOnlyOneBottle.tooltipText = "This is the only bottle for this pill"
+        } else{
+        }
+    }
+
+
+    }
+
+
+
 
 
 

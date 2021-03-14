@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".Activities.AddPillActivity"
-    android:id="@+id/editPillActivity">
+    android:id="@+id/addPillActivity">
 
     <!--    Pill Name -->
     <LinearLayout
@@ -42,9 +42,10 @@
 
     </LinearLayout>
 
-    <!--    Duration Layout-->
+
+    <!--    Bottle Quantity Layout-->
     <LinearLayout
-        android:id="@+id/DurationLayout"
+        android:id="@+id/ll_add_pill_BottleQty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -53,15 +54,15 @@
         app:layout_constraintTop_toBottomOf="@+id/PillNameLinearLayout">
 
         <TextView
-            android:id="@+id/tvDuration"
+            android:id="@+id/tv_add_pill_Quantity"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/tvDuration_textSize"
-            android:text="@string/TextViewDuration" />
+            android:text="@string/str_tv_add_pill_Quantity" />
 
         <EditText
-            android:id="@+id/etDuration"
+            android:id="@+id/et_add_pill_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -69,14 +70,62 @@
             android:inputType="number"
             android:maxEms="15"
             android:textSize="@dimen/etDuration_textSize"
-            android:text="1"
-            android:hint="How many days you need to take it?"
+            android:text="30"
+            android:hint="30"
             android:orientation="horizontal" />
     </LinearLayout>
 
+
+    <!--    Is Repetitive  Layout-->
+    <LinearLayout
+        android:id="@+id/ll_add_Pill_isRepetitive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_add_pill_BottleQty">
+
+        <RadioGroup
+            android:id="@+id/rg_add_pill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/rb_add_pill_repetitive">
+
+            <TextView
+                android:id="@+id/tv_add_pill_isRepetitive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_tv_add_pill_isRepetitive"
+                android:textSize="@dimen/etPillName_textSize" />
+
+            <RadioButton
+                android:id="@+id/rb_add_pill_repetitive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/str_add_pill_rb_pill_is_repetitve"
+                android:onClick="textOfRbSelected"/>
+
+            <RadioButton
+                android:id="@+id/rb_add_pill_only_one_bottle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/str_add_pill_rb_only_this_bottle"
+                android:onClick="textOfRbSelected"/>
+
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+
     <!--    Frequency Layout-->
 
-    <!--    Amount Layout-->
+
     <LinearLayout
         android:id="@+id/FrequencyLayout"
         android:layout_width="match_parent"
@@ -88,7 +137,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DurationLayout">
+        app:layout_constraintTop_toBottomOf="@+id/ll_add_Pill_isRepetitive">
 
         <TextView
             android:id="@+id/tvFrequency"
@@ -115,6 +164,8 @@
 
     </LinearLayout>
 
+
+    <!--    Amount Layout-->
     <LinearLayout
         android:id="@+id/AmountLayout"
         android:layout_width="match_parent"

@@ -3,7 +3,6 @@ package com.example.mypillclock.Database
 import android.util.Log
 import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Utilities.DataClassEntityConverter
 import com.example.mypillclock.Utilities.DateTimeFormatConverter
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.IntEntity
@@ -53,12 +52,12 @@ class PillClockInDBHelper {
 
     fun getScheduleClockIntime(pillInfo: PillInfo){
         val startDateTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
-        val startDateTimeLong = DateTimeFormatConverter().timeStringToLong(startDateTimeString)
+        val startDateTimeLong = DateTimeFormatConverter().dateTimeStringToLong(startDateTimeString)
         val now = DateTimeFormatConverter().now
 //        val interval:Long = (24 / pillInfo.frequency * 1000* 60 * 60).toLong()
 //        below is for test
         val interval:Long = (24 / pillInfo.frequency * 1000).toLong()
-        val endDateTime = startDateTimeLong + (pillInfo.duration*1000*24*60*60).toLong()
+        val endDateTime = startDateTimeLong + (pillInfo.quantity*1000*24*60*60).toLong()
 
         var lastScheduleTime = if (PillClockInDBHelper.ClockInTimeEntity.count().toInt() == 0){
             startDateTimeLong
@@ -103,7 +102,8 @@ class PillClockInDBHelper {
                     PillInfo(
                         clockInTimeInstance.name.id.value,
                         clockInTimeInstance.name.name,
-                    clockInTimeInstance.name.duration,
+                        clockInTimeInstance.name.quantity,
+                        clockInTimeInstance.name.isRepetitive,
                         clockInTimeInstance.name.frequency,
                         clockInTimeInstance.name.amount,
                         clockInTimeInstance.name.amountType,

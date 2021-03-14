@@ -36,7 +36,7 @@ class AlarmSchedule(pillInfoEntity: PillInfoDBHelper.DBExposedPillEntity) {
 //        https://developer.android.com/training/scheduling/alarms
 //        repeat the alarm every 60 minutes
 //        val repeatInMilliseconds = (24 / pillToAlarm.frequency * 60 * 60* 1000).toLong()
-        val repeatInMilliseconds = (1000 * 5 ).toLong()
+        val repeatInMilliseconds = (1000 * 5).toLong()
         alarmMgr.setRepeating(
             AlarmManager.RTC_WAKEUP,
             System.currentTimeMillis(),

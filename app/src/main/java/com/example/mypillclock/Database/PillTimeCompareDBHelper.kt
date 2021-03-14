@@ -1,21 +1,15 @@
 package com.example.mypillclock.Database
 
-import android.util.Log
 import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
-import com.example.mypillclock.Utilities.DataClassEntityConverter
-import kotlinx.serialization.json.Json
+import com.example.mypillclock.DataClass.PillScheduleTimeDataClass
+import com.example.mypillclock.Utilities.DateTimeFormatConverter
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
-import java.text.SimpleDateFormat
 
 class PillTimeCompareDBHelper {
     object pillTimeCompareTable : IntIdTable() {
@@ -45,24 +39,64 @@ class PillTimeCompareDBHelper {
         }
     }
 
-    fun addClockInTime(pill:PillInfo, time:Long){
-        val findPillScheduleDataClass = PillScheduleTimeDBHelper().getAllScheduleListFromDB().filter {
-            it.name == pill
-        }.firstOrNull()
 
-        if(findPillScheduleDataClass != null){
-        val pillScheduleDataClassToEntity = DataClassEntityConverter().pillScheduleDataClassToEntity(findPillScheduleDataClass)
-            val PillTimeCompareTableID = PillScheduleTimeDBHelper.pillScheduleTimeTable
+    fun findScheduleTimeThroughBroadCastInfo(pillInfo: PillInfo): MutableList<PillScheduleTimeDataClass> {
+        val allPillScheduleTimeList = PillScheduleTimeDBHelper().getAllScheduleListFromDB()
+        return allPillScheduleTimeList.filter {
+            it.name == pillInfo
+        }.toMutableList()
+    }
 
 
-            transaction {
-                pillTimeCompareTable.update ({ pillTimeCompareTable.id eq PillTimeCompareTableID} ) {
-                    it[clockInTime] = time
-                }
-                }
-            }
-
+    fun allScheduleTimeBeforeNow(pillInfo: PillInfo){
+        val firstScheduleTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
+        val firstScheduleTimeLong = DateTimeFormatConverter().dateTimeStringToLong(firstScheduleTimeString)
+        val now = DateTimeFormatConverter().now
+        val reminderFrequency = (24 /pillInfo.frequency)*60*60*1000
+        val qtyInThisBottle = pillInfo.quantity
+        val qtyPerDose = pillInfo.amount
+        val doseQty = qtyInThisBottle/qtyPerDose
+        val isRepetitive = pillInfo.isRepetitive
+        val lastScheduleTimeLong = if (!isRepetitive){
+             firstScheduleTimeLong + doseQty * reminderFrequency
+        } else{
+            now
         }
+//        val reminderEndDate =
+    }
+
+    fun findClockInTime(pillInfo: PillInfo): MutableList<PillClockInDataClass> {
+        val allPillClockInTimeList = PillClockInDBHelper().getAllClockInListFromDB()
+        return allPillClockInTimeList.filter {
+            it.pillName == pillInfo
+        }.toMutableList()
+    }
+
+    fun isAlreadyClockedIn(pillInfo: PillInfo, time:Long){
+//        val thisPillScheduleTimeList =
+
+    }
+
+
+
+//    fun addClockInTime(pill:PillInfo, time:Long){
+//        val findPillScheduleDataClass = PillScheduleTimeDBHelper().getAllScheduleListFromDB().filter {
+//            it.name == pill
+//        }.firstOrNull()
+//
+//        if(findPillScheduleDataClass != null){
+//        val pillScheduleDataClassToEntity = DataClassEntityConverter().pillScheduleDataClassToEntity(findPillScheduleDataClass)
+//            val PillTimeCompareTableID = PillScheduleTimeDBHelper.pillScheduleTimeTable
+//
+//
+//            transaction {
+//                pillTimeCompareTable.update ({ pillTimeCompareTable.id eq PillTimeCompareTableID} ) {
+//                    it[clockInTime] = time
+//                }
+//                }
+//            }
+//
+//        }
 
 
     }

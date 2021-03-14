@@ -8,7 +8,7 @@ class DateTimeFormatConverter {
     val now = System.currentTimeMillis()
     val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
-    fun timeStringToLong(dateFormat: String?): Long {
+    fun dateTimeStringToLong(dateFormat: String?): Long {
         var date = Date()
         try {
             date = formatter.parse(dateFormat)

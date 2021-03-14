@@ -10,7 +10,7 @@
 
     <!--    Pill Name -->
     <LinearLayout
-        android:id="@+id/PillNameLinearLayoutEdit"
+        android:id="@+id/ll_edit_pill_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvPillNameEdit"
+            android:id="@+id/tv_edit_pill_pillName"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
             android:text="@string/TextViewPillName" />
 
         <EditText
-            android:id="@+id/etPillNameEdit"
+            android:id="@+id/et_edit_pill_pillName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -42,15 +42,15 @@
 
     </LinearLayout>
 
-    <!--    Duration Layout-->
+    <!--    Quantity Layout-->
     <LinearLayout
-        android:id="@+id/DurationLayoutEdit"
+        android:id="@+id/ll_edit_pill_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/PillNameLinearLayoutEdit">
+        app:layout_constraintTop_toBottomOf="@+id/ll_edit_pill_name">
 
         <TextView
             android:id="@+id/tvDurationEdit"
@@ -58,10 +58,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/tvDuration_textSize"
-            android:text="@string/TextViewDuration" />
+            android:text="@string/str_tv_add_pill_Quantity" />
 
         <EditText
-            android:id="@+id/etDurationEdit"
+            android:id="@+id/et_edit_pill_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -73,6 +73,53 @@
             android:orientation="horizontal" />
     </LinearLayout>
 
+    <!--    Is Repetitive  Layout-->
+    <LinearLayout
+        android:id="@+id/ll_edit_Pill_isRepetitive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_edit_pill_quantity">
+
+        <RadioGroup
+            android:id="@+id/rg_edit_pill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/rb_add_pill_repetitive">
+
+            <TextView
+                android:id="@+id/tv_add_pill_isRepetitive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_tv_add_pill_isRepetitive"
+                android:textSize="@dimen/etPillName_textSize" />
+
+            <RadioButton
+                android:id="@+id/rb_add_pill_repetitive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/str_add_pill_rb_pill_is_repetitve" />
+
+            <RadioButton
+                android:id="@+id/rb_add_pill_only_one_bottle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/str_add_pill_rb_only_this_bottle"
+                />
+
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+
+
     <!--    Frequency Layout-->
     <LinearLayout
         android:id="@+id/FrequencyLayoutEdit"
@@ -83,7 +130,7 @@
         android:paddingRight="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DurationLayoutEdit">
+        app:layout_constraintTop_toBottomOf="@+id/ll_edit_Pill_isRepetitive">
 
         <TextView
             android:id="@+id/tvFrequencyEdit"

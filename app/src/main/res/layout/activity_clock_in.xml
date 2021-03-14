@@ -8,8 +8,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvClockInPillItem"
-        android:layout_width="415dp"
-        android:layout_height="442dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

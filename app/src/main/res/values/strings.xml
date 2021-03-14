@@ -9,7 +9,7 @@
     </string-array>
 
     <string name="TextViewPillName"> Pill Name:</string>
-    <string name="TextViewDuration">Duration (Days): </string>
+    <string name="str_tv_add_pill_Quantity">Quantity </string>
     <string name="TextViewFrequency">Frequency (times per day): </string>
     <string name="etFrequencyHint">1 = once per day</string>
     <string name="TextViewAmount">Amount: </string>
@@ -60,6 +60,9 @@
     <string name="str_tv_ll_one_pill_clockin_history_name_header">Pill Name</string>
     <string name="str_tv_ll_one_pill_clockin_history_isClockedIn_header">Does this dose taken?</string>
     <string name="str_tb_one_pill_schedule_actual_time_page_download">Download</string>
+    <string name="str_tv_add_pill_isRepetitive">Is this pill Repetitive?</string>
+    <string name="str_add_pill_rb_pill_is_repetitve">This pill is repetitive</string>
+    <string name="str_add_pill_rb_only_this_bottle">Only this bottle</string>
 
 
 </resources>

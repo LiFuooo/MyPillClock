@@ -26,7 +26,7 @@ class CalendarViewDecoratorDotAllRecords(private val color: Int, dates: Collecti
     }
 
     override fun decorate(view: DayViewFacade) {
-        view.addSpan(DotSpan(5F, color))
+        view.addSpan(DotSpan(10F, color))
     }
 
     init {
@@ -57,7 +57,7 @@ class DotSpan_left(private val radius: Float,
         if (color != 0) {
             paint.color = color
         }
-        canvas.drawCircle((left + right) / 2 - 5f, bottom + radius, radius, paint)
+        canvas.drawCircle((left + right) / 2 - 10f, bottom + radius, radius, paint)
         paint.color = oldColor
     }
 }
@@ -82,7 +82,7 @@ class DotSpan_right(private val radius: Float,
         if (color != 0) {
             paint.color = color
         }
-        canvas.drawCircle((left + right) / 2 + 5f, bottom + radius, radius, paint)
+        canvas.drawCircle((left + right) / 2 + 10f, bottom + radius, radius, paint)
         paint.color = oldColor
     }
 }
