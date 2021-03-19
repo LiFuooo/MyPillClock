@@ -15,6 +15,7 @@ import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.PillInfoDBHelper
+import com.example.mypillclock.Database.PillTimeCompareDBHelper
 import com.example.mypillclock.R
 import kotlinx.android.synthetic.main.item_clockin.view.*
 
@@ -85,6 +86,7 @@ open class ClockInPillItemAdapter(
 
 
     class MultipleListenerClass(context: Context) {
+
         val context = context
         val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
 
@@ -92,11 +94,64 @@ open class ClockInPillItemAdapter(
             Log.i("TAG", "onImageClick")
             val now = System.currentTimeMillis()
             val pillClicked = getSavedPillList[position]
-            val pillClockInData = PillClockInDataClass(0,pillClicked,"Medicine", now)
-            PillClockInDBHelper().addClockInRecord(pillClockInData)
-            Log.i("pill clock in", "${getSavedPillList[position]}")
-            Log.i("pill clockin time Long","${pillClockInData.timeClockIn}")
-            Toast.makeText(context, "${pillClicked.name} Clock-in Success!", Toast.LENGTH_SHORT).show()
+
+
+//            ------------------------------------------
+            //            test part
+            val pillInfo = pillClicked
+            val firstScheduleTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
+            Log.i("firstScheduleTimeString", firstScheduleTimeString)
+            val firstScheduleTimeLong =
+                DateTimeFormatConverter().dateTimeStringToLong(firstScheduleTimeString)
+            Log.i("firstScheduleTimeLong", firstScheduleTimeLong.toString())
+            val timeBetweenTwoReminder = (24 / pillInfo.frequency) * 60 * 60 * 1000
+            Log.i("timeBetweenTwoReminder", timeBetweenTwoReminder.toString())
+            val qtyInThisBottle = pillInfo.quantity
+            Log.i("qtyInThisBottle", qtyInThisBottle.toString())
+            val qtyPerDose = pillInfo.amount
+            val doseQty = qtyInThisBottle / qtyPerDose
+            val isRepetitive = pillInfo.isRepetitive
+            Log.i("isRepetitive", isRepetitive.toString())
+
+            val scheduleIndex = ((now - firstScheduleTimeLong) / timeBetweenTwoReminder).toInt()
+            Log.i("scheduleIndex", scheduleIndex.toString())
+            val lastScheduleIndex = scheduleIndex + 1
+            Log.i("lastScheduleIndex", lastScheduleIndex.toString())
+            val latestScheduleTimeLong = PillTimeCompareDBHelper().latestScheduleTimeLong(pillInfo)
+            Log.i("latestScheduleTimeLong", latestScheduleTimeLong.toString())
+            val nextScheduleTimeLong = PillTimeCompareDBHelper().nextScheduleTimeLong(pillInfo)
+            Log.i("nextScheduleTimeLong", nextScheduleTimeLong.toString())
+            Log.i("now", now.toString())
+            val allClockInTime = PillTimeCompareDBHelper().allClockInTime(pillInfo)
+            Log.i("allClockInTime", allClockInTime.toString())
+//            val clockInList = PillTimeCompareDBHelper().isClockInList(pillInfo)
+//            clockInList.forEach {
+//                Log.i("clockIn", it.toString())
+//            }
+
+            val isTheLatestScheduleClockedIn = PillTimeCompareDBHelper().isTheLatestScheduleClockedIn(pillClicked)
+            Log.i("isLatestSchedClockedIn",isTheLatestScheduleClockedIn.toString())
+
+            if(!isTheLatestScheduleClockedIn){
+                val pillClockInData = PillClockInDataClass(0,pillClicked,"Medicine", now)
+                PillClockInDBHelper().addClockInRecord(pillClockInData)
+                Log.i("pill clock in", "${getSavedPillList[position]}")
+                Log.i("pill clockin time Long","${pillClockInData.timeClockIn}")
+                Toast.makeText(context, "${pillClicked.name} Clock-in Success!", Toast.LENGTH_SHORT).show()
+            } else{
+//                cancelClockIn
+            }
+
+//-----------------------------------------------------------------
+
+
+//            val pillClockInData = PillClockInDataClass(0,pillClicked,"Medicine", now)
+//            PillClockInDBHelper().addClockInRecord(pillClockInData)
+//            Log.i("pill clock in", "${getSavedPillList[position]}")
+//            Log.i("pill clockin time Long","${pillClockInData.timeClockIn}")
+//            Toast.makeText(context, "${pillClicked.name} Clock-in Success!", Toast.LENGTH_SHORT).show()
+
+
         }
         fun onBtnAddClick(position: Int) {
             // Implement your functionality for onDelete here

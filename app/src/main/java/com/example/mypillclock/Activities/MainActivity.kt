@@ -82,11 +82,11 @@ class MainActivity : AppCompatActivity() {
                     DiaryClockInDBHelper.diaryItemclockInTimeTable,
                     PillScheduleTimeDBHelper.pillScheduleTimeTable
                 )
-//                SchemaUtils.drop(*table)
-//                SchemaUtils.create(*table)
-//                PillInfoDBHelper().addSampleDataToDB()
-//                DiaryCategoryDbHelper().addAllDefaultCategoriesToDB()
-//                DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
+                SchemaUtils.drop(*table)
+                SchemaUtils.create(*table)
+                PillInfoDBHelper().addSampleDataToDB()
+                DiaryCategoryDbHelper().addAllDefaultCategoriesToDB()
+                DiaryItemDBHelper().setAllDefaultObjectsIntoDB()
             }
         }
 

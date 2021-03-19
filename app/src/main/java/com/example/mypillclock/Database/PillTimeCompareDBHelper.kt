@@ -1,6 +1,5 @@
 package com.example.mypillclock.Database
 
-import com.example.mypillclock.DataClass.PillClockInDataClass
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.DataClass.PillScheduleTimeDataClass
 import com.example.mypillclock.Utilities.DateTimeFormatConverter
@@ -48,34 +47,103 @@ class PillTimeCompareDBHelper {
     }
 
 
-    fun allScheduleTimeBeforeNow(pillInfo: PillInfo){
+    fun allScheduleTimeBeforeNow(pillInfo: PillInfo): ArrayList<Long> {
         val firstScheduleTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
         val firstScheduleTimeLong = DateTimeFormatConverter().dateTimeStringToLong(firstScheduleTimeString)
         val now = DateTimeFormatConverter().now
-        val reminderFrequency = (24 /pillInfo.frequency)*60*60*1000
-        val qtyInThisBottle = pillInfo.quantity
-        val qtyPerDose = pillInfo.amount
-        val doseQty = qtyInThisBottle/qtyPerDose
-        val isRepetitive = pillInfo.isRepetitive
-        val lastScheduleTimeLong = if (!isRepetitive){
-             firstScheduleTimeLong + doseQty * reminderFrequency
-        } else{
-            now
+        val tomorrow = now + 1000*24*60*60
+        val timeBetweenTwoReminder = (24 /pillInfo.frequency)*60*60*1000
+        val theFinalOneScheduleTimeLong = latestScheduleTimeLong(pillInfo)
+        val isThisBottleEnd = now - theFinalOneScheduleTimeLong > timeBetweenTwoReminder
+        val numberOfReminderTotal = ((theFinalOneScheduleTimeLong - firstScheduleTimeLong)/timeBetweenTwoReminder).toInt()
+        val scheduleTimeList = arrayListOf<Long>()
+        for (i in 0..numberOfReminderTotal){
+            scheduleTimeList.add(firstScheduleTimeLong + i * timeBetweenTwoReminder)
         }
-//        val reminderEndDate =
+        return scheduleTimeList
     }
 
-    fun findClockInTime(pillInfo: PillInfo): MutableList<PillClockInDataClass> {
+    fun latestScheduleTimeLong(pillInfo: PillInfo): Long {
+        val firstScheduleTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
+        val firstScheduleTimeLong =
+            DateTimeFormatConverter().dateTimeStringToLong(firstScheduleTimeString)
+        val now = DateTimeFormatConverter().now
+        val tomorrow = now + 1000 * 24 * 60 * 60
+        val timeBetweenTwoReminder = (24 / pillInfo.frequency) * 60 * 60 * 1000
+        val qtyInThisBottle = pillInfo.quantity
+        val qtyPerDose = pillInfo.amount
+        val doseQty = qtyInThisBottle / qtyPerDose
+        val isRepetitive = pillInfo.isRepetitive
+
+        val scheduleIndex = ((now - firstScheduleTimeLong) / timeBetweenTwoReminder).toInt()
+        val lastScheduleIndex = scheduleIndex - 1
+        val lastScheduleTime = firstScheduleTimeLong + lastScheduleIndex * timeBetweenTwoReminder
+        return if (!isRepetitive) {
+            firstScheduleTimeLong + doseQty * timeBetweenTwoReminder
+        } else {
+            lastScheduleTime
+        }
+    }
+
+
+    fun nextScheduleTimeLong(pillInfo: PillInfo): Long {
+        val firstScheduleTimeString = pillInfo.remindStartDate + " " + pillInfo.RemindTime
+        val firstScheduleTimeLong =
+            DateTimeFormatConverter().dateTimeStringToLong(firstScheduleTimeString)
+        val now = DateTimeFormatConverter().now
+        val tomorrow = now + 1000 * 24 * 60 * 60
+        val timeBetweenTwoReminder = (24 / pillInfo.frequency) * 60 * 60 * 1000
+        val qtyInThisBottle = pillInfo.quantity
+        val qtyPerDose = pillInfo.amount
+        val doseQty = qtyInThisBottle / qtyPerDose
+        val isRepetitive = pillInfo.isRepetitive
+
+        val scheduleIndex = ((now - firstScheduleTimeLong) / timeBetweenTwoReminder).toInt()
+        val lastScheduleIndex = scheduleIndex + 1
+        val lastScheduleTime = firstScheduleTimeLong + lastScheduleIndex * timeBetweenTwoReminder
+        return if (!isRepetitive) {
+            firstScheduleTimeLong + doseQty * timeBetweenTwoReminder
+        } else {
+            lastScheduleTime
+        }
+    }
+
+    fun allClockInTime(pillInfo: PillInfo): List<Long> {
         val allPillClockInTimeList = PillClockInDBHelper().getAllClockInListFromDB()
         return allPillClockInTimeList.filter {
             it.pillName == pillInfo
-        }.toMutableList()
+        }.toMutableList().map {
+            it.timeClockIn
+        }
     }
 
-    fun isAlreadyClockedIn(pillInfo: PillInfo, time:Long){
-//        val thisPillScheduleTimeList =
-
+    fun isClockInList(pillInfo: PillInfo): MutableList<Boolean> {
+        val thisPillScheduleTimeList = allScheduleTimeBeforeNow(pillInfo)
+        val thisPillClockInTimeList = allClockInTime(pillInfo)
+        val isClockInList = mutableListOf<Boolean>()
+        for(i in 0..thisPillScheduleTimeList.size){
+            val scheduleN = thisPillScheduleTimeList[i]
+            val scheduleNPlusOne = thisPillScheduleTimeList[i+1]
+            val isThisScheduleClockedIn = thisPillClockInTimeList.any {
+                it in (scheduleN + 1) until scheduleNPlusOne
+            }
+            isClockInList.add(isThisScheduleClockedIn)
+        }
+        return isClockInList
     }
+
+
+
+
+    fun isTheLatestScheduleClockedIn(pillInfo: PillInfo): Boolean {
+        val thisPillClockInTimeList = allClockInTime(pillInfo)
+        val theLatestScheduleTimeLong = latestScheduleTimeLong(pillInfo)
+        val nextScheduleTimeLong = nextScheduleTimeLong(pillInfo)
+        return thisPillClockInTimeList.any {
+            it in (theLatestScheduleTimeLong + 1) until nextScheduleTimeLong
+        }
+    }
+
 
 
 
