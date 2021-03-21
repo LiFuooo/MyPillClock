@@ -129,17 +129,29 @@ open class ClockInPillItemAdapter(
 //                Log.i("clockIn", it.toString())
 //            }
 
-            val isTheLatestScheduleClockedIn = PillTimeCompareDBHelper().isTheLatestScheduleClockedIn(pillClicked)
-            Log.i("isLatestSchedClockedIn",isTheLatestScheduleClockedIn.toString())
+            val isTheLatestScheduleClockedIn = PillTimeCompareDBHelper().isTheLatestScheduleClockedIn(
+                pillClicked
+            )
+            Log.i("isLatestSchedClockedIn", isTheLatestScheduleClockedIn.toString())
 
             if(!isTheLatestScheduleClockedIn){
-                val pillClockInData = PillClockInDataClass(0,pillClicked,"Medicine", now)
+                val pillClockInData = PillClockInDataClass(0, pillClicked, "Medicine", now)
                 PillClockInDBHelper().addClockInRecord(pillClockInData)
                 Log.i("pill clock in", "${getSavedPillList[position]}")
-                Log.i("pill clockin time Long","${pillClockInData.timeClockIn}")
+                Log.i("pill clockin time Long", "${pillClockInData.timeClockIn}")
                 Toast.makeText(context, "${pillClicked.name} Clock-in Success!", Toast.LENGTH_SHORT).show()
             } else{
 //                cancelClockIn
+                val nextScheduleTime = PillTimeCompareDBHelper().nextScheduleTimeLong(pillClicked)
+                val lastScheduleTime = PillTimeCompareDBHelper().latestScheduleTimeLong(pillClicked)
+                val clockInList = PillClockInDBHelper().getAllClockInListFromDB().filter {
+                    it.pillName == pillClicked
+                }
+                val clockInRecord = clockInList.filter{
+                    it.timeClockIn in (lastScheduleIndex + 1) until nextScheduleTime
+                }.first()
+
+                PillClockInDBHelper().deleteClockInRecord(clockInRecord)
             }
 
 //-----------------------------------------------------------------
@@ -157,7 +169,7 @@ open class ClockInPillItemAdapter(
             // Implement your functionality for onDelete here
             Log.i("TAG", "on Button 1 Click")
             val pillClicked = getSavedPillList[position]
-            Log.i("pill name","${pillClicked.name}")
+            Log.i("pill name", "${pillClicked.name}")
             val intent = Intent(context, ActivityAddMissingPillClockinRecord::class.java)
             intent.putExtra("pill position", position)
             intent.putExtra("pill name", pillClicked.name)
@@ -207,14 +219,33 @@ open class ClockInPillItemAdapter(
 
 
 
-
         override fun onClick(view: View) {
             Log.i("adapter Position", "$adapterPosition")
             Log.i("itemsList count", "${itemsList.count()}")
                 when (view.id) {
                     R.id.ll_pillClockIn_image -> {
                         multipleListener.onImageClick(this.layoutPosition)
-                        this.pillImage.setImageResource(R.drawable.ic_baseline_wb_sunny_24)
+
+                        val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
+                        val pillClicked = getSavedPillList[layoutPosition]
+                        val isClockIn = PillTimeCompareDBHelper().isTheLatestScheduleClockedIn(
+                            pillClicked
+                        )
+                        if (isClockIn) {
+                            this.pillImage.setImageResource(R.drawable.ic_baseline_wb_sunny_24)
+                            Toast.makeText(context, "You clocked-in $pillName.", Toast.LENGTH_SHORT)
+                                .show()
+                            Log.i("clockin", "Clockin successful $now")
+
+                        } else {
+                            this.pillImage.setImageResource(R.drawable.ic_baseline_wb_sunny_24_grey)
+                            Toast.makeText(
+                                context,
+                                "You cancelled clocked-in $pillName.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.i("clock in Cancelled", "clockIn Cancelled $now")
+                        }
 
                     }
 
@@ -230,6 +261,8 @@ open class ClockInPillItemAdapter(
                     }
                 }
         }
+
+
 
 
     }

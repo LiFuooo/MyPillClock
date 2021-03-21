@@ -9,8 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mypillclock.DataClass.PillInfo
+import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Database.PillScheduleTimeDBHelper
+import com.example.mypillclock.Database.PillTimeCompareDBHelper
 import com.example.mypillclock.R
+import com.example.mypillclock.Utilities.DataClassEntityConverter
 import com.example.mypillclock.Utilities.ViewOnePillClockInHistoryRvAdapter
 import kotlinx.android.synthetic.main.activity_view_one_pill_clockin_history.*
 import java.io.File
@@ -35,14 +39,18 @@ class ActivityViewOnePillClockInHistory:AppCompatActivity() {
         if (intent.extras != null) {
             var pillIDFromIntent = intent.getIntExtra("pill id", 1)
             Log.i(TAG, "pill id = $pillIDFromIntent")
-            initRecyclerView(pillIDFromIntent)
+            val pillInfoEntity = PillInfoDBHelper().queryOnePillById(pillIDFromIntent)
+            val pillInfo  = DataClassEntityConverter().pillInfoEntityToDataClass(pillInfoEntity!!)
+            initRecyclerView(pillInfo)
         }
     }
 
 
 
-    private fun initRecyclerView(pillID:Int) {
-        var allPillScheduleClockInList =  PillScheduleTimeDBHelper().findScheduleListByPillId(pillID)
+    private fun initRecyclerView(pillInfo:PillInfo) {
+//        var allPillScheduleClockInList =  PillScheduleTimeDBHelper().findScheduleListByPillId(pillID)
+        var allPillScheduleClockInList =  PillTimeCompareDBHelper().isClockInList(pillInfo)
+
         var pillListToShow = allPillScheduleClockInList
         thisPageAdapter = ViewOnePillClockInHistoryRvAdapter(this, allPillScheduleClockInList!!)
         rv_viewOnePillClockInHistory.adapter = thisPageAdapter

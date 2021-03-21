@@ -140,7 +140,7 @@ class PillInfoDBHelper {
 
     fun addSampleDataToDB(){
         val now = DateTimeFormatConverter().now
-        val sampletime = now - 1000*24*60*60*5
+        val sampletime = now - 1000*24*60*60*5 - 1000*60*60
         val date = DateTimeFormatConverter().timeLongToDateString(sampletime)!!
         val time = DateTimeFormatConverter().timeLongToTimeString(sampletime)!!
         for (i in 1..3){
