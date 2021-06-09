@@ -16,7 +16,8 @@ import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.DataClassEntityConverter
 import com.example.mypillclock.Utilities.DateTimeFormatConverter
-import kotlinx.android.synthetic.main.activity_add_missing_pill_clockin_record.*
+import com.example.mypillclock.databinding.ActivityAddMissingPillClockinRecordBinding
+import com.example.mypillclock.databinding.ActivityAddPillBinding
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
@@ -25,9 +26,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class ActivityAddMissingPillClockinRecord:AppCompatActivity() {
     private val TAG = "ActivityAddMissingPillClockinRecord"
+    private lateinit var binding:ActivityAddMissingPillClockinRecordBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_missing_pill_clockin_record)
+        binding = ActivityAddMissingPillClockinRecordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 //        get intent of pillName
         if (intent.extras != null) {
@@ -47,9 +51,9 @@ class ActivityAddMissingPillClockinRecord:AppCompatActivity() {
 //                getCagetoryData()
 //            }
 
-            btn_add_missing_pill_clockin_save.setOnClickListener {
-                val pillClockInDate = tv_add_missing_pill_clockin_date.text.toString().trim()
-                val pillClockInTime = tv_add_missing_pill_clockin_time.text.toString().trim()
+            binding.btnAddMissingPillClockinSave.setOnClickListener {
+                val pillClockInDate = binding.tvAddMissingPillClockinDate.text.toString().trim()
+                val pillClockInTime = binding.tvAddMissingPillClockinTime.text.toString().trim()
                 val pillClockInDateTimeString = "$pillClockInDate $pillClockInTime"
                 val pillClockInDateTimeLong =
                     DateTimeFormatConverter().dateTimeStringToLong(pillClockInDateTimeString)

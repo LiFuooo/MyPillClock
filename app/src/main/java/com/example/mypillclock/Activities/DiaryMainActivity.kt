@@ -19,7 +19,7 @@ import com.example.mypillclock.DataClass.DiaryMainDataClass
 import com.example.mypillclock.Database.DiaryCategoryDbHelper
 import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.DiaryMainRvAdapter
-import kotlinx.android.synthetic.main.activity_diary_main.*
+import com.example.mypillclock.databinding.ActivityDiaryMainBinding
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
@@ -31,10 +31,12 @@ class DiaryMainActivity: AppCompatActivity() {
     private var diaryCategoryList = DiaryCategoryDbHelper().getCategoryListFromDB()
     private var gridLayoutManager: GridLayoutManager? = null
     private var diaryCategoryAdapter: DiaryMainRvAdapter? = null
+    private lateinit var binding:ActivityDiaryMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_main)
+        binding = ActivityDiaryMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
 //        add default Data to DB
@@ -45,7 +47,7 @@ class DiaryMainActivity: AppCompatActivity() {
 
 
 //        Bottom navigation part, already Done
-        createBottomNavBar(R.id.ic_diary, btm_navi)
+        createBottomNavBar(R.id.ic_diary, binding.btmNavi)
 
 
     }
@@ -56,8 +58,8 @@ class DiaryMainActivity: AppCompatActivity() {
         diaryCategoryList = DiaryCategoryDbHelper().getCategoryListFromDB()
         val onClick = this::onCategoryClick
         diaryCategoryAdapter = DiaryMainRvAdapter(this, diaryCategoryList!!, onClick)
-        rv_diary_main.adapter = diaryCategoryAdapter
-        rv_diary_main.layoutManager = GridLayoutManager(
+        binding.rvDiaryMain.adapter = diaryCategoryAdapter
+        binding.rvDiaryMain.layoutManager = GridLayoutManager(
             this,
             2,
             LinearLayoutManager.VERTICAL,

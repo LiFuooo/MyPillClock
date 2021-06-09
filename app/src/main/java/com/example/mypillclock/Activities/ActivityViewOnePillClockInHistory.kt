@@ -16,7 +16,8 @@ import com.example.mypillclock.Database.PillTimeCompareDBHelper
 import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.DataClassEntityConverter
 import com.example.mypillclock.Utilities.ViewOnePillClockInHistoryRvAdapter
-import kotlinx.android.synthetic.main.activity_view_one_pill_clockin_history.*
+import com.example.mypillclock.databinding.ActivityViewOnePillClockinHistoryBinding
+//import kotlinx.android.synthetic.main.activity_view_one_pill_clockin_history.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -29,10 +30,13 @@ class ActivityViewOnePillClockInHistory:AppCompatActivity() {
     private var gridLayoutManager: GridLayoutManager? = null
     private var thisPageAdapter: ViewOnePillClockInHistoryRvAdapter? = null
     private val TAG = "ActivityViewOnePillClockInHistory"
+    private lateinit var binding: ActivityViewOnePillClockinHistoryBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_one_pill_clockin_history)
+        binding = ActivityViewOnePillClockinHistoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 //         get position info from getExtra
@@ -53,8 +57,8 @@ class ActivityViewOnePillClockInHistory:AppCompatActivity() {
 
         var pillListToShow = allPillScheduleClockInList
         thisPageAdapter = ViewOnePillClockInHistoryRvAdapter(this, allPillScheduleClockInList!!)
-        rv_viewOnePillClockInHistory.adapter = thisPageAdapter
-        rv_viewOnePillClockInHistory.layoutManager = LinearLayoutManager(
+        binding.rvViewOnePillClockInHistory.adapter = thisPageAdapter
+        binding.rvViewOnePillClockInHistory.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
             false

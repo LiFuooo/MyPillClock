@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlinx-serialization'
+
+
 
 android {
     compileSdkVersion 30
@@ -29,6 +31,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -49,15 +58,17 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     debugImplementation 'im.dino:dbinspector:3.4.1@qqr'
-    implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
-    implementation "org.jetbrains.exposed:exposed-dao:$exposed_version"
-    implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
+//    implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
+//    implementation "org.jetbrains.exposed:exposed-dao:$exposed_version"
+//    implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
+    implementation("org.jetbrains.exposed:exposed-core:0.31.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.31.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.31.1")
     implementation "com.h2database:h2:1.4.199"
     //noinspection GradleCompatible
     implementation "com.android.support:support-compat:28.0.0"
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
     implementation "androidx.cardview:cardview:1.0.0"
-
 
 
 

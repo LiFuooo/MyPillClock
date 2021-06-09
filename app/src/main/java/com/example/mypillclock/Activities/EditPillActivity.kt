@@ -17,19 +17,20 @@ import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Fragments.EditPillDatePickerFragment
 import com.example.mypillclock.Fragments.EditPillTimePickerFragment
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_add_pill.*
-import kotlinx.android.synthetic.main.activity_edit_pill.*
-import kotlinx.android.synthetic.main.activity_edit_pill.rg_edit_pill
+import com.example.mypillclock.databinding.ActivityAddPillBinding
+import com.example.mypillclock.databinding.ActivityEditPillBinding
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class EditPillActivity : AppCompatActivity() {
+    private lateinit var binding:ActivityEditPillBinding
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_pill)
+        binding = ActivityEditPillBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         var ToBeEditedPillInfoDetail: PillInfo? = null
         if (intent.hasExtra(MainActivity.EXTRA_PILL_DETAIL)) {
@@ -55,10 +56,10 @@ class EditPillActivity : AppCompatActivity() {
                 android.R.layout.simple_spinner_item
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinnerAmountTypeEdit.setAdapter(adapter)
+            binding.spinnerAmountTypeEdit.setAdapter(adapter)
             if (compareValue != null) {
                 val spinnerPosition = adapter.getPosition(compareValue)
-                spinnerAmountTypeEdit.setSelection(spinnerPosition)}
+                binding.spinnerAmountTypeEdit.setSelection(spinnerPosition)}
 
 
 
@@ -67,31 +68,31 @@ class EditPillActivity : AppCompatActivity() {
 //                ToDo(Set pillInfo )
             val idOfPillBeenEdited = ToBeEditedPillInfoDetail.id
 
-            et_edit_pill_pillName.setText(ToBeEditedPillInfoDetail.name)
-            et_edit_pill_quantity.setText(ToBeEditedPillInfoDetail.quantity.toString())
-            etFrequencyEdit.setText(ToBeEditedPillInfoDetail.frequency.toString())
-            etPillAmountEdit.setText(ToBeEditedPillInfoDetail.amount.toString())
-            tvPillDatePickerEdit.text = ToBeEditedPillInfoDetail.remindStartDate
-            tvPillTimePickerEdit.text = ToBeEditedPillInfoDetail.RemindTime
-            Log.i("Line tvPillTimePickerE", tvPillTimePickerEdit.text.toString())
-            etRxNumberEdit.setText(ToBeEditedPillInfoDetail.rxNumber)
-            etDoctorNoteEdit.setText(ToBeEditedPillInfoDetail.doctorNote)
+            binding.etEditPillPillName.setText(ToBeEditedPillInfoDetail.name)
+            binding.etEditPillQuantity.setText(ToBeEditedPillInfoDetail.quantity.toString())
+            binding.etFrequencyEdit.setText(ToBeEditedPillInfoDetail.frequency.toString())
+            binding.etPillAmountEdit.setText(ToBeEditedPillInfoDetail.amount.toString())
+            binding.tvPillDatePickerEdit.text = ToBeEditedPillInfoDetail.remindStartDate
+            binding.tvPillTimePickerEdit.text = ToBeEditedPillInfoDetail.RemindTime
+            Log.i("Line tvPillTimePickerE", binding.tvPillTimePickerEdit.text.toString())
+            binding.etRxNumberEdit.setText(ToBeEditedPillInfoDetail.rxNumber)
+            binding.etDoctorNoteEdit.setText(ToBeEditedPillInfoDetail.doctorNote)
 
         }
 
 
 //        UPDATE AND SAVE  Button Part ------------------------------------------------------------------------
-        updatePillBtn.setOnClickListener {
-            val name = et_edit_pill_pillName.text.toString().trim()
-            val quantity = et_edit_pill_quantity.text.toString().trim().toIntOrNull()
+        binding.updatePillBtn.setOnClickListener {
+            val name = binding.etEditPillPillName.text.toString().trim()
+            val quantity = binding.etEditPillQuantity.text.toString().trim().toIntOrNull()
             val isRepetitive = isPillReminderRepetitive()
-            val frequency = etFrequencyEdit.text.toString().trim().toIntOrNull()
-            val amount = etPillAmountEdit.text.toString().trim().toIntOrNull()
-            val amountType = spinnerAmountTypeEdit.selectedItem.toString().trim()
-            val remindStartDate = tvPillDatePickerEdit.text.toString().trim()
-            val remindTime = tvPillTimePickerEdit.text.toString().trim()
-            val rxNumber = tvRxNumberEdit.text.toString().trim()
-            val doctorNote = etDoctorNoteEdit.text.toString().trim()
+            val frequency = binding.etFrequencyEdit.text.toString().trim().toIntOrNull()
+            val amount = binding.etPillAmountEdit.text.toString().trim().toIntOrNull()
+            val amountType = binding.spinnerAmountTypeEdit.selectedItem.toString().trim()
+            val remindStartDate = binding.tvPillDatePickerEdit.text.toString().trim()
+            val remindTime = binding.tvPillTimePickerEdit.text.toString().trim()
+            val rxNumber = binding.tvRxNumberEdit.text.toString().trim()
+            val doctorNote = binding.etDoctorNoteEdit.text.toString().trim()
 
             var isFormFilled = false
 
@@ -191,7 +192,7 @@ class EditPillActivity : AppCompatActivity() {
     fun showDatePickerDialogEdit(v: View) {
         val sdf = SimpleDateFormat("yyyy-mm-dd")
 
-        var dateOnClock: Date = sdf.parse(tvPillDatePickerEdit.text.toString())
+        var dateOnClock: Date = sdf.parse(binding.tvPillDatePickerEdit.text.toString())
         EditPillDatePickerFragment(dateOnClock).show(supportFragmentManager, "datePickerEdit")
     }
 
@@ -199,7 +200,7 @@ class EditPillActivity : AppCompatActivity() {
     fun showTimePickerDialogEdit(v: View) {
         val sdf = SimpleDateFormat("hh:mm a")
 
-        var timeOnClock: Date = sdf.parse(tvPillTimePickerEdit.text.toString())
+        var timeOnClock: Date = sdf.parse(binding.tvPillTimePickerEdit.text.toString())
             EditPillTimePickerFragment(timeOnClock).show(supportFragmentManager, "timePickerEdit")
         }
 
@@ -223,8 +224,11 @@ class EditPillActivity : AppCompatActivity() {
             }
         }
 
+//     rewrite this function
+//    get is this pill repetitive radio button selected ID
     private fun isPillReminderRepetitive(): Boolean {
-        var radioaGroupSelectedId: Int = rg_add_pill.checkedRadioButtonId
+        lateinit var addPillActivityBinding:ActivityAddPillBinding
+        var radioaGroupSelectedId: Int = addPillActivityBinding.rgAddPill.checkedRadioButtonId
         val radio:RadioButton = findViewById(radioaGroupSelectedId)
         val radioText = radio.text
         val mystring = resources.getString(R.string.str_add_pill_rb_pill_is_repetitve)

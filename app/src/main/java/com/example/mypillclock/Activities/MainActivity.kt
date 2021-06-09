@@ -20,9 +20,7 @@ import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.*
 import com.example.mypillclock.Utilities.PillItemAdapter
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_clock_in.*
-import kotlinx.android.synthetic.main.activity_diary_main.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.mypillclock.databinding.ActivityMainBinding
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,10 +28,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class MainActivity : AppCompatActivity() {
     var recreateDatabase = true
+    private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
 
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
 
 //        TODO: Add Pill when clicking FAB
-        AddPillFab.setOnClickListener {
+        binding.AddPillFab.setOnClickListener {
             recreateDatabase = false
             val intent = Intent(this, AddPillActivity::class.java).also {
                 startActivityForResult(it, ADD_PILL_ACTIVITY_REQUEST_CODE)
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
 //        TODO: set bottom Fragment Navigation
 //        val btm_navi = findViewById<View>(R.id.btm_navi) as BottomNavigationView
-        createBottomNavBar(R.id.ic_home, btm_navi_main)
+        createBottomNavBar(R.id.ic_home, binding.btmNaviMain)
 
 
 
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         NotificationHelper().createNotificationChannel(this)
 
 
-        notifi_test_btn.setOnClickListener {
+        binding.notifiTestBtn.setOnClickListener {
 //            NotificationHelper().createPillNotification(this,pillToNotify)
 //            if (getSavedPillList.count() != 0){
 ////                val pillToNotify = getSavedPillList[0]
@@ -152,22 +152,22 @@ class MainActivity : AppCompatActivity() {
         Log.i("Main getSavedPillList", getSavedPillList.size.toString())
 
         if (getSavedPillList.size > 0) {
-            rvPillItem.visibility = View.VISIBLE
-            tvNoMorePillRecords.visibility = View.GONE
+            binding.rvPillItem.visibility = View.VISIBLE
+            binding.tvNoMorePillRecords.visibility = View.GONE
             setupListOfDataIntoRecycleView(getSavedPillList)
         } else {
-            rvPillItem.visibility = View.GONE
-            tvNoMorePillRecords.visibility = View.VISIBLE
+            binding.rvPillItem.visibility = View.GONE
+            binding.tvNoMorePillRecords.visibility = View.VISIBLE
         }
     }
 
 
     //    function to show the list of pill Info in rv
     private fun setupListOfDataIntoRecycleView(SavedPillList: MutableList<PillInfo>) {
-        rvPillItem.layoutManager = LinearLayoutManager(this)
+        binding.rvPillItem.layoutManager = LinearLayoutManager(this)
 
         val itemAdapter = PillItemAdapter(this, SavedPillList)
-        rvPillItem.adapter = itemAdapter
+        binding.rvPillItem.adapter = itemAdapter
 
 
 //        TODO(Step1: Touch Item, go to EditPillActivity Page)
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
                 builder.setMessage("Are you sure you want to delete?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
-                        val adapter = rvPillItem.adapter as PillItemAdapter
+                        val adapter = binding.rvPillItem.adapter as PillItemAdapter
                         adapter.removeAt(viewHolder.adapterPosition)
                         getItemListFromLocalDB()
                     })
@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity() {
 
 //        delteItemTouchHelper
         val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
-        deleteItemTouchHelper.attachToRecyclerView(rvPillItem)
+        deleteItemTouchHelper.attachToRecyclerView(binding.rvPillItem)
         // END
 
     }

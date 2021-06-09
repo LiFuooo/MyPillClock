@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.PillScheduleTimeDataClass
 import com.example.mypillclock.DataClass.PillTimeCompareDataClass
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_view_one_pill_clockin_history.view.*
-import kotlinx.android.synthetic.main.item_one_pill_clockin_history.view.*
+import com.example.mypillclock.databinding.ItemOnePillClockinHistoryBinding
+import com.example.mypillclock.databinding.ItemPillBinding
 
 
 class ViewOnePillClockInHistoryRvAdapter(
@@ -19,6 +19,7 @@ class ViewOnePillClockInHistoryRvAdapter(
     RecyclerView.Adapter<ViewOnePillClockInHistoryRvAdapter.ViewHolder>() {
 
     private val TAG = "ViewOnePillClockInHistoryRvAdapter"
+    private lateinit var binding: ItemOnePillClockinHistoryBinding
 //    private var mOnCategoryListener: OnCategoryListener? = null
 
 
@@ -39,19 +40,19 @@ class ViewOnePillClockInHistoryRvAdapter(
     ) {
         val pillClockInCompareData: PillTimeCompareDataClass = arrayList[position]
         holder.itemView.apply {
-            tv_ll_one_pill_clockin_history_name_item.text = pillClockInCompareData.pillName
-            tv_ll_one_pill_clockin_history_planTime_item.text = DateTimeFormatConverter().timeLongToDateTimeString(
+            binding.tvLlOnePillClockinHistoryNameItem.text = pillClockInCompareData.pillName
+            binding.tvLlOnePillClockinHistoryPlanTimeItem.text = DateTimeFormatConverter().timeLongToDateTimeString(
                 pillClockInCompareData.scheduleTime
             )
-            tv_ll_one_pill_clockin_history_actualTime_item.text = if(pillClockInCompareData.clockInTime != null){
+            binding.tvLlOnePillClockinHistoryActualTimeItem.text = if(pillClockInCompareData.clockInTime != null){
                 DateTimeFormatConverter().timeLongToDateTimeString(pillClockInCompareData.clockInTime)
             } else{
                 "None"
             }
             if(pillClockInCompareData.isClockIn){
-                iv_ll_one_pill_clockin_history_istaken__item.setImageResource(R.drawable.ic_baseline_check_24)
+                binding.ivLlOnePillClockinHistoryIstakenItem.setImageResource(R.drawable.ic_baseline_check_24)
             } else{
-                iv_ll_one_pill_clockin_history_istaken__item.setImageResource(R.drawable.ic_baseline_clear_24)
+                binding.ivLlOnePillClockinHistoryIstakenItem.setImageResource(R.drawable.ic_baseline_clear_24)
             }
         }
     }

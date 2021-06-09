@@ -13,19 +13,20 @@ import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Fragments.AddPillDatePickerFragment
 import com.example.mypillclock.Fragments.AddPillTimePickerFragment
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_add_pill.*
+import com.example.mypillclock.databinding.ActivityAddPillBinding
 import kotlinx.serialization.json.Json
 
 
 class AddPillActivity : AppCompatActivity() {
 
     private var myPill: PillInfo? = null
+    private lateinit var binding:ActivityAddPillBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_pill)
-
+        binding = ActivityAddPillBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         var radioGroup: RadioGroup? = null
         lateinit var radioButton: RadioButton
 
@@ -90,20 +91,20 @@ class AddPillActivity : AppCompatActivity() {
 
 //        Save Button Part ------------------------------------------------------------------------
 
-        saveAddPillBtn.setOnClickListener {
-            val name = etPillName.text.toString().trim()
-            val duration = et_add_pill_quantity.text.toString().trim().toIntOrNull()
+        binding.saveAddPillBtn.setOnClickListener {
+            val name = binding.etPillName.text.toString().trim()
+            val duration = binding.etAddPillQuantity.text.toString().trim().toIntOrNull()
 
 
 
             var isRepetitive = isPillReminderRepetitive()
-            val frequency = etFrequency.text.toString().trim().toIntOrNull()
-            val amount = etPillAmount.text.toString().trim().toIntOrNull()
-            val amountType = spinnerAmountType.selectedItem.toString().trim()
-            val remindStartDate = tvPillDatePicker.text.toString().trim()
-            val remindTime = tvPillTimePicker.text.toString().trim()
-            val rxNumber = tvRxNumber.text.toString().trim()
-            val doctorNote = etDoctorNote.text.toString().trim()
+            val frequency = binding.etFrequency.text.toString().trim().toIntOrNull()
+            val amount = binding.etPillAmount.text.toString().trim().toIntOrNull()
+            val amountType = binding.spinnerAmountType.selectedItem.toString().trim()
+            val remindStartDate = binding.tvPillDatePicker.text.toString().trim()
+            val remindTime = binding.tvPillTimePicker.text.toString().trim()
+            val rxNumber = binding.tvRxNumber.text.toString().trim()
+            val doctorNote = binding.etDoctorNote.text.toString().trim()
 
 
             var isFormFilled = false
@@ -246,13 +247,13 @@ class AddPillActivity : AppCompatActivity() {
 //        return isRepetitive
 //
 //        // Get the clicked radio button instance
-        val radio: RadioButton = findViewById(rg_add_pill.checkedRadioButtonId)
+        val radio: RadioButton = findViewById(binding.rgAddPill.checkedRadioButtonId)
         return radio.text.toString()
 
     }
 
     private fun isPillReminderRepetitive(): Boolean {
-        var radioaGroupSelectedId: Int = rg_add_pill.checkedRadioButtonId
+        var radioaGroupSelectedId: Int = binding.rgAddPill.checkedRadioButtonId
             val radio:RadioButton = findViewById(radioaGroupSelectedId)
             val radioText = radio.text
             val mystring = resources.getString(R.string.str_add_pill_rb_pill_is_repetitve)

@@ -21,7 +21,7 @@ import com.example.mypillclock.Database.DiaryClockInDBHelper
 import com.example.mypillclock.Database.DiaryItemDBHelper
 import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.DiaryItemRvAdapter
-import kotlinx.android.synthetic.main.activity_diary_item_show.*
+import com.example.mypillclock.databinding.ActivityDiaryItemShowBinding
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -32,12 +32,14 @@ class DiaryItemsActivity: AppCompatActivity() {
     private var diaryItemsList: MutableList<DiaryItemDataClass>? = null
     private var positionFromIntent:Int = 1
     private var categoryData: DiaryMainDataClass? = null
+    private lateinit var binding:ActivityDiaryItemShowBinding
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_item_show)
+        binding = ActivityDiaryItemShowBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 //        DiaryItemDBHelper().deleteAllItemsFromDB()
@@ -210,8 +212,8 @@ class DiaryItemsActivity: AppCompatActivity() {
     private fun setListDataIntoDiaryItemRV(list: MutableList<DiaryItemDataClass>) {
         val onClick = this::onItemClick
         diaryItemAdapter = DiaryItemRvAdapter(this, list, onClick)
-        rv_diary_item.adapter = diaryItemAdapter
-        rv_diary_item.layoutManager = GridLayoutManager(
+        binding.rvDiaryItem.adapter = diaryItemAdapter
+        binding.rvDiaryItem.layoutManager = GridLayoutManager(
             this,
             4,
             LinearLayoutManager.VERTICAL,

@@ -11,13 +11,13 @@ import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_edit_pill.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EditPillTimePickerFragment(val timeOnClock : Date) : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
+    private lateinit var binding:EditPillTimePickerFragment
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val c = Calendar.getInstance()
         c.time = timeOnClock

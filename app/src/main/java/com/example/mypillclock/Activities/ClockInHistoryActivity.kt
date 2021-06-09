@@ -15,18 +15,21 @@ import com.example.mypillclock.Database.DiaryClockInDBHelper
 import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.R
 import com.example.mypillclock.Utilities.*
+import com.example.mypillclock.databinding.ActivityClockInHistoryBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import kotlinx.android.synthetic.main.activity_clock_in_history.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ClockInHistoryActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
+    private lateinit var binding:ActivityClockInHistoryBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_clock_in_history)
+        binding = ActivityClockInHistoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
@@ -127,7 +130,7 @@ class ClockInHistoryActivity: AppCompatActivity() {
 
 
 
-        caV_clockInHistory.setOnDateChangedListener { widget, date, selected ->
+        binding.caVClockInHistory.setOnDateChangedListener { widget, date, selected ->
 
 //             1. change text View text
             val dateSelected =  date.calendar.time

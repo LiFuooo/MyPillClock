@@ -17,7 +17,8 @@ import com.example.mypillclock.Database.PillClockInDBHelper
 import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Database.PillTimeCompareDBHelper
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.item_clockin.view.*
+import com.example.mypillclock.databinding.ActivityClockInBinding
+import com.example.mypillclock.databinding.ItemClockinBinding
 
 
 // https://github.com/android/views-widgets-samples/tree/main/RecyclerViewKotlin/
@@ -32,6 +33,7 @@ open class ClockInPillItemAdapter(
 ):
     RecyclerView.Adapter<ClockInPillItemAdapter.pillClockInViewHolder>() {
     private val TAG = "ClockInPillItemAdapter"
+    private lateinit var binding:ItemClockinBinding
 //    private var onClickListener: MultipleListenerInterface? = null
 
 
@@ -57,18 +59,18 @@ open class ClockInPillItemAdapter(
 
 
         holder.itemView.apply {
-            tv_clockInItemPillName.text = currentItem.name
+            binding.tvClockInItemPillName.text = currentItem.name
 
 
             if (position % 2 == 0) {
-                ll_pillClockIn_item.setBackgroundColor(
+                binding.llPillClockInItem.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
                         R.color.colorLightGray
                     )
                 )
             } else {
-                clockInItem.setBackgroundColor(
+                binding.clockInItem.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
                         R.color.white

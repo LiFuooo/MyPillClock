@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.item_pill.view.*
+import com.example.mypillclock.databinding.ItemPillBinding
 
 
 //https://github.com/android/views-widgets-samples/tree/main/RecyclerViewKotlin/
@@ -17,30 +17,34 @@ import kotlinx.android.synthetic.main.item_pill.view.*
 open class PillItemAdapter(
         val context:Context,
         var itemsList:MutableList<PillInfo>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<PillItemAdapter.PillViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
+//    private lateinit var binding:ItemPillBinding
 
+    inner class PillViewHolder(val binding: ItemPillBinding):RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PillViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.item_pill,
             parent,
             false)
-        return PillViewHolder(itemView)
+        val binding = ItemPillBinding
+            .inflate(LayoutInflater.from(parent.context), parent, false)
+        return PillViewHolder(binding)
     }
 
 
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PillViewHolder, position: Int) {
         val currentItem = itemsList[position]
         val displayString = currentItem.name + ",  " + currentItem.RemindTime+
                 " ,id = ${currentItem.id}"
 
 
-        holder.itemView.apply {
-            tvPillItem_Qty.text = currentItem.amount.toString() +" " + currentItem.amountType
-            tvPillItem_content.text = displayString
+        holder.apply {
+            binding.tvPillItemQty.text = currentItem.amount.toString() +" " + currentItem.amountType
+            binding.tvPillItemContent.text = displayString
 
             holder.itemView.setOnClickListener{
                 if(onClickListener != null){
@@ -49,12 +53,12 @@ open class PillItemAdapter(
             }
 
             if (position % 2 == 0) {
-                llPillItem.setBackgroundColor(
+                binding.llPillItem.setBackgroundColor(
                         ContextCompat.getColor(
                                 context,
                                 R.color.colorLightGray))
             } else {
-                llPillItem.setBackgroundColor(
+                binding.llPillItem.setBackgroundColor(
                         ContextCompat.getColor(
                                 context,
                                 R.color.white))
@@ -89,7 +93,8 @@ open class PillItemAdapter(
         fun onClick(position:Int, model: PillInfo)
     }
 
-    class PillViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
+
+
 
 //    View.OnClickListener {
 //        var etPillName = itemView.etPillName

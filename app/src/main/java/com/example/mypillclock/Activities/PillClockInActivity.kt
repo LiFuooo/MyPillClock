@@ -12,31 +12,32 @@ import com.example.mypillclock.DataClass.PillInfo
 import com.example.mypillclock.Database.PillInfoDBHelper
 import com.example.mypillclock.Utilities.ClockInPillItemAdapter
 import com.example.mypillclock.R
-import kotlinx.android.synthetic.main.activity_clock_in.*
-import kotlinx.android.synthetic.main.activity_clock_in.btm_navi
+import com.example.mypillclock.databinding.ActivityClockInBinding
 
 
 class PillClockInActivity : AppCompatActivity() {
+    private lateinit var binding:ActivityClockInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_clock_in)
+        binding = ActivityClockInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val appContext = getApplicationContext()
 //        CustomizeListenerObject.setContext(this)
 
         //        ToDO: List all pills from db here
             val getSavedPillList = PillInfoDBHelper().getPillListFromDB()
             if (getSavedPillList.size > 0) {
-                rvClockInPillItem.visibility = View.VISIBLE
+                binding.rvClockInPillItem.visibility = View.VISIBLE
                 setupListOfDataIntoClockInRV(getSavedPillList)
             } else {
-                rvClockInPillItem.visibility = View.GONE
+                binding.rvClockInPillItem.visibility = View.GONE
             }
 
 
 
 //        TODO: set navigation bar
-        createBottomNavBar(R.id.ic_clock_in, btm_navi)
+        createBottomNavBar(R.id.ic_clock_in, binding.btmNavi)
 
 
         }
@@ -45,10 +46,10 @@ class PillClockInActivity : AppCompatActivity() {
     //    function to show the list of pill Info in rv
     fun setupListOfDataIntoClockInRV(SavedPillList: MutableList<PillInfo>) {
 //        val onClick = this::onItemClick
-        rvClockInPillItem.layoutManager = LinearLayoutManager(this)
+        binding.rvClockInPillItem.layoutManager = LinearLayoutManager(this)
 
         val itemAdapter = ClockInPillItemAdapter(this, SavedPillList,CustomizeListenerObject)
-        rvClockInPillItem.adapter = itemAdapter
+        binding.rvClockInPillItem.adapter = itemAdapter
     }
 
 
